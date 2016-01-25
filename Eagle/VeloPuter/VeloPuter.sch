@@ -19540,7 +19540,6 @@ Based on the previous libraries:
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
-<part name="P+7" library="supply1" deviceset="V+" device=""/>
 <part name="SWITCHES_STEER" library="con-molex" deviceset="22-?-06" device="27-2061" value=""/>
 <part name="SPD_CAD" library="con-molex" deviceset="22-?-03" device="27-2031" value=""/>
 <part name="GND" library="supply1" deviceset="GND" device=""/>
@@ -19560,12 +19559,12 @@ Based on the previous libraries:
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
 <part name="P+1" library="supply1" deviceset="V+" device=""/>
-<part name="C2" library="rcl" deviceset="CPOL-EU" device="E2.5-7" value="200 uF">
+<part name="C2" library="rcl" deviceset="CPOL-EU" device="E5-10.5" value="200 uF">
 <attribute name="MF" value=""/>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
-<part name="IC1" library="v-reg-3" deviceset="LM2931" device="Z" value="">
+<part name="IC1" library="v-reg-3" deviceset="LM2931" device="T-L" value="LM2931T-L">
 <attribute name="MF" value=""/>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
@@ -19645,7 +19644,7 @@ Based on the previous libraries:
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
-<part name="IO8" library="pinhead" deviceset="PINHD-1X1" device="">
+<part name="D8" library="pinhead" deviceset="PINHD-1X1" device="">
 <attribute name="MF" value=""/>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
@@ -19655,17 +19654,7 @@ Based on the previous libraries:
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
-<part name="D4" library="pinhead" deviceset="PINHD-1X1" device="">
-<attribute name="MF" value=""/>
-<attribute name="MPN" value=""/>
-<attribute name="OC_NEWARK" value="unknown"/>
-</part>
-<part name="NC7" library="pinhead" deviceset="PINHD-1X1" device="">
-<attribute name="MF" value=""/>
-<attribute name="MPN" value=""/>
-<attribute name="OC_NEWARK" value="unknown"/>
-</part>
-<part name="NC8" library="pinhead" deviceset="PINHD-1X1" device="">
+<part name="A5" library="pinhead" deviceset="PINHD-1X1" device="" value="A5">
 <attribute name="MF" value=""/>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
@@ -19728,7 +19717,6 @@ Based on the previous libraries:
 <instance part="GND6" gate="1" x="187.96" y="78.74"/>
 <instance part="GND7" gate="1" x="187.96" y="104.14"/>
 <instance part="GND8" gate="1" x="10.16" y="109.22"/>
-<instance part="P+7" gate="1" x="10.16" y="114.3" rot="R180"/>
 <instance part="SWITCHES_STEER" gate="-1" x="5.08" y="48.26" rot="R180"/>
 <instance part="SWITCHES_STEER" gate="-2" x="5.08" y="53.34" rot="R180"/>
 <instance part="SWITCHES_STEER" gate="-3" x="5.08" y="58.42" rot="R180"/>
@@ -19836,10 +19824,10 @@ Based on the previous libraries:
 <instance part="LIGHTS" gate="-4" x="238.76" y="5.08" rot="R180"/>
 <instance part="LIGHTS" gate="-5" x="236.22" y="116.84" rot="R180"/>
 <instance part="LIGHTS" gate="-6" x="236.22" y="106.68" rot="R180"/>
-<instance part="H1" gate="G$1" x="58.42" y="-20.32">
-<attribute name="OC_NEWARK" x="58.42" y="-20.32" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="58.42" y="-20.32" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="58.42" y="-20.32" size="1.778" layer="96" display="off"/>
+<instance part="H1" gate="G$1" x="53.34" y="-17.78">
+<attribute name="OC_NEWARK" x="53.34" y="-17.78" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="53.34" y="-17.78" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="53.34" y="-17.78" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="H2" gate="G$1" x="58.42" y="-30.48">
 <attribute name="OC_NEWARK" x="58.42" y="-30.48" size="1.778" layer="96" display="off"/>
@@ -19851,30 +19839,20 @@ Based on the previous libraries:
 <attribute name="MF" x="58.42" y="-38.1" size="1.778" layer="96" display="off"/>
 <attribute name="MPN" x="58.42" y="-38.1" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="IO8" gate="G$1" x="68.58" y="78.74" rot="R180">
-<attribute name="OC_NEWARK" x="68.58" y="78.74" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="68.58" y="78.74" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="68.58" y="78.74" size="1.778" layer="96" display="off"/>
+<instance part="D8" gate="G$1" x="58.42" y="81.28" rot="R180">
+<attribute name="OC_NEWARK" x="58.42" y="81.28" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="58.42" y="81.28" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="58.42" y="81.28" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="IO12" gate="G$1" x="91.44" y="58.42">
 <attribute name="OC_NEWARK" x="91.44" y="58.42" size="1.778" layer="96" display="off"/>
 <attribute name="MF" x="91.44" y="58.42" size="1.778" layer="96" display="off"/>
 <attribute name="MPN" x="91.44" y="58.42" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="D4" gate="G$1" x="68.58" y="99.06" rot="R180">
-<attribute name="OC_NEWARK" x="68.58" y="99.06" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="68.58" y="99.06" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="68.58" y="99.06" size="1.778" layer="96" display="off"/>
-</instance>
-<instance part="NC7" gate="G$1" x="154.94" y="121.92">
-<attribute name="OC_NEWARK" x="154.94" y="121.92" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="154.94" y="121.92" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="154.94" y="121.92" size="1.778" layer="96" display="off"/>
-</instance>
-<instance part="NC8" gate="G$1" x="154.94" y="111.76">
-<attribute name="OC_NEWARK" x="154.94" y="111.76" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="154.94" y="111.76" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="154.94" y="111.76" size="1.778" layer="96" display="off"/>
+<instance part="A5" gate="G$1" x="152.4" y="116.84" rot="R180">
+<attribute name="OC_NEWARK" x="152.4" y="116.84" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="152.4" y="116.84" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="152.4" y="116.84" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="D7" gate="G$1" x="68.58" y="83.82" rot="R180">
 <attribute name="OC_NEWARK" x="68.58" y="83.82" size="1.778" layer="96" display="off"/>
@@ -19997,11 +19975,6 @@ Based on the previous libraries:
 <pinref part="P+6" gate="1" pin="V+"/>
 <pinref part="U$5" gate="G$1" pin="DCIN+"/>
 <wire x1="187.96" y1="15.24" x2="195.58" y2="15.24" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="P+7" gate="1" pin="V+"/>
-<pinref part="OLED" gate="-3" pin="S"/>
-<wire x1="-5.08" y1="116.84" x2="10.16" y2="116.84" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C2" gate="G$1" pin="+"/>
@@ -20201,8 +20174,8 @@ Based on the previous libraries:
 <net name="DOWN_SWITCH" class="0">
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="A3"/>
-<wire x1="127" y1="88.9" x2="142.24" y2="93.98" width="0.1524" layer="91"/>
-<label x="142.24" y="93.98" size="1.778" layer="95"/>
+<wire x1="127" y1="88.9" x2="142.24" y2="88.9" width="0.1524" layer="91"/>
+<label x="142.24" y="88.9" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="SWITCHES_STEER" gate="-4" pin="S"/>
@@ -20213,8 +20186,8 @@ Based on the previous libraries:
 <net name="LEFT_SWITCH" class="0">
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="A2"/>
-<wire x1="127" y1="86.36" x2="142.24" y2="88.9" width="0.1524" layer="91"/>
-<label x="142.24" y="88.9" size="1.778" layer="95" xref="yes"/>
+<wire x1="127" y1="86.36" x2="142.24" y2="86.36" width="0.1524" layer="91"/>
+<label x="142.24" y="86.36" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
 <pinref part="SWITCHES_STEER" gate="-5" pin="S"/>
@@ -20236,15 +20209,14 @@ Based on the previous libraries:
 </net>
 <net name="BRAKE_SWITCH" class="0">
 <segment>
-<label x="149.86" y="101.6" size="1.778" layer="95" xref="yes"/>
-<pinref part="ARDUINO_MICRO" gate="G$1" pin="A5"/>
-<wire x1="149.86" y1="101.6" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="129.54" y1="96.52" x2="127" y2="93.98" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="SWITCHES_STEER" gate="-2" pin="S"/>
 <wire x1="7.62" y1="53.34" x2="10.16" y2="53.34" width="0.1524" layer="91"/>
 <label x="10.16" y="53.34" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="ARDUINO_MICRO" gate="G$1" pin="D4*"/>
+<wire x1="71.12" y1="99.06" x2="91.44" y2="93.98" width="0.1524" layer="91"/>
+<label x="63.5" y="99.06" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SDA_OLED" class="0">
@@ -20297,6 +20269,11 @@ Based on the previous libraries:
 <wire x1="91.44" y1="35.56" x2="91.44" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="SPK1" gate="P" pin="P"/>
 <label x="91.44" y="35.56" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="OLED" gate="-3" pin="S"/>
+<wire x1="-5.08" y1="116.84" x2="10.16" y2="116.84" width="0.1524" layer="91"/>
+<label x="15.24" y="116.84" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -20369,13 +20346,6 @@ Based on the previous libraries:
 <junction x="83.82" y="20.32"/>
 </segment>
 </net>
-<net name="N$15" class="0">
-<segment>
-<pinref part="ARDUINO_MICRO" gate="G$1" pin="D4*"/>
-<pinref part="D4" gate="G$1" pin="1"/>
-<wire x1="71.12" y1="99.06" x2="91.44" y2="93.98" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$16" class="0">
 <segment>
 <pinref part="D7" gate="G$1" pin="1"/>
@@ -20385,9 +20355,9 @@ Based on the previous libraries:
 </net>
 <net name="N$17" class="0">
 <segment>
-<pinref part="IO8" gate="G$1" pin="1"/>
+<pinref part="D8" gate="G$1" pin="1"/>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="IO8"/>
-<wire x1="71.12" y1="78.74" x2="91.44" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="81.28" x2="91.44" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="IO12" class="0">
@@ -20397,29 +20367,18 @@ Based on the previous libraries:
 <wire x1="88.9" y1="58.42" x2="91.44" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$19" class="0">
+<net name="A5" class="0">
 <segment>
-<pinref part="NC8" gate="G$1" pin="1"/>
-<pinref part="ARDUINO_MICRO" gate="G$1" pin="NC8"/>
-<wire x1="152.4" y1="111.76" x2="127" y2="96.52" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$20" class="0">
-<segment>
-<pinref part="NC7" gate="G$1" pin="1"/>
-<pinref part="ARDUINO_MICRO" gate="G$1" pin="NC7"/>
-<wire x1="152.4" y1="121.92" x2="127" y2="99.06" width="0.1524" layer="91"/>
+<pinref part="A5" gate="G$1" pin="1"/>
+<pinref part="ARDUINO_MICRO" gate="G$1" pin="A5"/>
+<wire x1="154.94" y1="116.84" x2="127" y2="93.98" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="113,1,70.8829,77.3388,IO8,,,,,"/>
 <approved hash="113,1,89.1371,59.8212,IO12,,,,,"/>
-<approved hash="113,1,70.8829,97.6588,D4,,,,,"/>
-<approved hash="113,1,152.637,123.321,NC7,,,,,"/>
-<approved hash="113,1,152.637,113.161,NC8,,,,,"/>
 <approved hash="113,1,70.8829,82.4188,D7,,,,,"/>
 </errors>
 </schematic>
