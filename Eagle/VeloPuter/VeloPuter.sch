@@ -19664,41 +19664,66 @@ Based on the previous libraries:
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
+<part name="R1" library="resistor" deviceset="R-EU_" device="0207/10" value="100k">
+<attribute name="MF" value=""/>
+<attribute name="MPN" value=""/>
+<attribute name="OC_NEWARK" value="unknown"/>
+</part>
+<part name="R2" library="resistor" deviceset="R-EU_" device="0207/10" value="100k">
+<attribute name="MF" value=""/>
+<attribute name="MPN" value=""/>
+<attribute name="OC_NEWARK" value="unknown"/>
+</part>
+<part name="R3" library="resistor" deviceset="R-EU_" device="0207/10" value="100k">
+<attribute name="MF" value=""/>
+<attribute name="MPN" value=""/>
+<attribute name="OC_NEWARK" value="unknown"/>
+</part>
+<part name="R4" library="resistor" deviceset="R-EU_" device="0207/10" value="100k">
+<attribute name="MF" value=""/>
+<attribute name="MPN" value=""/>
+<attribute name="OC_NEWARK" value="unknown"/>
+</part>
+<part name="R9" library="resistor" deviceset="R-EU_" device="0207/10" value="100l">
+<attribute name="MF" value=""/>
+<attribute name="MPN" value=""/>
+<attribute name="OC_NEWARK" value="unknown"/>
+</part>
 </parts>
 <sheets>
 <sheet>
 <plain>
-<text x="200.66" y="121.92" size="1.778" layer="91">Brake</text>
-<text x="200.66" y="96.52" size="1.778" layer="91">Left</text>
-<text x="200.66" y="71.12" size="1.778" layer="91">Right</text>
-<text x="200.66" y="45.72" size="1.778" layer="91">Front 1</text>
-<text x="200.66" y="20.32" size="1.778" layer="91">Front 2</text>
+<text x="233.68" y="119.38" size="1.778" layer="91">Brake</text>
+<text x="233.68" y="93.98" size="1.778" layer="91">Left</text>
+<text x="233.68" y="68.58" size="1.778" layer="91">Right</text>
+<text x="233.68" y="43.18" size="1.778" layer="91">Front 1</text>
+<text x="233.68" y="17.78" size="1.778" layer="91">Front 2</text>
 </plain>
 <instances>
-<instance part="BRAKE" gate="G$1" x="210.82" y="111.76">
-<attribute name="OC_NEWARK" x="210.82" y="111.76" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="210.82" y="111.76" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="210.82" y="111.76" size="1.778" layer="96" display="off"/>
+<instance part="BRAKE" gate="G$1" x="243.84" y="109.22">
+<attribute name="OC_NEWARK" x="243.84" y="109.22" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="243.84" y="109.22" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="243.84" y="109.22" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="U$2" gate="G$1" x="210.82" y="86.36">
-<attribute name="OC_NEWARK" x="210.82" y="86.36" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="210.82" y="86.36" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="210.82" y="86.36" size="1.778" layer="96" display="off"/>
+<instance part="U$2" gate="G$1" x="246.38" y="83.82">
+<attribute name="OC_NEWARK" x="246.38" y="83.82" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="246.38" y="83.82" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="246.38" y="83.82" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="U$3" gate="G$1" x="210.82" y="60.96">
-<attribute name="OC_NEWARK" x="210.82" y="60.96" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="210.82" y="60.96" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="210.82" y="60.96" size="1.778" layer="96" display="off"/>
+<instance part="U$3" gate="G$1" x="243.84" y="58.42">
+<attribute name="OC_NEWARK" x="243.84" y="58.42" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="243.84" y="58.42" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="243.84" y="58.42" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="U$4" gate="G$1" x="210.82" y="35.56">
-<attribute name="OC_NEWARK" x="210.82" y="35.56" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="210.82" y="35.56" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="210.82" y="35.56" size="1.778" layer="96" display="off"/>
+<instance part="U$4" gate="G$1" x="243.84" y="33.02">
+<attribute name="OC_NEWARK" x="243.84" y="33.02" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="243.84" y="33.02" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="243.84" y="33.02" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="U$5" gate="G$1" x="210.82" y="10.16">
-<attribute name="OC_NEWARK" x="210.82" y="10.16" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="210.82" y="10.16" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="210.82" y="10.16" size="1.778" layer="96" display="off"/>
+<instance part="U$5" gate="G$1" x="243.84" y="7.62">
+<attribute name="OC_NEWARK" x="243.84" y="7.62" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="243.84" y="7.62" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="243.84" y="7.62" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="ARDUINO_MICRO" gate="G$1" x="109.22" y="93.98">
 <attribute name="OC_NEWARK" x="109.22" y="93.98" size="1.778" layer="96" display="off"/>
@@ -19706,16 +19731,16 @@ Based on the previous libraries:
 <attribute name="MPN" x="109.22" y="93.98" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="GND2" gate="1" x="73.66" y="114.3" rot="R270"/>
-<instance part="P+2" gate="1" x="187.96" y="119.38"/>
-<instance part="P+3" gate="1" x="187.96" y="93.98"/>
-<instance part="P+4" gate="1" x="187.96" y="68.58"/>
-<instance part="P+5" gate="1" x="187.96" y="43.18"/>
-<instance part="P+6" gate="1" x="187.96" y="17.78"/>
-<instance part="GND3" gate="1" x="187.96" y="2.54"/>
-<instance part="GND4" gate="1" x="187.96" y="27.94"/>
-<instance part="GND5" gate="1" x="187.96" y="53.34"/>
-<instance part="GND6" gate="1" x="187.96" y="78.74"/>
-<instance part="GND7" gate="1" x="187.96" y="104.14"/>
+<instance part="P+2" gate="1" x="220.98" y="116.84"/>
+<instance part="P+3" gate="1" x="220.98" y="91.44"/>
+<instance part="P+4" gate="1" x="220.98" y="66.04"/>
+<instance part="P+5" gate="1" x="220.98" y="40.64"/>
+<instance part="P+6" gate="1" x="220.98" y="15.24"/>
+<instance part="GND3" gate="1" x="220.98" y="0"/>
+<instance part="GND4" gate="1" x="220.98" y="25.4"/>
+<instance part="GND5" gate="1" x="220.98" y="50.8"/>
+<instance part="GND6" gate="1" x="220.98" y="76.2"/>
+<instance part="GND7" gate="1" x="220.98" y="101.6"/>
 <instance part="GND8" gate="1" x="10.16" y="109.22"/>
 <instance part="SWITCHES_STEER" gate="-1" x="5.08" y="48.26" rot="R180"/>
 <instance part="SWITCHES_STEER" gate="-2" x="5.08" y="53.34" rot="R180"/>
@@ -19728,10 +19753,10 @@ Based on the previous libraries:
 <instance part="SPD_CAD" gate="-3" x="5.08" y="99.06" rot="R180"/>
 <instance part="GND" gate="1" x="17.78" y="99.06" rot="R90"/>
 <instance part="GND10" gate="1" x="10.16" y="45.72"/>
-<instance part="BLINKERS" gate="-1" x="236.22" y="91.44" rot="R180"/>
-<instance part="BLINKERS" gate="-2" x="236.22" y="81.28" rot="R180"/>
-<instance part="BLINKERS" gate="-3" x="236.22" y="66.04" rot="R180"/>
-<instance part="BLINKERS" gate="-4" x="236.22" y="55.88" rot="R180"/>
+<instance part="BLINKERS" gate="-1" x="269.24" y="88.9" rot="R180"/>
+<instance part="BLINKERS" gate="-2" x="269.24" y="78.74" rot="R180"/>
+<instance part="BLINKERS" gate="-3" x="269.24" y="63.5" rot="R180"/>
+<instance part="BLINKERS" gate="-4" x="269.24" y="53.34" rot="R180"/>
 <instance part="D1" gate="G$1" x="38.1" y="10.16" rot="R90">
 <attribute name="OC_NEWARK" x="38.1" y="10.16" size="1.778" layer="96" display="off"/>
 <attribute name="MF" x="38.1" y="10.16" size="1.778" layer="96" display="off"/>
@@ -19818,12 +19843,12 @@ Based on the previous libraries:
 <attribute name="MF" x="127" y="17.78" size="1.778" layer="96" display="off"/>
 <attribute name="MPN" x="127" y="17.78" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="LIGHTS" gate="-1" x="236.22" y="40.64" rot="R180"/>
-<instance part="LIGHTS" gate="-2" x="236.22" y="30.48" rot="R180"/>
-<instance part="LIGHTS" gate="-3" x="238.76" y="15.24" rot="R180"/>
-<instance part="LIGHTS" gate="-4" x="238.76" y="5.08" rot="R180"/>
-<instance part="LIGHTS" gate="-5" x="236.22" y="116.84" rot="R180"/>
-<instance part="LIGHTS" gate="-6" x="236.22" y="106.68" rot="R180"/>
+<instance part="LIGHTS" gate="-1" x="269.24" y="38.1" rot="R180"/>
+<instance part="LIGHTS" gate="-2" x="269.24" y="27.94" rot="R180"/>
+<instance part="LIGHTS" gate="-3" x="271.78" y="12.7" rot="R180"/>
+<instance part="LIGHTS" gate="-4" x="271.78" y="2.54" rot="R180"/>
+<instance part="LIGHTS" gate="-5" x="269.24" y="114.3" rot="R180"/>
+<instance part="LIGHTS" gate="-6" x="269.24" y="104.14" rot="R180"/>
 <instance part="H1" gate="G$1" x="53.34" y="-17.78">
 <attribute name="OC_NEWARK" x="53.34" y="-17.78" size="1.778" layer="96" display="off"/>
 <attribute name="MF" x="53.34" y="-17.78" size="1.778" layer="96" display="off"/>
@@ -19859,6 +19884,31 @@ Based on the previous libraries:
 <attribute name="MF" x="68.58" y="83.82" size="1.778" layer="96" display="off"/>
 <attribute name="MPN" x="68.58" y="83.82" size="1.778" layer="96" display="off"/>
 </instance>
+<instance part="R1" gate="G$1" x="215.9" y="104.14" rot="R180">
+<attribute name="OC_NEWARK" x="215.9" y="104.14" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MF" x="215.9" y="104.14" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MPN" x="215.9" y="104.14" size="1.778" layer="96" rot="R90" display="off"/>
+</instance>
+<instance part="R2" gate="G$1" x="215.9" y="78.74" rot="R180">
+<attribute name="OC_NEWARK" x="215.9" y="78.74" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MF" x="215.9" y="78.74" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MPN" x="215.9" y="78.74" size="1.778" layer="96" rot="R90" display="off"/>
+</instance>
+<instance part="R3" gate="G$1" x="215.9" y="53.34" rot="R180">
+<attribute name="OC_NEWARK" x="215.9" y="53.34" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MF" x="215.9" y="53.34" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MPN" x="215.9" y="53.34" size="1.778" layer="96" rot="R90" display="off"/>
+</instance>
+<instance part="R4" gate="G$1" x="215.9" y="27.94" rot="R180">
+<attribute name="OC_NEWARK" x="215.9" y="27.94" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MF" x="215.9" y="27.94" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MPN" x="215.9" y="27.94" size="1.778" layer="96" rot="R90" display="off"/>
+</instance>
+<instance part="R9" gate="G$1" x="215.9" y="2.54" rot="R180">
+<attribute name="OC_NEWARK" x="215.9" y="2.54" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MF" x="215.9" y="2.54" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="MPN" x="215.9" y="2.54" size="1.778" layer="96" rot="R90" display="off"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -19867,27 +19917,37 @@ Based on the previous libraries:
 <segment>
 <pinref part="GND7" gate="1" pin="GND"/>
 <pinref part="BRAKE" gate="G$1" pin="DCIN-"/>
-<wire x1="187.96" y1="106.68" x2="195.58" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="104.14" x2="228.6" y2="104.14" width="0.1524" layer="91"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<junction x="220.98" y="104.14"/>
 </segment>
 <segment>
 <pinref part="GND6" gate="1" pin="GND"/>
 <pinref part="U$2" gate="G$1" pin="DCIN-"/>
-<wire x1="187.96" y1="81.28" x2="195.58" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="78.74" x2="231.14" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<junction x="220.98" y="78.74"/>
 </segment>
 <segment>
 <pinref part="GND5" gate="1" pin="GND"/>
 <pinref part="U$3" gate="G$1" pin="DCIN-"/>
-<wire x1="187.96" y1="55.88" x2="195.58" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="53.34" x2="228.6" y2="53.34" width="0.1524" layer="91"/>
+<pinref part="R3" gate="G$1" pin="1"/>
+<junction x="220.98" y="53.34"/>
 </segment>
 <segment>
 <pinref part="GND3" gate="1" pin="GND"/>
 <pinref part="U$5" gate="G$1" pin="DCIN-"/>
-<wire x1="187.96" y1="5.08" x2="195.58" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="2.54" x2="228.6" y2="2.54" width="0.1524" layer="91"/>
+<pinref part="R9" gate="G$1" pin="1"/>
+<junction x="220.98" y="2.54"/>
 </segment>
 <segment>
 <pinref part="GND4" gate="1" pin="GND"/>
 <pinref part="U$4" gate="G$1" pin="DCIN-"/>
-<wire x1="187.96" y1="30.48" x2="195.58" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="27.94" x2="228.6" y2="27.94" width="0.1524" layer="91"/>
+<pinref part="R4" gate="G$1" pin="1"/>
+<junction x="220.98" y="27.94"/>
 </segment>
 <segment>
 <pinref part="GND8" gate="1" pin="GND"/>
@@ -19954,27 +20014,27 @@ Based on the previous libraries:
 <segment>
 <pinref part="P+2" gate="1" pin="V+"/>
 <pinref part="BRAKE" gate="G$1" pin="DCIN+"/>
-<wire x1="187.96" y1="116.84" x2="195.58" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="114.3" x2="228.6" y2="114.3" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+3" gate="1" pin="V+"/>
 <pinref part="U$2" gate="G$1" pin="DCIN+"/>
-<wire x1="187.96" y1="91.44" x2="195.58" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="88.9" x2="231.14" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+4" gate="1" pin="V+"/>
 <pinref part="U$3" gate="G$1" pin="DCIN+"/>
-<wire x1="187.96" y1="66.04" x2="195.58" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="63.5" x2="228.6" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+5" gate="1" pin="V+"/>
 <pinref part="U$4" gate="G$1" pin="DCIN+"/>
-<wire x1="187.96" y1="40.64" x2="195.58" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="38.1" x2="228.6" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+6" gate="1" pin="V+"/>
 <pinref part="U$5" gate="G$1" pin="DCIN+"/>
-<wire x1="187.96" y1="15.24" x2="195.58" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="12.7" x2="228.6" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C2" gate="G$1" pin="+"/>
@@ -20018,8 +20078,11 @@ Based on the previous libraries:
 <net name="PWM_BRAKE" class="0">
 <segment>
 <pinref part="BRAKE" gate="G$1" pin="PWM"/>
-<wire x1="195.58" y1="111.76" x2="185.42" y2="111.76" width="0.1524" layer="91"/>
-<label x="185.42" y="111.76" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="228.6" y1="109.22" x2="210.82" y2="109.22" width="0.1524" layer="91"/>
+<label x="205.74" y="109.22" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="210.82" y1="109.22" x2="205.74" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="210.82" y1="104.14" x2="210.82" y2="109.22" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="IO9*"/>
@@ -20042,14 +20105,14 @@ Based on the previous libraries:
 <net name="N$3" class="0">
 <segment>
 <pinref part="BRAKE" gate="G$1" pin="DCOUT+"/>
-<wire x1="226.06" y1="116.84" x2="231.14" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="114.3" x2="264.16" y2="114.3" width="0.1524" layer="91"/>
 <pinref part="LIGHTS" gate="-5" pin="1"/>
 </segment>
 </net>
 <net name="N$5" class="0">
 <segment>
 <pinref part="BRAKE" gate="G$1" pin="DCOUT-"/>
-<wire x1="231.14" y1="106.68" x2="226.06" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="104.14" x2="259.08" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="LIGHTS" gate="-6" pin="1"/>
 </segment>
 </net>
@@ -20057,65 +20120,68 @@ Based on the previous libraries:
 <segment>
 <pinref part="U$2" gate="G$1" pin="DCOUT+"/>
 <pinref part="BLINKERS" gate="-1" pin="1"/>
-<wire x1="226.06" y1="91.44" x2="231.14" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="261.62" y1="88.9" x2="264.16" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$7" class="0">
 <segment>
 <pinref part="BLINKERS" gate="-2" pin="1"/>
 <pinref part="U$2" gate="G$1" pin="DCOUT-"/>
-<wire x1="231.14" y1="81.28" x2="226.06" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="78.74" x2="261.62" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$8" class="0">
 <segment>
 <pinref part="U$3" gate="G$1" pin="DCOUT+"/>
 <pinref part="BLINKERS" gate="-3" pin="1"/>
-<wire x1="226.06" y1="66.04" x2="231.14" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="63.5" x2="264.16" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$9" class="0">
 <segment>
 <pinref part="BLINKERS" gate="-4" pin="1"/>
 <pinref part="U$3" gate="G$1" pin="DCOUT-"/>
-<wire x1="231.14" y1="55.88" x2="226.06" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="53.34" x2="259.08" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$10" class="0">
 <segment>
 <pinref part="LIGHTS" gate="-1" pin="1"/>
 <pinref part="U$4" gate="G$1" pin="DCOUT+"/>
-<wire x1="226.06" y1="40.64" x2="231.14" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="38.1" x2="264.16" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$11" class="0">
 <segment>
 <pinref part="LIGHTS" gate="-2" pin="1"/>
 <pinref part="U$4" gate="G$1" pin="DCOUT-"/>
-<wire x1="226.06" y1="30.48" x2="231.14" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="27.94" x2="264.16" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$12" class="0">
 <segment>
 <pinref part="U$5" gate="G$1" pin="DCOUT+"/>
-<wire x1="233.68" y1="15.24" x2="226.06" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="266.7" y1="12.7" x2="259.08" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="LIGHTS" gate="-3" pin="1"/>
-<junction x="233.68" y="15.24"/>
+<junction x="266.7" y="12.7"/>
 </segment>
 </net>
 <net name="N$13" class="0">
 <segment>
 <pinref part="U$5" gate="G$1" pin="DCOUT-"/>
-<wire x1="233.68" y1="5.08" x2="226.06" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="266.7" y1="2.54" x2="259.08" y2="2.54" width="0.1524" layer="91"/>
 <pinref part="LIGHTS" gate="-4" pin="1"/>
-<junction x="233.68" y="5.08"/>
+<junction x="266.7" y="2.54"/>
 </segment>
 </net>
 <net name="PWM_LEFT" class="0">
 <segment>
 <pinref part="U$2" gate="G$1" pin="PWM"/>
-<wire x1="195.58" y1="86.36" x2="185.42" y2="86.36" width="0.1524" layer="91"/>
-<label x="185.42" y="86.36" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="231.14" y1="83.82" x2="210.82" y2="83.82" width="0.1524" layer="91"/>
+<label x="205.74" y="83.82" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="R2" gate="G$1" pin="2"/>
+<wire x1="210.82" y1="83.82" x2="205.74" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="210.82" y1="78.74" x2="210.82" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="D6*"/>
@@ -20126,8 +20192,11 @@ Based on the previous libraries:
 <net name="PWM_RIGHT" class="0">
 <segment>
 <pinref part="U$3" gate="G$1" pin="PWM"/>
-<wire x1="195.58" y1="60.96" x2="185.42" y2="60.96" width="0.1524" layer="91"/>
-<label x="185.42" y="60.96" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="228.6" y1="58.42" x2="210.82" y2="58.42" width="0.1524" layer="91"/>
+<label x="205.74" y="58.42" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+<wire x1="210.82" y1="58.42" x2="205.74" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="210.82" y1="53.34" x2="210.82" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="D5*"/>
@@ -20138,8 +20207,11 @@ Based on the previous libraries:
 <net name="PWM_FRONT1" class="0">
 <segment>
 <pinref part="U$4" gate="G$1" pin="PWM"/>
-<wire x1="195.58" y1="35.56" x2="185.42" y2="35.56" width="0.1524" layer="91"/>
-<label x="185.42" y="35.56" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="228.6" y1="33.02" x2="210.82" y2="33.02" width="0.1524" layer="91"/>
+<label x="205.74" y="33.02" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="R4" gate="G$1" pin="2"/>
+<wire x1="210.82" y1="33.02" x2="205.74" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="210.82" y1="27.94" x2="210.82" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="IO11*"/>
@@ -20150,8 +20222,11 @@ Based on the previous libraries:
 <net name="PWM_FRONT2" class="0">
 <segment>
 <pinref part="U$5" gate="G$1" pin="PWM"/>
-<wire x1="195.58" y1="10.16" x2="185.42" y2="10.16" width="0.1524" layer="91"/>
-<label x="185.42" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="228.6" y1="7.62" x2="210.82" y2="7.62" width="0.1524" layer="91"/>
+<label x="205.74" y="7.62" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="R9" gate="G$1" pin="2"/>
+<wire x1="210.82" y1="7.62" x2="205.74" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="210.82" y1="2.54" x2="210.82" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ARDUINO_MICRO" gate="G$1" pin="IO10*"/>

@@ -3573,6 +3573,31 @@ design rules under a new name.</description>
 <attribute name="MF" value="" x="85.09" y="80.01" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="" x="85.09" y="80.01" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
+<element name="R1" library="resistor" package="0207/10" value="100k" x="10.16" y="15.24">
+<attribute name="OC_NEWARK" value="unknown" x="10.16" y="15.24" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="10.16" y="15.24" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="" x="10.16" y="15.24" size="1.778" layer="27" display="off"/>
+</element>
+<element name="R2" library="resistor" package="0207/10" value="100k" x="10.16" y="10.16">
+<attribute name="OC_NEWARK" value="unknown" x="10.16" y="10.16" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="10.16" y="10.16" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="" x="10.16" y="10.16" size="1.778" layer="27" display="off"/>
+</element>
+<element name="R3" library="resistor" package="0207/10" value="100k" x="10.16" y="5.08">
+<attribute name="OC_NEWARK" value="unknown" x="10.16" y="5.08" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="10.16" y="5.08" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="" x="10.16" y="5.08" size="1.778" layer="27" display="off"/>
+</element>
+<element name="R4" library="resistor" package="0207/10" value="100k" x="10.16" y="0">
+<attribute name="OC_NEWARK" value="unknown" x="10.16" y="0" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="10.16" y="0" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="" x="10.16" y="0" size="1.778" layer="27" display="off"/>
+</element>
+<element name="R9" library="resistor" package="0207/10" value="100l" x="10.16" y="-5.08">
+<attribute name="OC_NEWARK" value="unknown" x="10.16" y="-5.08" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="10.16" y="-5.08" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="" x="10.16" y="-5.08" size="1.778" layer="27" display="off"/>
+</element>
 </elements>
 <signals>
 <signal name="GND">
@@ -3611,7 +3636,38 @@ design rules under a new name.</description>
 <via x="85.09" y="29.21" extent="1-16" drill="0.7" shape="square"/>
 <via x="55.88" y="63.5" extent="1-16" drill="0.7" shape="square"/>
 <via x="55.88" y="39.37" extent="1-16" drill="0.7" shape="square"/>
-<wire x1="73.66" y1="46.99" x2="64.77" y2="46.99" width="0" layer="19" extent="1-1"/>
+<contactref element="R1" pad="1"/>
+<contactref element="R2" pad="1"/>
+<contactref element="R3" pad="1"/>
+<contactref element="R4" pad="1"/>
+<contactref element="R9" pad="1"/>
+<wire x1="73.66" y1="69.85" x2="90.17" y2="74.93" width="0" layer="19" extent="1-1"/>
+<wire x1="73.66" y1="58.42" x2="73.66" y2="69.85" width="0" layer="19" extent="1-1"/>
+<wire x1="73.66" y1="46.99" x2="73.66" y2="58.42" width="0" layer="19" extent="1-1"/>
+<wire x1="64.77" y1="46.99" x2="73.66" y2="46.99" width="0" layer="19" extent="1-1"/>
+<wire x1="73.66" y1="35.56" x2="73.66" y2="46.99" width="0" layer="19" extent="1-1"/>
+<wire x1="73.66" y1="24.13" x2="73.66" y2="35.56" width="0" layer="19" extent="1-1"/>
+<wire x1="55.88" y1="39.37" x2="64.77" y2="46.99" width="0" layer="19" extent="1-1"/>
+<wire x1="49.53" y1="41.91" x2="55.88" y2="39.37" width="0" layer="19" extent="1-1"/>
+<wire x1="40.64" y1="46.99" x2="49.53" y2="41.91" width="0" layer="19" extent="1-1"/>
+<wire x1="40.64" y1="52.07" x2="40.64" y2="46.99" width="0" layer="19" extent="1-1"/>
+<wire x1="40.64" y1="36.83" x2="40.64" y2="46.99" width="0" layer="19" extent="1-1"/>
+<wire x1="35.56" y1="27.94" x2="40.64" y2="36.83" width="0" layer="19" extent="1-1"/>
+<wire x1="36.83" y1="24.13" x2="35.56" y2="27.94" width="0" layer="19" extent="1-1"/>
+<wire x1="85.09" y1="50.8" x2="73.66" y2="46.99" width="0" layer="19" extent="1-1"/>
+<wire x1="85.09" y1="29.21" x2="73.66" y2="24.13" width="0" layer="19" extent="1-1"/>
+<wire x1="55.88" y1="63.5" x2="73.66" y2="58.42" width="0" layer="19" extent="1-1"/>
+<wire x1="40.64" y1="73.66" x2="55.88" y2="63.5" width="0" layer="19" extent="1-1"/>
+<wire x1="34.29" y1="80.01" x2="40.64" y2="73.66" width="0" layer="19" extent="1-1"/>
+<wire x1="25.4" y1="73.66" x2="34.29" y2="80.01" width="0" layer="19" extent="1-1"/>
+<wire x1="27.94" y1="68.58" x2="25.4" y2="73.66" width="0" layer="19" extent="1-1"/>
+<wire x1="13.97" y1="72.39" x2="25.4" y2="73.66" width="0" layer="19" extent="1-1"/>
+<wire x1="15.24" y1="38.1" x2="35.56" y2="27.94" width="0" layer="19" extent="1-1"/>
+<wire x1="5.08" y1="15.24" x2="15.24" y2="38.1" width="0" layer="19" extent="1-1"/>
+<wire x1="5.08" y1="10.16" x2="5.08" y2="15.24" width="0" layer="19" extent="1-1"/>
+<wire x1="5.08" y1="5.08" x2="5.08" y2="10.16" width="0" layer="19" extent="1-1"/>
+<wire x1="5.08" y1="0" x2="5.08" y2="5.08" width="0" layer="19" extent="1-1"/>
+<wire x1="5.08" y1="-5.08" x2="5.08" y2="0" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="V+">
 <contactref element="BRAKE" pad="+VIN"/>
@@ -3674,6 +3730,8 @@ design rules under a new name.</description>
 <wire x1="64.77" y1="67.31" x2="68.58" y2="67.31" width="0.6096" layer="1"/>
 <wire x1="68.58" y1="67.31" x2="69.85" y2="66.04" width="0.6096" layer="1"/>
 <wire x1="69.85" y1="66.04" x2="69.85" y2="50.8" width="0.6096" layer="1"/>
+<contactref element="R1" pad="2"/>
+<wire x1="15.24" y1="15.24" x2="69.85" y2="50.8" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="WHEEL_SWITCH">
 <contactref element="ARDUINO_MICRO" pad="TX"/>
@@ -3760,6 +3818,8 @@ design rules under a new name.</description>
 <wire x1="68.58" y1="39.37" x2="68.58" y2="58.42" width="0.6096" layer="1"/>
 <wire x1="68.58" y1="58.42" x2="67.31" y2="59.69" width="0.6096" layer="1"/>
 <wire x1="67.31" y1="59.69" x2="64.77" y2="59.69" width="0.6096" layer="1"/>
+<contactref element="R2" pad="2"/>
+<wire x1="15.24" y1="10.16" x2="68.58" y2="39.37" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PWM_RIGHT">
 <contactref element="U$3" pad="PWM"/>
@@ -3769,11 +3829,15 @@ design rules under a new name.</description>
 <wire x1="67.31" y1="55.88" x2="67.31" y2="27.94" width="0.6096" layer="1"/>
 <wire x1="67.31" y1="27.94" x2="68.58" y2="26.67" width="0.6096" layer="1"/>
 <wire x1="68.58" y1="26.67" x2="73.66" y2="26.67" width="0.6096" layer="1"/>
+<contactref element="R3" pad="2"/>
+<wire x1="15.24" y1="5.08" x2="67.31" y2="27.94" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PWM_FRONT1">
 <contactref element="U$4" pad="PWM"/>
 <contactref element="ARDUINO_MICRO" pad="D11"/>
 <wire x1="73.66" y1="72.39" x2="64.77" y2="72.39" width="0.6096" layer="1"/>
+<contactref element="R4" pad="2"/>
+<wire x1="15.24" y1="0" x2="64.77" y2="72.39" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PWM_FRONT2">
 <contactref element="U$5" pad="PWM"/>
@@ -3783,6 +3847,8 @@ design rules under a new name.</description>
 <wire x1="69.85" y1="69.85" x2="64.77" y2="69.85" width="0.6096" layer="1"/>
 <wire x1="69.85" y1="69.85" x2="71.12" y2="68.58" width="0.6096" layer="1"/>
 <wire x1="71.12" y1="68.58" x2="71.12" y2="62.23" width="0.6096" layer="1"/>
+<contactref element="R9" pad="2"/>
+<wire x1="15.24" y1="-5.08" x2="72.39" y2="60.96" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="UP_SWITCH">
 <contactref element="SWITCHES_STEER" pad="3"/>
