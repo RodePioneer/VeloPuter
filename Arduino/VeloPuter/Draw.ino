@@ -9,6 +9,18 @@
 // ToDo: make this a proper name space.
 //
 
+// A splash schreen
+void drawSplash ()
+{
+    u8g.firstPage();
+    do {  
+      u8g.drawBitmapP (0, 0, 16, 64,  icoSplash);
+    } while( u8g.nextPage() );
+
+    delay (2500);
+
+}
+
 void writeScreen ()
 {
   int tDelay_ms = 250; // 4 time per second

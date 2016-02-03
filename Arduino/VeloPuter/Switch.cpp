@@ -12,7 +12,7 @@ class Switch
 private: 
   const byte tDebounce_ms           = 25; // 40 Hz on a reed contact -> 40*1.5 m/s * 3.6 = 216 km/h. Speeds in excess of this cannot be measured (single sensor) or in excess of 108 with two sensors.
   unsigned long tLastStateChange_ms = 0;  
-  unsigned long tNow_ms = 0;
+  unsigned long tNow_ms             = 0;
   volatile unsigned long tInterupts_ms[10] = {0}; // 25 ms debounce -> max 1 sec.
   
   byte LastState = HIGH;
@@ -42,7 +42,7 @@ public:
     return StateChanged;
   }
 
-  float getInteruptFrequency (void)
+  float getInteruptFrequency (int tMaxDelay_ms)
   {
     /***************************************************
      * 
@@ -54,12 +54,11 @@ public:
      * 
      ***************************************************/
     byte numOfInterupts = 0;
-    const int tMaxDelay_ms = 1000;
     float frequency = 0;
     
     tNow_ms = millis();
 
-    // First check is the last interupt was within the last second. 
+    // First check is the last interupt was within the last tMaxDelay_ms . 
     if (tInterupts_ms[iEnd] > (tNow_ms - tMaxDelay_ms))
     {
       // Now: find out how many timestamps in the timestamp are within the last delay time. 
@@ -75,11 +74,16 @@ public:
         }
       }
   
-      // Time passed (less than one second) between the last two interups.     
-      if (numOfInterupts > 1)
+      // Time passed (less than tMaxDelay_ms) since the last interups.     
+      if (numOfInterupts > 0)
       {
-        frequency = 1000 * numOfInterupts / (tInterupts_ms[iEnd] - tInterupts_ms[iEnd - numOfInterupts]);
+        frequency = float(1000.0 * numOfInterupts) / (tInterupts_ms[iEnd] - tInterupts_ms[iEnd - numOfInterupts]);  
       }
+
+      //String Message = String (frequency) + " = " + String(numOfInterupts ) + " / (" + String (tInterupts_ms[iEnd] - tInterupts_ms[iEnd - numOfInterupts]) + " = " + String (tInterupts_ms[iEnd] ) + " - " + String(tInterupts_ms[iEnd - numOfInterupts]) + ")";
+      //Serial.println(Message);
+      
+
     }
     return frequency;
   }

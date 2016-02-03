@@ -76,16 +76,16 @@ void updateHead()
     head2Led.setLedIntensity (0);
     break;  
   case LOW_INTENSITY:
-    headLed.setLedIntensity (8);
-    head2Led.setLedIntensity (8);
+    headLed.setLedIntensity (16);
+    head2Led.setLedIntensity (16);
     break;
   case DEFAULT_INTENSITY:
-    headLed.setLedIntensity (32); // set new rearlight low intensity
-    head2Led.setLedIntensity (32); // set new rearlight low intensity
+    headLed.setLedIntensity (64); 
+    head2Led.setLedIntensity (64); 
     break;
   case HIGH_INTENSITY:
-    headLed.setLedIntensity (255); // set new rearlight low intensity
-    head2Led.setLedIntensity (255); // set new rearlight low intensity
+    headLed.setLedIntensity (255); 
+    head2Led.setLedIntensity (255); 
     break;
   }
 } 
@@ -267,7 +267,7 @@ of a CMA means that the influence of every measurement decays exponentially.
   const float VRef = 5.06;     
   const float R1 = 1.0;
   const float R2 = 3.3;
-  const float VbattFull = 15.6; // Assume that the cell is mostly between 3.9 and 3.6 V
+  const float VbattFull = 15.6; // Assume that the cell is mostly between 3.6 and 3.9 V in most of it's operational phase.
   const float VbattEmpty = 14.4;
 
   static float PinMean = VbattEmpty;
@@ -282,11 +282,16 @@ of a CMA means that the influence of every measurement decays exponentially.
 void updateSpeed() 
 {
   // Calculate the speed from the frequency
-  speed_kmh = 3.6 * wheelCircumvention_mm * spdSwitch.getInteruptFrequency() / 1000;
+  speed_kmh = 3.6 * wheelCircumvention_mm * spdSwitch.getInteruptFrequency(1250) / 1000;
+  //String Message = " kmh = " + String(speed_kmh ) + " / " + String (spdSwitch.getInteruptFrequency(1250)) ;
+  //Serial.println(Message);
+      
 }
 
 void updateCadence() 
 {
   // Calculate the cadence from the frequency
-  cadence_rpm = 60 * cadSwitch.getInteruptFrequency();
+  cadence_rpm = 60 * cadSwitch.getInteruptFrequency(2500);
+  //String Message = " Cad = " + String(cadence_rpm ) + " / " + String (cadSwitch.getInteruptFrequency(2500)) ;
+  //Serial.println(Message);
 }

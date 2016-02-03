@@ -33,8 +33,8 @@ Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, spdSwitch, ca
 State rearState, headState, blinkerState, loopState, sleepState;
 int batteryStatus = 0;
 float batteryVoltage_mv = 0;
-int speed_kmh = 11;
-int cadence_rpm = 22;
+int speed_kmh = 0;
+int cadence_rpm = 0;
 
 void setup()   { 
   analogReference(DEFAULT);  // use the 5V pin as ref
@@ -68,6 +68,9 @@ void setup()   {
   
   u8g.setColorIndex(1); // Instructs the display to draw with a pixel on.
   u8g.setContrast(16);
+
+    drawSplash ();
+
 }
 
 /***********************************************
@@ -127,6 +130,7 @@ void loop ()
 
   case WAKE_UP:
     updatePinStates();
+    // continue with Init!
     
   case INIT:
     Init();
@@ -168,6 +172,8 @@ void Init () {
   rearState.setState(DEFAULT_INTENSITY);
   blinkerState.setState(DEFAULT_INTENSITY);
   loopState.setState(0);
+
+  drawSplash ();
   
   // TODO: a loop to set the output of the LED pins so that the LDD modules know that there is a PWM signal.
 }

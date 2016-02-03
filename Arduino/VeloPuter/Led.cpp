@@ -14,7 +14,7 @@ private:
 
 public:
   byte minIntensity = 8; // "group" intensity
-  byte lowIntensity = 16; // "normal day ride"
+  byte lowIntensity = 64; // "normal day ride"
   byte highIntensity = 255; // "normal night ride"
   byte maxIntensity = 255; // "max"
 
