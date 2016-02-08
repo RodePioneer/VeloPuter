@@ -50,19 +50,19 @@ const byte ledHead2Pin =        11;
 // const byte UNUSED =          12; 
 const int speakerPin =          13; 
 const byte voltagePin =         A0;    
-const byte switchHeadUpPin =    A1;    
-const byte switchHeadDownPin =  A2;
+const byte switchHeadUpPin =    A2;    // switch up and down for the Strada to sync all head light switches. 
+const byte switchHeadDownPin =  A1;
 const byte switchRightPin =     A3;    
 const byte switchLeftPin =      A4;  
-const byte switchBrakePin =     A5; // the number of the brake switch -> to be open in the next gen.
+const byte switchBrakePin =     A5; // the number of the brake switch -> to be open in the next gen. The brake goes to pin 7 because of the interupt.
 
 /*
  * Other constants which are used throughout the programm:
  * 
  */
-const long tSleep_ms = 6000;     // 10 min
+const long tSleep_ms = 60000;     // 10 min
 const int tPeriodBlink_ms = 333;  // 1.5 Hz
-const byte numTimesToBlink = 10;  // 10 times high, 9 times low, = 19 * 6.3 s
+const byte numTimesToBlink = 7;  // 7 times high, 6 times low, = 13 = 4.3 s
 const int wheelCircumvention_mm = 1590;  // 406-50 wheel
 
 

@@ -144,6 +144,8 @@ void updateBlinkers()
     blinkerState.setState(BLINK_WAIT);
     rightLed.setLedLow();
     leftLed.setLedLow();
+    analogWrite(speakerPin, 0);
+
   }
   /*
  
@@ -159,6 +161,14 @@ void updateBlinkers()
       leftLed.toggleledIntensity();
       rightLed.setLedLow();
       blinkScreen(numTimesBlinked++ % 2);
+      if (numTimesBlinked % 2)
+      {
+        analogWrite(speakerPin, 15);
+      }
+      else
+      {
+        analogWrite(speakerPin, 0);
+      }
       break;
 
     case BLINK_RIGHT:
@@ -166,6 +176,14 @@ void updateBlinkers()
       leftLed.setLedLow();
       rightLed.toggleledIntensity();
       blinkScreen(numTimesBlinked++ % 2);
+      if (numTimesBlinked % 2)
+      {
+        analogWrite(speakerPin, 15);
+      }
+      else
+      {
+        analogWrite(speakerPin, 0);
+      }
       break;
 
     case BLINK_ALARM:

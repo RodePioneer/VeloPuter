@@ -61,7 +61,7 @@ void setup()   {
   attachInterrupt(digitalPinToInterrupt(switchCadPin), intCad, FALLING); // 1 = interupt on pin 3
   //attachInterrupt(digitalPinToInterrupt(switchBrakePin), intBrake, FALLING); // 0 = interupt on pin 7 
 
-  //pinMode(speakerPin, OUTPUT);      
+  pinMode(speakerPin, OUTPUT);      
 
   // define serial if we want to sent serial information to the serial monitor
   Serial.begin(9600);
@@ -160,7 +160,7 @@ void Init () {
 
   // reset all the intensities and states. 
   rearLed.setPin(ledRearPin);
-  rearLed.lowIntensity = 8; // it might have been set to FOG of off
+  rearLed.lowIntensity = 16; // it might have been set to FOG of off
 
   headLed.setPin(ledHeadPin);
   headLed.setLedIntensity(16); // set initial intensity of the frontlight
