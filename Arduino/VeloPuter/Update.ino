@@ -282,19 +282,31 @@ of a CMA means that the influence of every measurement decays exponentially.
   int PinValue = analogRead(voltagePin);
 
   const byte numSamples = 10;
-  const float VRef = 5.06;     
+  const float VRef = 5.00;     
   const float R1 = 1.0;
   const float R2 = 3.3;
-  const float VbattFull = 15.6; // Assume that the cell is mostly between 3.6 and 3.9 V in most of it's operational phase.
-  const float VbattEmpty = 14.4;
+  const float VcellFull = 3.9; // Assume that the cell is mostly between 3.6 and 3.9 V in most of it's operational phase.
+  const float VcellEmpty = 3.6;
+  float batteryVoltage_v;
+  byte numOfCells;
 
-  static float PinMean = VbattEmpty;
+
+  static float PinMean = VcellEmpty;
 
   PinMean = (PinMean*(numSamples - 1) + PinValue)/numSamples; // the mean voltage on the pin. 
   
-  batteryVoltage_mv = 4.326 * (VRef/1023) * PinMean; // 4.326 was measured useing a voltage meter
+  batteryVoltage_v = 4.326 * (VRef/1023) * PinMean; // 4.326 was measured useing a voltage meter
+  
+  // Assume the cells are no less then 3.2 V and no more 4.2V.
+  // cutoffs for 3 cells between 9.0 and 12.8 V. 
+  if (batteryVoltage_v < 9.0) numOfCells = 2;
+  else if (batteryVoltage_v < 12.8) numOfCells = 3;
+  else numOfCells = 4;
+
+  cellVoltage_v = batteryVoltage_v / numOfCells;
     
-  batteryStatus = 100 * (batteryVoltage_mv - VbattEmpty)/(VbattFull - VbattEmpty);
+  batteryStatus = 100 * (cellVoltage_v - VcellEmpty)/(VcellFull - VcellEmpty);
+
 }
 
 void updateSpeed() 

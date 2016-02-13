@@ -13,7 +13,7 @@ private:
   const byte tDebounce_ms           = 25; // 40 Hz on a reed contact -> 40*1.5 m/s * 3.6 = 216 km/h. Speeds in excess of this cannot be measured (single sensor) or in excess of 108 with two sensors.
   unsigned long tLastStateChange_ms = 0;  
   unsigned long tNow_ms             = 0;
-  volatile unsigned long tInterupts_ms[10] = {0}; // 25 ms debounce -> max 1 sec.
+  volatile unsigned long tInterupts_ms[10] = {0}; 
   
   byte LastState = HIGH;
   byte iEnd = sizeof (tInterupts_ms) / sizeof (tInterupts_ms[0]) - 1;
@@ -122,14 +122,24 @@ public:
   //
   // Since it is rather difficult to properly keep track of when the interupts happend and
   // because that is precicely what we need to know we start using an array to keep track of the
-  // last number of interupt timestamps. Currently we assume that 40 stamps should be enough since that 
+  // last number of interupt timestamps. Currently we assume that 10 stamps should be enough since that 
   // would cover a whole second at the current debounce pace. 
   //
+
+    //
+    // When moving at low speeds the sensor can make multiple contacts when the magnet passes the 
+    // reed-sensor. A solid way to prevent double counts would be to make sure that the 
+    // bebounce time is 1/8th of a revolution (of both the cadence and the wheel). 
+    //
+    //  Note that we now calculate over the whole array of timestamps but that we could also 
+    // calculate it over a smaller window. 2016-02-13 /Gert
+    //
+    unsigned long tDebounceVariable_ms = max(tDebounce_ms, (tInterupts_ms[iEnd] - tInterupts_ms[0])/(8*iEnd));
+
     tNow_ms = millis();
-    
-    // Debouce
-    
-    if ((tNow_ms - tInterupts_ms[iEnd]) >= tDebounce_ms)
+
+    // Debounce
+    if ((tNow_ms - tInterupts_ms[iEnd]) >= tDebounceVariable_ms)
     { 
     
       // shift the new time into the array. 

@@ -32,7 +32,7 @@ Led leftLed, rightLed, rearLed, headLed, head2Led;
 Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, spdSwitch, cadSwitch;
 State rearState, headState, blinkerState, loopState, sleepState;
 int batteryStatus = 0;
-float batteryVoltage_mv = 0;
+float cellVoltage_v = 0;
 int speed_kmh = 0;
 int cadence_rpm = 0;
 
@@ -61,8 +61,6 @@ void setup()   {
   attachInterrupt(digitalPinToInterrupt(switchCadPin), intCad, FALLING); // 1 = interupt on pin 3
   //attachInterrupt(digitalPinToInterrupt(switchBrakePin), intBrake, FALLING); // 0 = interupt on pin 7 
 
-  pinMode(speakerPin, OUTPUT);      
-
   // define serial if we want to sent serial information to the serial monitor
   Serial.begin(9600);
   
@@ -81,16 +79,25 @@ void setup()   {
  */
 void loop ()
 {
+  long timeLast_ms;
+  long timeNow_ms;
+  String Message;
+  
   enum {
     INIT, UPDATE_SWITCHES, GO_TO_SLEEP, SLEEP, WAKE_UP,  UPDATE_FRONT, UPDATE_REAR, UPDATE_BLINKERS, UPDATE_SPD, UPDATE_CAD, UPDATE_DISPLAY, BATTERY, ACTIVE_LOOP       };
 
   switch (loopState.getState()) {
   case UPDATE_SWITCHES:
+//    timeLast_ms =  micros();
     updatePinStates();
     if ( (sleepState.getTimeInState() > tSleep_ms) && (blinkerState.getState() != BLINK_ALARM)) 
     {
       sleepState.setState(true);
     }
+//    timeNow_ms = mic ros();
+    
+//    Message = "updatePinStates: " + String(timeNow_ms - timeLast_ms);
+//    Serial.println (Message);
 
     // Check if we are sleeping. If zo -> sleep the loop. 
     if ( sleepState.getState() ) // true = sleep mode started.
@@ -104,13 +111,41 @@ void loop ()
     break;
 
   case ACTIVE_LOOP:
+    timeLast_ms =  micros();
     updateHead();
+   // Message = "updateHead: " + String(micros() - timeLast_ms);
+    //Serial.println (Message);
+
+    //timeLast_ms =  micros();
     updateRear();
+    //Message = "updateRear: " + String(micros() - timeLast_ms);
+    //Serial.println (Message);
+
+    //timeLast_ms =  micros();
     updateBlinkers();
+    //Message = "updateBlinkers: " + String(micros() - timeLast_ms);
+    //Serial.println (Message);
+
+    //timeLast_ms =  micros();
     updateBattery();
+    //Message = "updateBattery: " + String(micros() - timeLast_ms);
+    //Serial.println (Message);
+
+   // timeLast_ms =  micros();
     updateSpeed();
+    //Message = "updateSpeed: " + String(micros() - timeLast_ms);
+    //Serial.println (Message);
+
+    //timeLast_ms =  micros();
     updateCadence();
+//    Message = "Active loop: " + String(micros() - timeLast_ms);
+//    Serial.println (Message);
+
+//    timeLast_ms =  micros();
     writeScreen();
+//    Message = "writeScreen: " + String(micros() - timeLast_ms);
+//    Serial.println (Message);
+    
     loopState.setState(UPDATE_SWITCHES);
     break;
 
@@ -217,7 +252,6 @@ void intBrake()
 {
   brakeSwitch.Interupt();
 }
-
 
 
 

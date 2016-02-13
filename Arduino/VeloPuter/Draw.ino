@@ -81,6 +81,7 @@ void drawSpeed()
   u8g.setFont(u8g_font_helvR18n); //12,14,18
   u8g.setFontPosTop();
   u8g.setScale2x2();
+  
   if (speed_kmh < 10)
     u8g.setPrintPos (39-5,0);
   else if (speed_kmh < 100)
@@ -116,12 +117,8 @@ void drawBatteryText()
   u8g.setFontPosBottom();
   
   // the if statement makes that the end of the number is at a fixed position. 
-  if (batteryVoltage_mv >= 10)
-    u8g.setPrintPos (0,64);
-  else
-    u8g.setPrintPos (10,64);
-    
-  u8g.print (batteryVoltage_mv);
+  u8g.setPrintPos (0,64);   
+  u8g.print (cellVoltage_v);
 }
 
 void drawBatteryIcon()
