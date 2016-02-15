@@ -14,27 +14,87 @@ void updatePinStates()
   downSwitch.ReadOut();
   leftSwitch.ReadOut();
   rightSwitch.ReadOut();
-  spdSwitch.ReadOut();
+  
+  spdSwitch.ReadOut(); // the interupts still have to be "ReadOut" because an interupt is only registered. Not handled any further.
   cadSwitch.ReadOut();
-
-  // if any of the states changed:
-  if (upSwitch.hasStateChanged() ||
-    downSwitch.hasStateChanged() || 
-    leftSwitch.hasStateChanged() || 
-    rightSwitch.hasStateChanged() || 
-    brakeSwitch.hasStateChanged() || 
-    spdSwitch.hasStateChanged() || 
-    cadSwitch.hasStateChanged() 
-  )
-  {
-      //    Serial.println("Going to WAKE UP sleepstate");
-
-    sleepState.setState(true);  // set it to sleep first in order to make sure we have a toggle.
-    sleepState.setState(false); // sleep to false == wakeup or stay awake.
-  } 
 }
 
- 
+void updateSleep ()
+{
+  //Serial.println("Just checking...");
+
+  // if any of the states changed: make sure we leave the sleep state.
+
+//  byte switchChanged  = (upSwitch.hasStateChanged() ||
+//                        downSwitch.hasStateChanged() || 
+//                        leftSwitch.hasStateChanged() || 
+//                        rightSwitch.hasStateChanged() || 
+//                        brakeSwitch.hasStatehanged() || 
+//                        spdSwitch.hasStateChanged() || 
+//                        cadSwitch.hasStateChanged()) ; 
+//  byte alarmLightsAreOn = (blinkerState.getState() != BLINK_ALARM);
+//  byte 
+//    
+//  if (  )
+//  {
+//    Serial.println("A switch has toggled. Set slaap state to awake (false)"); 
+//    sleepState.setState(true);  // set it to sleep first in order to make sure we have a toggle.
+//    sleepState.setState(false); // sleep to false == wakeup or stay awake.
+//  }
+//
+//    if ( (sleepState.getTimeInState() > tSleep_ms) && (blinkerState.getState() != BLINK_ALARM))
+//  {
+//    Serial.println ("sleepState.setState(true);");
+//    clearScreen ();
+//    goToSleep();
+//    sleepState.setState(true);
+//  }
+  
+  
+  
+  //Serial.println ("updateSleep() 2");
+    //
+    // If we are asleep and any pin changes: wake up.
+    //
+    byte switchChanged  = (upSwitch.hasStateChanged() ||
+                          downSwitch.hasStateChanged() || 
+                          leftSwitch.hasStateChanged() || 
+                          rightSwitch.hasStateChanged() || 
+                          brakeSwitch.hasStateChanged() || 
+                          spdSwitch.hasStateChanged() || 
+                          cadSwitch.hasStateChanged()) ;
+    if (switchChanged)
+    {
+      Serial.println ("switchChanged: stay awake or wake up");
+      sleepState.setState(true);  // A switch changed. Toggle the state so make sure the time in the state is now reset.  
+      sleepState.setState(false); 
+    }
+
+  // if we have not has a switch active for a certain time and do not have the alarm lights on: go to sleep
+  // and are not already in sleep state.
+  if ((sleepState.getTimeInState() > tSleep_ms) && 
+      (blinkerState.getState() != BLINK_ALARM) && 
+      (sleepState.getState() == false)) 
+  {
+      Serial.println ("goToSleep () ");
+      // and sleep....
+      sleepState.setState(true);
+
+      // switch off all lichts.
+      leftLed.setLedOff();
+      rightLed.setLedOff();
+      rearLed.setLedOff();
+      headLed.setLedOff();
+      head2Led.setLedOff();
+    
+      // clear the screen
+      clearScreen ();    
+      Serial.println ("Done ");
+
+  }
+}
+
+
 void updateHead() 
 {
   static int currentState = rearState.getState();
@@ -99,7 +159,7 @@ void updateBlinkers()
   // - it blinks untill it is released. 
 
   static long tStartBlink_ms = 0;
-  static byte numTimesBlinked = 0; 
+  static byte numTimesBlinked = 1; 
   long tNow_ms = millis();
 
   /*
@@ -315,7 +375,6 @@ void updateSpeed()
   speed_kmh = 3.6 * wheelCircumvention_mm * spdSwitch.getInteruptFrequency(1250) / 1000;
   //String Message = " kmh = " + String(speed_kmh ) + " / " + String (spdSwitch.getInteruptFrequency(1250)) ;
   //Serial.println(Message);
-      
 }
 
 void updateCadence() 

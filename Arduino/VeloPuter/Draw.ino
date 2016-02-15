@@ -17,19 +17,19 @@ void drawSplash ()
       u8g.drawBitmapP (0, 0, 16, 64,  icoSplash);
     } while( u8g.nextPage() );
 
-    delay (2500);
+    delay (1500);
 
 }
 
 void writeScreen ()
 {
-  int tDelay_ms = 250; // 4 time per second
-  static long tNew = 0;
-  static long tOld = 0;
-  tNew = millis();
+ // int tDelay_ms = 250; // 4 time per second
+//  static long tNew = 0;
+//  static long tOld = 0;
+//  tNew = millis();
 
-  if ((tNew - tOld) >= tDelay_ms)
-  {
+//  if ((tNew - tOld) >= tDelay_ms)
+ // {
     // display
     u8g.firstPage();
     do {  
@@ -40,9 +40,9 @@ void writeScreen ()
       drawCadence();
     } while( u8g.nextPage() );
 
-    // reset the timer
-    tOld = tNew;
-  }
+  //  // reset the timer
+    //tOld = tNew;
+//  }
 }
 
 // To clear the screen we only need an empty picture loop.

@@ -134,7 +134,14 @@ public:
     //  Note that we now calculate over the whole array of timestamps but that we could also 
     // calculate it over a smaller window. 2016-02-13 /Gert
     //
-    unsigned long tDebounceVariable_ms = max(tDebounce_ms, (tInterupts_ms[iEnd] - tInterupts_ms[0])/(8*iEnd));
+    unsigned long tDebounceVariable_ms = (tInterupts_ms[iEnd] - tInterupts_ms[0])/(8*iEnd);
+    
+    // define upper als lower limits to the debounce time.
+    // 
+    //  On a 1590 mm wheel the speed for 1 Hz ~ 6 km/h. -> debounce upper limit for this is 0.25 s = 250 ms.
+    //
+    //
+    tDebounceVariable_ms = constrain(tDebounceVariable_ms,tDebounce_ms,250);
 
     tNow_ms = millis();
 

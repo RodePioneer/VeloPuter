@@ -60,9 +60,11 @@ const byte switchBrakePin =     A5; // the number of the brake switch -> to be o
  * Other constants which are used throughout the programm:
  * 
  */
-const long tSleep_ms = 60000;     // 10 min
+const long tSleep_ms = 15000;     // 1 min
 const int tPeriodBlink_ms = 333;  // 1.5 Hz
 const byte numTimesToBlink = 7;  // 7 times high, 6 times low, = 13 = 4.3 s
 const int wheelCircumvention_mm = 1590;  // 406-50 wheel
+const unsigned long tSoftwareTimerInterrupt_us = 10000; // run the timer at 100 Hz.
+
 
 

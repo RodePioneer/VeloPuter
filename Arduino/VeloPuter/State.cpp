@@ -23,8 +23,8 @@ public:
   }
   
 private: 
-  byte state;
-  unsigned long tLastStateChange_ms;
+  volatile byte state;
+  volatile unsigned long tLastStateChange_ms;
 };
 
 

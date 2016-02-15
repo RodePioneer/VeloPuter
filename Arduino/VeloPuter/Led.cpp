@@ -4,13 +4,14 @@
  
  */
 #include <Arduino.h> 
- 
+#include <TimerOne.h>
+
 class Led
 { 
   //private: 
 private: 
-  byte ledIntensity = lowIntensity;
-  byte Pin;
+  volatile byte ledIntensity = minIntensity;
+  byte pin;
 
 public:
   byte minIntensity = 8; // "group" intensity
@@ -18,10 +19,19 @@ public:
   byte highIntensity = 255; // "normal night ride"
   byte maxIntensity = 255; // "max"
 
-  void setLedIntensity (byte newState) // directly set the new LED value, either digital or analog.
+  void setLedIntensity (byte newIntensity) // directly set the new LED value, either digital or analog.
   {
-    ledIntensity = newState;
-    analogWrite(Pin, ledIntensity);
+    ledIntensity = newIntensity;
+
+    // Because we Timer1 pin 9 and 10 are broken for analogwrite
+    if (pin == 9 or pin == 10)
+    {
+      Timer1.pwm(pin, 4*ledIntensity);
+    }
+    else
+    {
+      analogWrite(pin, ledIntensity);
+    }
   }
 
   byte getLedIntensity () // return the current intensity of the led.
@@ -29,17 +39,17 @@ public:
     return ledIntensity;
   }
 
-  void setPin (byte pin)
+  void setPin (byte Pin)
   {
-    Pin = pin;
+    pin = Pin;
   }
   
   byte getPin ()
   {
-    return Pin;
+    return pin;
   }
 
-  void toggleledIntensity (void) // Flip the state of the LED
+  void toggleledIntensity (void) // Flip the state of the LED. Note that the toggle is between Low and High. Off, Min and Max are ignored. 
   {
     if (ledIntensity == lowIntensity) 
     {
@@ -49,32 +59,40 @@ public:
     {
       ledIntensity = lowIntensity;
     }
-    analogWrite(Pin, ledIntensity);  
+    setLedIntensity(ledIntensity);  
   }  
 
-  void setLedHigh (void) // switch to high / max 
+  void setLedOff (void)
   {
-    ledIntensity = highIntensity;
-    analogWrite(Pin, ledIntensity);
+    ledIntensity = 0;
+    setLedIntensity(ledIntensity);
   }
-
+  
   void setLedMin (void) // switch to high / max 
   {
     ledIntensity = minIntensity;
-    analogWrite(Pin, ledIntensity);
-  }
-
-  void setLedMax (void) // switch to high / max 
-  {
-    ledIntensity = maxIntensity;
-    analogWrite(Pin, ledIntensity);
+    setLedIntensity(ledIntensity);
   }
 
   void setLedLow (void) // switch to low / min
   {
     ledIntensity = lowIntensity;
-    analogWrite(Pin, ledIntensity);
+    setLedIntensity(ledIntensity);
   }
+
+  void setLedHigh (void) // switch to high / max 
+  {
+    ledIntensity = highIntensity;
+    setLedIntensity(ledIntensity);
+  }
+
+  void setLedMax (void) // switch to high / max 
+  {
+    ledIntensity = maxIntensity;
+    setLedIntensity(ledIntensity);
+  }
+
+
 
 //  void upledIntensity (void) // increase the intensity of the LED using PWM
 //  {
