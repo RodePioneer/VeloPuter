@@ -4,93 +4,73 @@
  * Functions which update the states and .
  *
  **********************************************************************************************/
-void updatePinStates()
-{
-  /*
-  Update all switches. After this all switch statuses can be used. 
-   */
-  brakeSwitch.ReadOut();
-  upSwitch.ReadOut();
-  downSwitch.ReadOut();
-  leftSwitch.ReadOut();
-  rightSwitch.ReadOut();
-  
-  spdSwitch.ReadOut(); // the interupts still have to be "ReadOut" because an interupt is only registered. Not handled any further.
-  cadSwitch.ReadOut();
-}
 
 void updateSleep ()
 {
-  //Serial.println("Just checking...");
-
-  // if any of the states changed: make sure we leave the sleep state.
-
-//  byte switchChanged  = (upSwitch.hasStateChanged() ||
-//                        downSwitch.hasStateChanged() || 
-//                        leftSwitch.hasStateChanged() || 
-//                        rightSwitch.hasStateChanged() || 
-//                        brakeSwitch.hasStatehanged() || 
-//                        spdSwitch.hasStateChanged() || 
-//                        cadSwitch.hasStateChanged()) ; 
-//  byte alarmLightsAreOn = (blinkerState.getState() != BLINK_ALARM);
-//  byte 
-//    
-//  if (  )
-//  {
-//    Serial.println("A switch has toggled. Set slaap state to awake (false)"); 
-//    sleepState.setState(true);  // set it to sleep first in order to make sure we have a toggle.
-//    sleepState.setState(false); // sleep to false == wakeup or stay awake.
-//  }
-//
-//    if ( (sleepState.getTimeInState() > tSleep_ms) && (blinkerState.getState() != BLINK_ALARM))
-//  {
-//    Serial.println ("sleepState.setState(true);");
-//    clearScreen ();
-//    goToSleep();
-//    sleepState.setState(true);
-//  }
-  
-  
-  
-  //Serial.println ("updateSleep() 2");
-    //
-    // If we are asleep and any pin changes: wake up.
-    //
+  //
+  // If we are asleep and any pin changes: wake up.
+  //
+  if (sleepState.getState() == true)
+  {
+    //since we are asleep none of the pins will be read out at the updates so do it here.
+    brakeSwitch.ReadOut();
+    upSwitch.ReadOut();
+    downSwitch.ReadOut();
+    leftSwitch.ReadOut();
+    rightSwitch.ReadOut();
+    
+    speedSwitch.ReadOut(); // the interupts still have to be "ReadOut" because an interupt is only registered. Not handled any further.
+    cadenceSwitch.ReadOut();
+    
+    // see if any pins have changed
     byte switchChanged  = (upSwitch.hasStateChanged() ||
                           downSwitch.hasStateChanged() || 
                           leftSwitch.hasStateChanged() || 
                           rightSwitch.hasStateChanged() || 
                           brakeSwitch.hasStateChanged() || 
-                          spdSwitch.hasStateChanged() || 
-                          cadSwitch.hasStateChanged()) ;
+                          speedSwitch.hasStateChanged() || 
+                          cadenceSwitch.hasStateChanged()) ;
     if (switchChanged)
     {
-      Serial.println ("switchChanged: stay awake or wake up");
-      sleepState.setState(true);  // A switch changed. Toggle the state so make sure the time in the state is now reset.  
+    //  Serial.println ("switchChanged: wake up");
       sleepState.setState(false); 
     }
-
-  // if we have not has a switch active for a certain time and do not have the alarm lights on: go to sleep
-  // and are not already in sleep state.
-  if ((sleepState.getTimeInState() > tSleep_ms) && 
-      (blinkerState.getState() != BLINK_ALARM) && 
-      (sleepState.getState() == false)) 
+  }
+  else // What to do is we are awake
   {
-      Serial.println ("goToSleep () ");
-      // and sleep....
-      sleepState.setState(true);
 
-      // switch off all lichts.
-      leftLed.setLedOff();
-      rightLed.setLedOff();
-      rearLed.setLedOff();
-      headLed.setLedOff();
-      head2Led.setLedOff();
-    
-      // clear the screen
-      clearScreen ();    
-      Serial.println ("Done ");
-
+    // if we have not has a switch active for a certain time and do not have the alarm lights on: go to sleep
+    // and are not already in sleep state.
+    if ((sleepState.getTimeInState() > tSleep_ms) &&  
+        (sleepState.getState() == false)) 
+    {
+      if (blinkerState.getState() == BLINK_ALARM)
+      {
+        //
+        // Since the alarm lights are on: do not go into sleep mode.
+        // toggle the state to reset the sleep timer
+        sleepState.setState(true); 
+        sleepState.setState(false);
+      }
+      else
+      {
+        // No alarm: go to sleep
+        //    Serial.println ("goToSleep () ");
+        // and sleep....
+        sleepState.setState(true);
+  
+        // switch off all lichts.
+        leftLed.setLedOff();
+        rightLed.setLedOff();
+        rearLed.setLedOff();
+        headLed.setLedOff();
+        head2Led.setLedOff();
+      
+        // clear the screen
+        clearScreen ();    
+    //    Serial.println ("Done ");
+      }
+    }
   }
 }
 
@@ -98,6 +78,8 @@ void updateSleep ()
 void updateHead() 
 {
   static int currentState = rearState.getState();
+  upSwitch.ReadOut();
+  downSwitch.ReadOut();
 
   if (upSwitch.getState() == LOW && upSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH) 
   {
@@ -132,20 +114,20 @@ void updateHead()
   // update intensities.
   switch (headState.getState()) {
   case OFF:
-    headLed.setLedIntensity (0);
-    head2Led.setLedIntensity (0);
+    headLed.setLedOff();
+    head2Led.setLedOff();
     break;  
   case LOW_INTENSITY:
-    headLed.setLedIntensity (16);
-    head2Led.setLedIntensity (16);
+    headLed.setLedMin();
+    head2Led.setLedMin();
     break;
   case DEFAULT_INTENSITY:
-    headLed.setLedIntensity (64); 
-    head2Led.setLedIntensity (64); 
+    headLed.setLedLow(); 
+    head2Led.setLedLow(); 
     break;
   case HIGH_INTENSITY:
-    headLed.setLedIntensity (255); 
-    head2Led.setLedIntensity (255); 
+    headLed.setLedHigh(); 
+    head2Led.setLedHigh(); 
     break;
   }
 } 
@@ -157,10 +139,14 @@ void updateBlinkers()
   // - it is off (initial state)
   // - it blinks a number of times
   // - it blinks untill it is released. 
+  // - Allarm light
 
   static long tStartBlink_ms = 0;
   static byte numTimesBlinked = 1; 
   long tNow_ms = millis();
+
+  leftSwitch.ReadOut();
+  rightSwitch.ReadOut();
 
   /*
  
@@ -263,6 +249,8 @@ void updateRear()
   First we determine how the state changed
    Second we adapt the led settings.
    */
+  brakeSwitch.ReadOut();
+   
 
   // Determine the next state
   static byte nonBrakeState = DEFAULT_INTENSITY;
@@ -305,19 +293,19 @@ void updateRear()
   // update intensities according to the set state.
   switch (rearState.getState()) {
   case OFF:
-    rearLed.setLedIntensity (0);
+    rearLed.setLedOff(); // unused
     break;  
   case LOW_INTENSITY:
-    rearLed.setLedIntensity (8);
+    rearLed.setLedMin(); // set new rearlight convoy intensity
     break;
   case DEFAULT_INTENSITY:
-    rearLed.setLedIntensity (16); // set new rearlight low intensity
+    rearLed.setLedLow(); // set new rearlight low intensity
     break;
   case FOG_INTENSITY:
-    rearLed.setLedIntensity (64); // set new rearlight low intensity
+    rearLed.setLedHigh(); // set new rearlight fog intensity
     break;
   case BRAKE_INTENSITY:
-    rearLed.setLedIntensity (255); // set new rearlight low intensity
+    rearLed.setLedMax(); // set new rearlight brake intensity
     break;
   }
 
@@ -327,17 +315,17 @@ void updateRear()
 
 void updateBattery() 
 {
-/* 
-Reads the value from the specified analog pin. The Arduino board contains a 6 
-channel (8 channels on the Mini and Nano, 16 on the Mega), 10-bit analog to 
-digital converter. This means that it will map input voltages between 0 and 5 
-volts into integer values between 0 and 1023. This yields a resolution between 
-readings of: 5 volts / 1024 units or, .0049 volts (4.9 mV) per unit. The input 
-range and resolution can be changed using analogReference().
-
-Use a cumulative moving average to keep track of the voltage. Note that this implementation
-of a CMA means that the influence of every measurement decays exponentially. 
-*/
+  /* 
+  Reads the value from the specified analog pin. The Arduino board contains a 6 
+  channel (8 channels on the Mini and Nano, 16 on the Mega), 10-bit analog to 
+  digital converter. This means that it will map input voltages between 0 and 5 
+  volts into integer values between 0 and 1023. This yields a resolution between 
+  readings of: 5 volts / 1024 units or, .0049 volts (4.9 mV) per unit. The input 
+  range and resolution can be changed using analogReference().
+  
+  Use a cumulative moving average to keep track of the voltage. Note that this implementation
+  of a CMA means that the influence of every measurement decays exponentially. 
+  */
   
   int PinValue = analogRead(voltagePin);
 
@@ -349,7 +337,6 @@ of a CMA means that the influence of every measurement decays exponentially.
   const float VcellEmpty = 3.6;
   float batteryVoltage_v;
   byte numOfCells;
-
 
   static float PinMean = VcellEmpty;
 
@@ -366,21 +353,25 @@ of a CMA means that the influence of every measurement decays exponentially.
   cellVoltage_v = batteryVoltage_v / numOfCells;
     
   batteryStatus = 100 * (cellVoltage_v - VcellEmpty)/(VcellFull - VcellEmpty);
-
 }
 
 void updateSpeed() 
-{
-  // Calculate the speed from the frequency
-  speed_kmh = 3.6 * wheelCircumvention_mm * spdSwitch.getInteruptFrequency(1250) / 1000;
-  //String Message = " kmh = " + String(speed_kmh ) + " / " + String (spdSwitch.getInteruptFrequency(1250)) ;
-  //Serial.println(Message);
+{ 
+  /*
+  Check the timestamps on the interupts.
+  then from that calculate the speed in km/h.
+  */
+  speedSwitch.ReadOut(); 
+  speed_kmh = 3.6 * wheelCircumvention_mm * speedSwitch.getInteruptFrequency(1250) / 1000;
+  
 }
 
 void updateCadence() 
-{
-  // Calculate the cadence from the frequency
-  cadence_rpm = 60 * cadSwitch.getInteruptFrequency(2500);
-  //String Message = " Cad = " + String(cadence_rpm ) + " / " + String (cadSwitch.getInteruptFrequency(2500)) ;
-  //Serial.println(Message);
+{ 
+  /*  
+  Check the timestamps on the interupts.
+  then from that calculate the cadens in RPM.
+  */
+  cadenceSwitch.ReadOut(); 
+  cadence_rpm = 60 * cadenceSwitch.getInteruptFrequency(2500);  
 }

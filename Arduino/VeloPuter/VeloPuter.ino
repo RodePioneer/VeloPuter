@@ -31,7 +31,7 @@ U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // I2C / TWI ACK <= WORKS
 //**************************************************
 
 Led leftLed, rightLed, rearLed, headLed, head2Led;
-Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, spdSwitch, cadSwitch;
+Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch;
 State rearState, headState, blinkerState, loopState, sleepState;
 int batteryStatus = 0;
 float cellVoltage_v = 0;
@@ -89,101 +89,20 @@ void setup()   {
 */
 void loop ()
 {
-      String Message = "State: " + String (sleepState.getState()) + "  " + String (sleepState.getTimeInState()) + "  [ms]";
-   Serial.println (Message);
+  // String Message = "State: " + String (sleepState.getState()) + "  " + String (sleepState.getTimeInState()) + "  [ms]";
+  // Serial.println (Message);
   
   // If we are not asleep
   if (sleepState.getState() == false)
   {
    //Serial.println ("Active in Loop");
+   updateBlinkers();// Update the blinkers
    updateBattery(); // Read out and calculate the acutual battery status
    updateSpeed();   // Check the speed based on the interupts which have been.
    updateCadence(); // Check the cadence based on the interupts which have been.
    writeScreen();   // Write all the information to the display.
   }
 }
-
-
-//void loopOld ()
-//{
-//  long timeLast_ms;
-//  long timeNow_ms;
-//  String Message;
-//  enum { INIT, UPDATE_SWITCHES, GO_TO_SLEEP, SLEEP, WAKE_UP,  UPDATE_FRONT, UPDATE_REAR, UPDATE_BLINKERS, UPDATE_SPD, UPDATE_CAD, UPDATE_DISPLAY, BATTERY, ACTIVE_LOOP  };
-//
-//
-//if (1)
-//{
-//  Serial.println ("Loop");
-//  switch (loopState.getState()) {
-//    
-//    case UPDATE_SWITCHES:
-//    Serial.println ("UpdateSwitches");
-//      if ( (sleepState.getTimeInState() > tSleep_ms) && (blinkerState.getState() != BLINK_ALARM))
-//      {
-//
-//        Serial.println ("sleepState.setState(true);");
-//        sleepState.setState(true);
-//      }
-//      
-//      // Check if we are sleeping. If zo -> sleep the loop.
-//      if ( sleepState.getState() ) // true = sleep mode started.
-//      {
-//        loopState.setState(GO_TO_SLEEP);
-//      }
-//      else
-//      {
-//        //loopState.setState(ACTIVE_LOOP);
-//        Serial.println ("ActiveLoop");
-//        updateBattery();
-//        updateSpeed();
-//        updateCadence();
-//        writeScreen();
-//        //loopState.setState(UPDATE_SWITCHES);
-//      }
-//      break;
-//
-//    case ACTIVE_LOOP:
-//      Serial.println ("ActiveLoop");
-//      updateBattery();
-//      updateSpeed();
-//      updateCadence();
-//      writeScreen();
-//      loopState.setState(UPDATE_SWITCHES);
-//      break;
-//
-//    case GO_TO_SLEEP:
-//      Serial.println ("Goto sleep");
-//      clearScreen ();
-//      goToSleep();
-//      loopState.setState(SLEEP);
-//      break;
-//
-//    case SLEEP:
-//      Serial.println ("Sleep");
-//      if (sleepState.getState() == false) // sleepstate gets ste in the update pins.
-//      {
-//        loopState.setState(INIT);
-//      }
-//      break;
-//
-//    case INIT:
-//      Serial.println ("Init / Wake up");
-//      Init();
-//      loopState.setState(UPDATE_SWITCHES);
-//      break;
-//  }
-//}
-//  else
-//  {
-//             Serial.println ("Test");
-//        updateBattery();
-//        updateSpeed();
-//        updateCadence();
-//        writeScreen();
-//  }
-//}
-
 
 /**********************************************************************************************
    Init: after return from sleep or at bootup.
@@ -198,21 +117,36 @@ void Init () {
   brakeSwitch.setPin(switchBrakePin);
 
   leftLed.setPin(ledLeftPin);
-  rightLed.setPin(ledRightPin);
+  leftLed.minIntensity = 0;
   leftLed.lowIntensity = 0;
-  rightLed.lowIntensity = 0;
-  leftLed.setLedLow(); // do this because otherwise the LED would remain on.
-  rightLed.setLedLow();
+  leftLed.highIntensity = 255;
+  leftLed.maxIntensity = 255;
 
-  // reset all the intensities and states.
+  rightLed.setPin(ledRightPin);
+  rightLed.minIntensity = 0;
+  rightLed.lowIntensity = 0; 
+  rightLed.highIntensity = 255;
+  rightLed.maxIntensity = 255;
+  
   rearLed.setPin(ledRearPin);
-  rearLed.lowIntensity = 16; // it might have been set to FOG of off
+  rearLed.minIntensity = 8;
+  rearLed.lowIntensity = 16; 
+  rearLed.highIntensity = 64;
+  rearLed.maxIntensity = 255;
 
   headLed.setPin(ledHeadPin);
-  headLed.setLedIntensity(16); // set initial intensity of the frontlight
-  head2Led.setPin(ledHead2Pin);
-  head2Led.setLedIntensity(16);
+  headLed.minIntensity = 16;
+  headLed.lowIntensity = 64; 
+  headLed.highIntensity = 255;
+  headLed.maxIntensity = 255; 
 
+  head2Led.setPin(ledHead2Pin);
+  head2Led.minIntensity = 16;
+  head2Led.lowIntensity = 64; 
+  head2Led.highIntensity = 255;
+  head2Led.maxIntensity = 255;
+
+  
   // Initialise all the in
   headState.setState(DEFAULT_INTENSITY);
   rearState.setState(DEFAULT_INTENSITY);
@@ -237,30 +171,25 @@ void Init () {
 
 void interruptServiceRoutineSpeed()
 {
-  spdSwitch.Interupt();
+  speedSwitch.Interupt();
 }
 
 void interruptServiceRoutineCadence()
 {
-  cadSwitch.Interupt();
+  cadenceSwitch.Interupt();
 }
-
-//void intBrake()
-//{
-//  brakeSwitch.Interupt();
-//}
 
 void interruptServiceRoutinePinsAndLEDs ()
 {
   interrupts(); // make sure the speed and cadence interupts can go through.
-  updatePinStates();
   updateSleep();
   
   if (sleepState.getState() == false)
   {
+    // Note 1: the blinkers are out due to timing issues and crashes. 
+    // Note 2: the brake will be coupled to the D7 pin with interupt. Perhaps we will not use the timed interupt then. 
     updateRear();
-    updateHead();
-    updateBlinkers();
+    updateHead(); 
   }
   noInterrupts(); 
 }

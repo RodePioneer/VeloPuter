@@ -14,10 +14,10 @@ private:
   byte pin;
 
 public:
-  byte minIntensity = 8; // "group" intensity
-  byte lowIntensity = 64; // "normal day ride"
-  byte highIntensity = 255; // "normal night ride"
-  byte maxIntensity = 255; // "max"
+  byte minIntensity = 0; // "group" intensity
+  byte lowIntensity = 0; // "normal day ride"
+  byte highIntensity = 0; // "normal night ride"
+  byte maxIntensity = 0; // "max"
 
   void setLedIntensity (byte newIntensity) // directly set the new LED value, either digital or analog.
   {
