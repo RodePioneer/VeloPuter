@@ -1,10 +1,11 @@
+
 /*********************************************************************
 
   Velomobiel led driver board by Gert Beumer
 
 **********************************************************************
 
-  2016
+  2016, 2017
   by G.M. Beumer
 
 */
@@ -13,162 +14,75 @@
 #include "Switch.cpp"
 #include "Led.cpp"
 #include "Draw_Icons.cpp"
-#include "State.cpp"
-#include "Constants.cpp"
+#include "Constants.h"
 #include <TimerOne.h>
+#include <avr/interrupt.h>
+#include <avr/power.h>
+#include <avr/sleep.h>
 
-enum {
-  LEFT, RIGHT, OFF, LOW_INTENSITY, DEFAULT_INTENSITY, HIGH_INTENSITY, FOG_INTENSITY, BRAKE_INTENSITY, BLINK_WAIT, BLINK_LEFT, BLINK_RIGHT, BLINK_ALARM
-};
+U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // The proper contructor for the display currently used.
 
-//**************************************************
-// Change this constructor to match your display!!!
-//Adafruit_SSD1306 display(NULL); <= alternative display unit.
-U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // I2C / TWI ACK <= WORKS
-//U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_DEV_0|U8G_I2C_OPT_FAST); // Dev 0, Fast I2C / TWI  <= WORKS
-//U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NO_ACK); // Display which does not send ACK <= WORKS
-
-//**************************************************
-
-Led leftLed, rightLed, rearLed, headLed, head2Led;
+Led leftLed, rightLed, rearLed, headLed, auxLed;
 Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch;
-State rearState, headState, blinkerState, loopState, sleepState;
-int batteryStatus = 0;
-float cellVoltage_v = 0;
+
+int batteryPercentage_pct = 99;
+float cellVoltage_v = 4.2;
 int speed_kmh = 0;
 int cadence_rpm = 0;
 
-void setup()   {
-  analogReference(DEFAULT);  // use the 5V pin as ref
-
-  // Define the mode of  the pints
-  pinMode(ledRearPin, OUTPUT);
-  pinMode(switchBrakePin, INPUT_PULLUP);
-
-  pinMode(ledHeadPin, OUTPUT);
-  pinMode(switchHeadUpPin, INPUT_PULLUP);
-  pinMode(switchHeadDownPin, INPUT_PULLUP);
-
-  pinMode(ledLeftPin, OUTPUT);
-  pinMode(switchLeftPin, INPUT_PULLUP);
-
-  pinMode(ledRightPin, OUTPUT);
-  pinMode(switchRightPin, INPUT_PULLUP);
-
-  pinMode(voltagePin, INPUT);
-
-  pinMode(switchSpdPin, INPUT_PULLUP);
-  pinMode(switchCadPin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(switchSpdPin), interruptServiceRoutineSpeed, FALLING); // 0 = interupt on pin 2
-  attachInterrupt(digitalPinToInterrupt(switchCadPin), interruptServiceRoutineCadence, FALLING); // 1 = interupt on pin 3
-  //attachInterrupt(digitalPinToInterrupt(switchBrakePin), intBrake, FALLING); // 0 = interupt on pin 7 <= in the future
+enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED};
+byte statusBattery = BATTERY_GREEN;
+volatile byte statusPowerDown = false;
+byte stateAlarmBlinkersOn = false;
 
 
-  // Timer interupt
-  Timer1.initialize(tSoftwareTimerInterrupt_us); 
-  Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
+/**********************************************************************************************
+   The Loop the engine of the system. This is the slow train.
+ **********************************************************************************************
 
-  // define serial if we want to sent serial information to the serial monitor
-  Serial.begin(9600);
+  The are all the non-essential functions. It is not critical if they are slow or delayed.
 
-  u8g.setColorIndex(1); // Instructs the display to draw with a pixel on.
-  u8g.setContrast(16);
-
-  //drawSplash ();
-
-  Init();
-
-
-}
-
-/***********************************************
-
-   The state machine: the engine of the system.
-
- ***********************************************
 */
 void loop ()
 {
-  // String Message = "State: " + String (sleepState.getState()) + "  " + String (sleepState.getTimeInState()) + "  [ms]";
-  // Serial.println (Message);
-  
-  // If we are not asleep
-  if (sleepState.getState() == false)
+  updateBattery(); // Read out and calculate the acutual battery status
+  updateSpeed();   // Check the speed based on the interupts which have been.
+  updateCadence(); // Check the cadence based on the interupts which have been.
+  updateSleep();   // See is we need to powerdown the Arduino
+  drawScreen();    // Write all the information to the display.
+}
+
+/**********************************************************************************************
+   Interupt functions
+ **********************************************************************************************
+
+  These are the functions which are done at a fixed interval Note that the processin time of these functions
+  MAY NEVER be more that the interupt time. Keep in mind that they themselves are interuped by hardware interupts.
+
+*/
+void interruptServiceRoutinePinsAndLEDs ()
+{
+  if (statusPowerDown == false) // we want to avoid that lights are set to ON when goinig down. 
   {
-   //Serial.println ("Active in Loop");
-   updateBlinkers();// Update the blinkers
-   updateBattery(); // Read out and calculate the acutual battery status
-   updateSpeed();   // Check the speed based on the interupts which have been.
-   updateCadence(); // Check the cadence based on the interupts which have been.
-   writeScreen();   // Write all the information to the display.
+    interrupts(); // make sure the speed and cadence interupts can go through.
+    // Note 1: the blinkers are out due to timing issues and crashes.
+    // Note 2: the brake will be coupled to the D7 pin with interupt. Perhaps we will not use the timed interupt then.
+    // Note 3: the interupts screw up some of the PWM timers causing the lights to behave weirdly.
+    updateHead();
+    updateRear();
+    updateBlinkers();// Update the blinkers
+    noInterrupts(); // end that interupts can go through.
   }
 }
 
 /**********************************************************************************************
-   Init: after return from sleep or at bootup.
- **********************************************************************************************/
-
-void Init () {
-  // Connect all the pins.
-  leftSwitch.setPin(switchLeftPin);
-  rightSwitch.setPin(switchRightPin);
-  upSwitch.setPin(switchHeadUpPin);
-  downSwitch.setPin(switchHeadDownPin);
-  brakeSwitch.setPin(switchBrakePin);
-
-  leftLed.setPin(ledLeftPin);
-  leftLed.minIntensity = 0;
-  leftLed.lowIntensity = 0;
-  leftLed.highIntensity = 255;
-  leftLed.maxIntensity = 255;
-
-  rightLed.setPin(ledRightPin);
-  rightLed.minIntensity = 0;
-  rightLed.lowIntensity = 0; 
-  rightLed.highIntensity = 255;
-  rightLed.maxIntensity = 255;
-  
-  rearLed.setPin(ledRearPin);
-  rearLed.minIntensity = 8;
-  rearLed.lowIntensity = 16; 
-  rearLed.highIntensity = 64;
-  rearLed.maxIntensity = 255;
-
-  headLed.setPin(ledHeadPin);
-  headLed.minIntensity = 16;
-  headLed.lowIntensity = 64; 
-  headLed.highIntensity = 255;
-  headLed.maxIntensity = 255; 
-
-  head2Led.setPin(ledHead2Pin);
-  head2Led.minIntensity = 16;
-  head2Led.lowIntensity = 64; 
-  head2Led.highIntensity = 255;
-  head2Led.maxIntensity = 255;
-
-  
-  // Initialise all the in
-  headState.setState(DEFAULT_INTENSITY);
-  rearState.setState(DEFAULT_INTENSITY);
-  blinkerState.setState(DEFAULT_INTENSITY);
-  loopState.setState(1);
-
-  drawSplash ();
-
-  // TODO: a loop to set the output of the LED pins so that the LDD modules know that there is a PWM signal.
-}
-
-
-
-/**********************************************************************************************
-   Interupt functions
+   Interupt functions: Hardware interupts. The deepest level.
  **********************************************************************************************
 
   Because interupt handling can only be done by a function and not a class member we have a
   few functions here which make that call.
 
 */
-
 void interruptServiceRoutineSpeed()
 {
   speedSwitch.Interupt();
@@ -179,20 +93,6 @@ void interruptServiceRoutineCadence()
   cadenceSwitch.Interupt();
 }
 
-void interruptServiceRoutinePinsAndLEDs ()
-{
-  interrupts(); // make sure the speed and cadence interupts can go through.
-  updateSleep();
-  
-  if (sleepState.getState() == false)
-  {
-    // Note 1: the blinkers are out due to timing issues and crashes. 
-    // Note 2: the brake will be coupled to the D7 pin with interupt. Perhaps we will not use the timed interupt then. 
-    updateRear();
-    updateHead(); 
-  }
-  noInterrupts(); 
-}
 
 
 

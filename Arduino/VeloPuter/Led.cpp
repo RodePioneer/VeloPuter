@@ -10,12 +10,13 @@ class Led
 { 
   //private: 
 private: 
-  volatile byte ledIntensity = minIntensity;
+  volatile byte ledIntensity = lowIntensity;
   byte pin;
-
+  
 public:
-  byte minIntensity = 0; // "group" intensity
-  byte lowIntensity = 0; // "normal day ride"
+  byte offIntensity = 0; // "group" intensity
+  byte lowIntensity = 0; // "group" intensity
+  byte mediumIntensity = 0; // "normal day ride"
   byte highIntensity = 0; // "normal night ride"
   byte maxIntensity = 0; // "max"
 
@@ -24,7 +25,7 @@ public:
     ledIntensity = newIntensity;
 
     // Because we Timer1 pin 9 and 10 are broken for analogwrite
-    if (pin == 9 or pin == 10)
+    if (pin == 9 or pin == 10 ) 
     {
       Timer1.pwm(pin, 4*ledIntensity);
     }
@@ -32,6 +33,9 @@ public:
     {
       analogWrite(pin, ledIntensity);
     }
+    // tracer on a specific or all pins. 
+    //if (pin == 11) Serial.println ("Setting pin " +String(pin) + " to " + String(ledIntensity) );
+  
   }
 
   byte getLedIntensity () // return the current intensity of the led.
@@ -47,36 +51,23 @@ public:
   byte getPin ()
   {
     return pin;
-  }
-
-  void toggleledIntensity (void) // Flip the state of the LED. Note that the toggle is between Low and High. Off, Min and Max are ignored. 
-  {
-    if (ledIntensity == lowIntensity) 
-    {
-      ledIntensity = highIntensity;
-    }
-    else // if == high
-    {
-      ledIntensity = lowIntensity;
-    }
-    setLedIntensity(ledIntensity);  
-  }  
+  } 
 
   void setLedOff (void)
   {
-    ledIntensity = 0;
+    ledIntensity = offIntensity;
     setLedIntensity(ledIntensity);
   }
   
-  void setLedMin (void) // switch to high / max 
+  void setLedLow (void) // switch to high / max 
   {
-    ledIntensity = minIntensity;
+    ledIntensity = lowIntensity;
     setLedIntensity(ledIntensity);
   }
 
-  void setLedLow (void) // switch to low / min
+  void setLedMedium (void) // switch to low / min
   {
-    ledIntensity = lowIntensity;
+    ledIntensity = mediumIntensity;
     setLedIntensity(ledIntensity);
   }
 
@@ -92,21 +83,21 @@ public:
     setLedIntensity(ledIntensity);
   }
 
-
-
-//  void upledIntensity (void) // increase the intensity of the LED using PWM
-//  {
-//    ledIntensity *= 4;
-//    ledIntensity = constrain (ledIntensity, 1, 255);
-//    analogWrite(Pin, ledIntensity);  
-//  } 
-//
-//  void downledIntensity (void) // redudce the intensity using PWM
-//  {
-//    ledIntensity /= 4;
-//    ledIntensity = constrain (ledIntensity, 1, 255);
-//    analogWrite(Pin, ledIntensity);  
-//  } 
+  void upLed (void) // increase the intensity
+  {
+    if      (ledIntensity == offIntensity) setLedLow();
+    else if (ledIntensity == lowIntensity) setLedMedium();
+    else if (ledIntensity == mediumIntensity) setLedHigh();
+    else if (ledIntensity == highIntensity) setLedMax();
+  }
+  
+  void downLed (void) // lower the intensity
+  {
+    if      (ledIntensity == lowIntensity) setLedOff();
+    else if (ledIntensity == mediumIntensity) setLedLow();
+    else if (ledIntensity == highIntensity) setLedMedium();
+    else if (ledIntensity == maxIntensity) setLedHigh();
+  }
 };
 
 
