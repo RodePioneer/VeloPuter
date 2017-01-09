@@ -377,7 +377,7 @@ void updateBlinkers()
     else
     {
       // set to zero during Alarm. 
-      analogWrite(speakerPin, BlinkOn * speakerVolume);
+      analogWrite(speakerPin, 0);
     }
   }
 
