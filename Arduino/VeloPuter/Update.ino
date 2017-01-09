@@ -370,7 +370,15 @@ void updateBlinkers()
     else u8g.sleepOff();
 
     // zoomer
-    if (stateAlarmBlinkersOn == false) analogWrite(speakerPin, BlinkOn * speakerVolume);
+    if (stateAlarmBlinkersOn == false)  
+    {
+      analogWrite(speakerPin, BlinkOn * speakerVolume);
+    }
+    else
+    {
+      // set to zero during Alarm. 
+      analogWrite(speakerPin, BlinkOn * speakerVolume);
+    }
   }
 
 }

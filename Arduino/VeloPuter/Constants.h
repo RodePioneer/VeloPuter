@@ -65,10 +65,11 @@ const long tSleepNoCadSpd_ms = 1800000;     // Half an hour
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz
 const byte numTimesToBlink = 4;             // 7 times high, 6 times low, = 13 = 4.3 s
 const int  wheelCircumvention_mm = 1590;    // 406-50 wheel
+//const int  wheelCircumvention_mm = 1450;    // 406-28 wheel
 const byte speakerVolume = 50;
 const byte setOledIntensity = 255;
 
-//const int  wheelCircumvention_mm = 1450;    // 406-28 wheel
+
 
 //const unsigned long tSoftwareTimerInterrupt_us = 10000; // run the timer at 100 Hz.
 const unsigned long tSoftwareTimerInterrupt_us = 40000; // run the timer at 25 Hz.
@@ -95,13 +96,13 @@ const int rearLedHighIntensity = 64; // Note that this stops the up/down!
 const int rearLedMaxIntensity = 255;
 
 const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 64;
+const int headLedLowIntensity = 16;
 const int headLedMediumIntensity = 96; 
 const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255; 
 
 const int auxLedOffIntensity = 0;
-const int auxLedLowIntensity = 64;
+const int auxLedLowIntensity = 16;
 const int auxLedMediumIntensity = 96; 
 const int auxLedHighIntensity = 255;
 const int auxLedMaxIntensity = 255;
