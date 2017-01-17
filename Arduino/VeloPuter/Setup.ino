@@ -1,8 +1,5 @@
 
 void setup()   {
-
-
-  
   // Timer interupt
   Timer1.initialize(tSoftwareTimerInterrupt_us); 
   Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);

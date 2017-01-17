@@ -17,7 +17,7 @@ void drawSplash ()
   */
   u8g.firstPage();
   do {
-    u8g.drawBitmapP (22, 24, 10, 21,  icoSplash);
+    u8g.drawBitmapP (22, 24, 10, 10,  icoSplash);
   } while ( u8g.nextPage() );
   delay (1000);
 }
@@ -34,7 +34,8 @@ void drawScreen ()
     drawSpeed();
     drawCadence();
     drawBatteryIcon();
-//    drawDebug();
+    drawSensors();
+    drawDebug();
   } while ( u8g.nextPage() );
 }
 
@@ -231,28 +232,50 @@ void drawLightIcons ()
   else if (rearLed.getLedIntensity() == rearLed.maxIntensity)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
 }
 
+void drawSensors()
+{
+  /*
+   * Draw indicators for the interust sensitive sensors. 
+   */
+  if (speedSwitch.getInteruptActive())
+  {
+  u8g.drawDisc (120, 4, 3);
+  }
+  if (cadenceSwitch.getInteruptActive())
+  {
+  u8g.drawDisc (110, 4, 3);
+  }
+}
 
 void drawDebug()
 {
 
-  u8g.setPrintPos (100, 32);
-  u8g.print (batteryPercentage_pct);
+//  u8g.setPrintPos (100, 32);
+//  u8g.print (batteryPercentage_pct);
 
-  u8g.setPrintPos (100, 16);
-  u8g.print (statusBattery);
+u8g.setPrintPos (97, 17);
 
-  u8g.setPrintPos (25, 17);
-  u8g.print (10 * (cadenceSwitch.getTSinceLastChange_ms() != 0) + (speedSwitch.getTSinceLastChange_ms() != 0));
+#if defined(QUILTJE)
+u8g.print (2);
+#elif defined(QUATRO)
+u8g.print (3);
+#elif defined(STRADA)
+u8g.print (1);
+#endif
+
+//
+//  u8g.setPrintPos (25, 17);
+//  u8g.print (10 * (cadenceSwitch.getTSinceLastChange_ms() != 0) + (speedSwitch.getTSinceLastChange_ms() != 0));
 
   //  u8g.setPrintPos (25,36);
   //  u8g.print (10*(cadenceSwitch.getInteruptActive())+(speedSwitch.getInteruptActive()!=0));
 
-  u8g.setPrintPos (25, 34);
-  u8g.print (cadenceSwitch.getInteruptActive());
-
-
-  u8g.setPrintPos (25, 52);
-  u8g.print (speedSwitch.getInteruptActive());
+//  u8g.setPrintPos (25, 34);
+//  u8g.print (cadenceSwitch.getInteruptActive());
+//
+//
+//  u8g.setPrintPos (25, 52);
+//  u8g.print (speedSwitch.getInteruptActive());
 }
 
 

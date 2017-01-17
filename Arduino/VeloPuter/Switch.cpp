@@ -57,7 +57,7 @@ class Switch
       {
         numOfZeros  += (tInterupts_ms[i] == 0); 
       }
-      Serial.println ("numZEros pin " + String(numOfZeros)  );
+      //Serial.println ("numZEros pin " + String(numOfZeros)  );
       return (numOfZeros == 0);
     }
 

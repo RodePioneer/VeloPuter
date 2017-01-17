@@ -27,7 +27,8 @@ public:
     // Because we Timer1 pin 9 and 10 are broken for analogwrite
     if (pin == 9 or pin == 10 ) 
     {
-      Timer1.pwm(pin, 4*ledIntensity);
+      //Timer1.pwm(pin, 4*ledIntensity); // I suspect Timer1 form the sometimes weird behaviour for the display. 
+      digitalWrite(pin, ledIntensity > 0);
     }
     else
     {

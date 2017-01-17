@@ -20,6 +20,7 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
 
+
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // The proper contructor for the display currently used.
 
 Led leftLed, rightLed, rearLed, headLed, auxLed;

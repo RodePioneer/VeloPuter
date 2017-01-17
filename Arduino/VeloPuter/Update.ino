@@ -40,6 +40,9 @@ void updateSleep ()
     // make sure leds stay off when set to off.
     //Timer1.detachInterrupt (); // it wil reattached during the setup
     // TODO: use a semaphore to block the interupts.
+    
+    // clear the screen
+    u8g.sleepOn();
 
     // switch off all lichts.
     leftLed.setLedIntensity(0);
@@ -48,8 +51,6 @@ void updateSleep ()
     headLed.setLedIntensity(0);
     auxLed.setLedIntensity(0);
 
-    // clear the screen
-    u8g.sleepOn();
     //    Serial.println ("Done ");
 
     //
@@ -252,6 +253,7 @@ void updateBlinkers()
   static byte numTimesToBlinkRight = 0;
   static long tStartBlink_ms = 0;
   long tNow_ms = millis();
+  byte BlinkOn = 0;
 
   leftSwitch.ReadOut();
   rightSwitch.ReadOut();
@@ -311,18 +313,28 @@ void updateBlinkers()
       }
       numTimesToBlinkRight = 0;
     }
-
+//    else if (leftSwitch.getState() == HIGH && leftSwitch.getState() == HIGH && (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0))
+//    {
+//      // Apearently the leds are still on while the blinker switch is in the off setting. 
+//      rightLed.setLedOff();
+//      leftLed.setLedOff();
+//    }
 
   }
 
   /*
      Do the actual blinking
   */
+  
   //
   // See if enough time has passed since the last change of the leds.
   //
   if ((tNow_ms - tStartBlink_ms) >= tPeriodBlink_ms)
   {
+
+    // Zoomer ands screen blinking in sync with the actual leds. Don't keep track.
+    BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
+    
     tStartBlink_ms = tNow_ms;
 
     // blink left
@@ -361,11 +373,16 @@ void updateBlinkers()
         leftLed.setLedOff();
       }
     }
-
-    // Zoomer ands screen blinking in sync with the actual leds. Don't keep track.
-    byte BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
+    else if (numTimesToBlinkRight == 0 && numTimesToBlinkLeft == 0 && BlinkOn)
+    {
+      // Apearently the leds are still on while the blinker switch is in the off setting and we no longer need to do anything 
+        rightLed.setLedOff();
+        leftLed.setLedOff();
+    }
 
     // blink the screen
+    BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
+
     if (BlinkOn) u8g.sleepOn();
     else u8g.sleepOff();
 
