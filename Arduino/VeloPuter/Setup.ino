@@ -3,6 +3,8 @@ void setup()   {
   // Timer interupt
   Timer1.initialize(tSoftwareTimerInterrupt_us); 
   Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
+  //Timer3.initialize(tSoftwareTimerInterrupt_us); 
+  //Timer3.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
 
   // define serial if we want to sent serial information to the serial monitor
 //  Serial.begin(9600);
@@ -31,6 +33,13 @@ void setup()   {
   
   pinMode(switchBrakePin, INPUT_PULLUP);
   brakeSwitch.setPin(switchBrakePin);
+
+  pinMode(switchAlarmPin, INPUT_PULLUP);
+  alarmSwitch.setPin(switchAlarmPin);
+
+  pinMode(switchConfigPin, INPUT_PULLUP);
+  configSwitch.setPin(switchConfigPin);
+
 
   pinMode(switchSpdPin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(switchSpdPin), interruptServiceRoutineSpeed, FALLING); // 0 = interupt on pin 2
@@ -85,7 +94,12 @@ void setup()   {
   auxLed.mediumIntensity = auxLedMediumIntensity; 
   auxLed.highIntensity = auxLedHighIntensity;
   auxLed.maxIntensity = auxLedMaxIntensity;
-  auxLed.setLedLow();
+  #if defined(QUILTJE)  || defined(STRADA)
+    auxLed.setLedLow();  
+  #elif defined(QUATRO)
+    auxLed.setLedOff();
+  #endif
+  
 
   pinMode(speakerPin, OUTPUT);
 

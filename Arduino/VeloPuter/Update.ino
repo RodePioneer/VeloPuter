@@ -72,8 +72,12 @@ void updateSleep ()
     rightLed.setLedOff();
     rearLed.setLedLow();
     headLed.setLedLow();
+    #if defined(QUILTJE)  || defined(STRADA)
     auxLed.setLedLow();
-
+    #elif defined(QUILTJE)  
+    auxLed.setLedOff();
+    #endif
+    
     //Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
     //setup ();
 
@@ -101,45 +105,73 @@ void updateBattery()
   const byte numSamples = 10;
   const float VRef = 5.00;
 
-  float batteryVoltage_v;
+  int batteryVoltage_mv;
   byte numOfCells;
 
 
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
-  batteryVoltage_v = 4.326 * (VRef / 1023) * PinMean; // 4.326 was measured useing a voltage meter
+  batteryVoltage_mv = 4326 * (VRef / 1023) * PinMean; // 4.326 was measured useing a voltage meter
 
   // Assume the cells are no less then 3.2 V and no more 4.2V.
   // cutoffs for 3 cells between 9.0 and 12.8 V.
-  if (batteryVoltage_v >= 16.4) numOfCells = 1; // 5 or more: dislay voltage
-  else if (batteryVoltage_v >= 12.8) numOfCells = 4; // 4 cells
-  else if (batteryVoltage_v >= 9.0) numOfCells  = 3;  // 3 cells
-  else if (batteryVoltage_v >= 5.0) numOfCells  = 2;
+  if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
+  else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
+  else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
+  else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
   else numOfCells = 1;                               // 1,2 cells or other than lipo
 
-  cellVoltage_v = batteryVoltage_v / numOfCells;
+  cellVoltage_mv = batteryVoltage_mv / numOfCells;
 
   /*
      Determine the battery percentage. This is a measures dischage curve for LiPo.
+
+     measurement data
+     Vlow   Vmid  Vhigh   C
+     3.78   3.73  x       (5000-2600)/5000 = 48%
+     4.2 = 100%
+     4.0 = 90 %
+     3.75 = 50%
+     3.4 = 5%
+     V = [4.2, 4.0, 3.75, 3.4]
+     C = [100, 90, 50, 0]
+    
   */
-  // 84-100% full
-  if      (cellVoltage_v >= 4.0) batteryPercentage_pct = int(16.0 * (cellVoltage_v - 4.0) / (4.2 - 4.0) + 84.5);
+  const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+  const int C[6] = {100,    90,   75,   50,   10,    0};      // % capacity
+  //int cellVoltage_mv = cellVoltage_v * 1000 ; 
+  
+  // 84-100% full :
+  if      (cellVoltage_mv >= V[1]) batteryPercentage_pct = int((C[0]-C[1]) * (cellVoltage_mv - V[1]) / (V[0] - V[1]) + C[1]);
   // 49-84% full
-  else if (cellVoltage_v >= 3.8) batteryPercentage_pct = int(35.0 * (cellVoltage_v - 3.8) / (4.0 - 3.8) + 49.5);
+  else if (cellVoltage_mv >= V[2]) batteryPercentage_pct = int((C[1]-C[2]) * (cellVoltage_mv - V[2]) / (V[1] - V[2]) + C[2]);
   // 12-49% full
-  else if (cellVoltage_v >= 3.7) batteryPercentage_pct = int(37.0 * (cellVoltage_v - 3.7) / (3.8 - 3.7) + 12.5);
+  else if (cellVoltage_mv >= V[3]) batteryPercentage_pct = int((C[2]-C[3]) * (cellVoltage_mv - V[3]) / (V[2] - V[3]) + C[3]);
   // 3-12 % full
-  else if (cellVoltage_v >= 3.4) batteryPercentage_pct = int(9.0  * (cellVoltage_v - 3.4) / (3.7 - 3.4) + 3.5);
+  else if (cellVoltage_mv >= V[4]) batteryPercentage_pct = int((C[3]-C[4]) * (cellVoltage_mv - V[4]) / (V[3] - V[4]) + C[4]);
   // < 3% full
-  else if (cellVoltage_v <  3.4) batteryPercentage_pct = int(3.0  * (cellVoltage_v - 3.2) / (3.2 - 3.2) + 0.5);
+  else if (cellVoltage_mv >= V[5]) batteryPercentage_pct = int((C[4]-C[5]) * (cellVoltage_mv - V[5]) / (V[4] - V[5]) + C[5]);
+//
+//// 84-100% full :
+//  if      (cellVoltage_v >= 4.0) batteryPercentage_pct = int(16.0 * (cellVoltage_v - 4.0) / (4.2 - 4.0) + 84.5);
+//  // 49-84% full
+//  else if (cellVoltage_v >= 3.8) batteryPercentage_pct = int(35.0 * (cellVoltage_v - 3.8) / (4.0 - 3.8) + 49.5);
+//  // 12-49% full
+//  else if (cellVoltage_v >= 3.75) batteryPercentage_pct = int(37.0 * (cellVoltage_v - 3.7) / (3.8 - 3.7) + 12.5);
+//  // 3-12 % full
+//  else if (cellVoltage_v >= 3.4) batteryPercentage_pct = int(9.0  * (cellVoltage_v - 3.4) / (3.7 - 3.4) + 3.5);
+//  // < 3% full
+//  else if (cellVoltage_v <  3.4) batteryPercentage_pct = int(3.0  * (cellVoltage_v - 3.4) / (3.4 - 3.2) + 0.5);
+  
+  
   batteryPercentage_pct = constrain(batteryPercentage_pct, 0, 99);
 
   /*
      Determnine battery regime
   */
-  
-  if (batteryPercentage_pct < 20 && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
+  const int Batt_pct[3] = {20,10,5};
+  if (batteryPercentage_pct < Batt_pct[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
   {
     /*
        No high beam
@@ -156,7 +188,7 @@ void updateBattery()
 
 
   }
-  if (batteryPercentage_pct < 10 && statusBattery == BATTERY_ORANGE)
+  if (batteryPercentage_pct < Batt_pct[1]  && statusBattery == BATTERY_ORANGE)
   {
     /*
        We are now more pressen for power consumption. 
@@ -190,7 +222,7 @@ void updateBattery()
 
     statusBattery = BATTERY_RED;
   }
-  if (batteryPercentage_pct < 5 && statusBattery == BATTERY_RED)
+  if (batteryPercentage_pct < Batt_pct[2]  && statusBattery == BATTERY_RED)
   {
     /*
        The battery is almost dead. We now power it down.
@@ -228,13 +260,22 @@ void updateHead()
   if (upSwitch.getState() == LOW && upSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH)
   {
     headLed.upLed();
-    auxLed.upLed();
+    #if defined(QUILTJE)  || defined(STRADA)
+      auxLed.upLed();
+    #endif
   }
 
   if (downSwitch.getState() == LOW && downSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH)
   {
     headLed.downLed();
+
+    //
+    // Only the strada and Quiltje have double headlights.
+    // 
+    #if defined(QUILTJE)  || defined(STRADA)
     auxLed.downLed();
+    #endif
+    
   }
 }
 
@@ -257,9 +298,39 @@ void updateBlinkers()
 
   leftSwitch.ReadOut();
   rightSwitch.ReadOut();
+  alarmSwitch.ReadOut();
+
+  #if defined(QUATRO)
+    if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW ) 
+    {
+      stateAlarmBlinkersOn = !stateAlarmBlinkersOn;
+    
+    if (stateAlarmBlinkersOn == false) 
+      {
+      numTimesToBlinkLeft = 0;
+      numTimesToBlinkRight = 0;
+      // Just in case.... otherwise they might stay on. 
+      rightLed.setLedOff();
+      leftLed.setLedOff();
+      }
+}
+  #endif
 
   if (stateAlarmBlinkersOn)
   { // We are blinking alarm lights. Continue to stop?
+    #if defined(QUATRO)
+    //
+    // Quatro
+    //
+      numTimesToBlinkLeft = 1;
+      numTimesToBlinkRight = 1;
+
+    #elif defined(QUILTJE)  || defined(STRADA)
+    //
+    // Code for the Strada & Quiltje
+    // Confirm alarm state by checking of there is still an blinker switch on
+    // if not: leave the alarm state.
+    //
     if (leftSwitch.getState() == LOW || rightSwitch.getState() == LOW)
     { // Still the switch is either left or right. Keep on blinking.
       // blink when a certain amount of time has elapsed.
@@ -275,6 +346,7 @@ void updateBlinkers()
       rightLed.setLedOff();
       leftLed.setLedOff();
     }
+    #endif
   }
   else
   { // regular stuff to do.
@@ -383,7 +455,12 @@ void updateBlinkers()
     // blink the screen
     BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
 
-    if (BlinkOn) u8g.sleepOn();
+    if (BlinkOn) 
+    {
+      u8g.begin(); // Make sure the display gets reset when we blink
+      u8g.setContrast(setOledIntensity);
+      u8g.sleepOn();
+    }
     else u8g.sleepOff();
 
     // zoomer
@@ -417,6 +494,10 @@ void updateRear()
   {
     ledPreviousIntensity = rearLed.getLedIntensity();
     rearLed.setLedMax();
+
+    #if defined(QUATRO)
+    auxLed.setLedMax();
+    #endif
     //DEBUG_CV = DEBUG_CV - 3;
   }
 
@@ -424,6 +505,10 @@ void updateRear()
   else if (brakeSwitch.getState() == HIGH && brakeSwitch.hasStateChanged() && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
+
+    #if defined(QUATRO)
+    auxLed.setLedOff();
+    #endif
   }
 
   // Brake is on, up has changed- > default goes up
@@ -443,6 +528,26 @@ void updateRear()
   }
 }
 
+void updateConfig()
+    {
+    #if defined(QUATRO)
+      configSwitch.ReadOut();
+      if (configSwitch.hasStateChanged() && configSwitch.getState() == LOW ) 
+      {
+        if (setOledIntensity == 255)
+        {
+          setOledIntensity = 0;
+        }
+        else
+        {
+          setOledIntensity = 255;
+        }
+        u8g.begin();
+        u8g.setContrast(setOledIntensity);
+      }
+    #endif
+    }
+    
 void updateSpeed()
 {
   /*

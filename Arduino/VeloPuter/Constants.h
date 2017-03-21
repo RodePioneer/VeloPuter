@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <U8glib.h>
 
-#define STRADA   // Configuration management: STRADA QUILTJE and QUATRO 
+#define QUATRO   // Configuration management: STRADA QUILTJE and QUATRO 
+#define Ug82
 
 /* Arduino Micro pin configuration/ capabilities
  *
@@ -41,11 +42,11 @@ const byte switchCadPin =       0;      // NOTE: 0 and 1 are the RX and TX pins.
 const byte switchSpdPin =       1;      // NOTE: 0 and 1 are the RX and TX pins.
 const byte OLED_SDA =           2;      // used for the oled display through u8glib
 const byte OLED_SCL =           3;      // used for the oled display through u8glib
-const byte UNUSED1 =            4;
+const byte switchAlarmPin =     4;
 const byte ledHeadPin =         5;
 const byte ledAuxPin =          6;
 const byte switchBrakePin =     7;      // 7 had an interupt so use it for the brake.
-const byte UNUSED2 =            8;
+const byte switchConfigPin =    8;
 const byte ledRightPin =        9;
 const byte ledLeftPin =         10;
 const byte ledRearPin =         11;
@@ -53,24 +54,24 @@ const byte UNUSED3 =            12;
 const byte speakerPin =         13;
 const byte voltagePin =         A0;
 
-#if defined(STRADA) || defined(QUATRO)
-const byte switchHeadUpPin =    A2; // switch up and down for the STRADA to sync all head light switches.
-const byte switchHeadDownPin =  A1;
-const byte switchRightPin =     A3;
-const byte switchLeftPin =      A4;
-const byte UNUSED4 =            A5;
-#elif defined(QUILTJE)
-const byte switchRightPin =     A1;
-const byte switchLeftPin =      A2;
-const byte switchHeadDownPin =  A3;
-const byte switchHeadUpPin =    A4;     // switch up and down for the STRADA to sync all head light switches.
+#if defined(STRADA) 
+  const byte switchHeadUpPin =    A2; // switch up and down for the STRADA to sync all head light switches.
+  const byte switchHeadDownPin =  A1;
+  const byte switchRightPin =     A3;
+  const byte switchLeftPin =      A4;
+  const byte UNUSED4 =            A5;
+#elif defined(QUILTJE)  || defined(QUATRO)
+  const byte switchRightPin =     A1;
+  const byte switchLeftPin =      A2;
+  const byte switchHeadDownPin =  A3;
+  const byte switchHeadUpPin =    A4;     // switch up and down for the STRADA to sync all head light switches.
 #endif
 
 /*
    Other constants which are used throughout the programm:
 
 */
-const long tSleep_ms = 300000;              // 3 minutes 60000 = 1 min 15000 = 15 sec 600000 = 10 min 300000 = 5 min
+const long tSleep_ms = 30000;              // 3 minutes 60000 = 1 min 15000 = 15 sec 600000 = 10 min 300000 = 5 min
 const long tSleepNoCadSpd_ms = 1800000;     // Half an hour
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz
 const byte numTimesToBlink = 4;             // 7 times high, 6 times low, = 13 = 4.3 s
@@ -84,12 +85,14 @@ const int  wheelCircumvention_mm = 1526;    // 406-28 wheel
 #endif
 
 const byte speakerVolume = 50;
-const byte setOledIntensity = 255;
+ byte setOledIntensity = 255;
 
 
 
 //const unsigned long tSoftwareTimerInterrupt_us = 10000; // run the timer at 100 Hz.
-const unsigned long tSoftwareTimerInterrupt_us = 40000; // run the timer at 25 Hz.
+//const unsigned long tSoftwareTimerInterrupt_us = 40000; // run the timer at 25 Hz.
+const unsigned long tSoftwareTimerInterrupt_us = 50000; // run the timer at 25 H
+//const unsigned long tSoftwareTimerInterrupt_us = 100000; // run the timer at 10 Hz. == too slow
 
 /*
   Defaullt intensiteiten
@@ -113,42 +116,42 @@ const int rearLedHighIntensity = 64; // Note that this stops the up/down!
 const int rearLedMaxIntensity = 255;
 
 #if  defined(STRADA) 
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 16;
-const int headLedMediumIntensity = 96;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
-
-const int auxLedOffIntensity = 0; //uas is just an other headlinght
-const int auxLedLowIntensity = 16;
-const int auxLedMediumIntensity = 96;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
+  const int headLedOffIntensity = 0;
+  const int headLedLowIntensity = 16;
+  const int headLedMediumIntensity = 96;
+  const int headLedHighIntensity = 255;
+  const int headLedMaxIntensity = 255;
+  
+  const int auxLedOffIntensity = 0; //aux is just an other headlinght
+  const int auxLedLowIntensity = 16;
+  const int auxLedMediumIntensity = 96;
+  const int auxLedHighIntensity = 255;
+  const int auxLedMaxIntensity = 255;
 
 #elif defined(QUILTJE)
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 32;
-const int headLedMediumIntensity = 128;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
-
-const int auxLedOffIntensity = 0; // uax is the floodlight
-const int auxLedLowIntensity = 16;
-const int auxLedMediumIntensity = 32;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
+  const int headLedOffIntensity = 0;
+  const int headLedLowIntensity = 32;
+  const int headLedMediumIntensity = 128;
+  const int headLedHighIntensity = 255;
+  const int headLedMaxIntensity = 255;
+  
+  const int auxLedOffIntensity = 0; // aux is the floodlight
+  const int auxLedLowIntensity = 16;
+  const int auxLedMediumIntensity = 32;
+  const int auxLedHighIntensity = 255;
+  const int auxLedMaxIntensity = 255;
 
 #elif defined(QUATRO)
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 16;
-const int headLedMediumIntensity = 96;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
-
-const int auxLedOffIntensity = 0; // aux is the brakelight
-const int auxLedLowIntensity = 255;
-const int auxLedMediumIntensity = 255;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
+  const int headLedOffIntensity = 0;
+  const int headLedLowIntensity = 16;
+  const int headLedMediumIntensity = 96;
+  const int headLedHighIntensity = 255;
+  const int headLedMaxIntensity = 255;
+  
+  const int auxLedOffIntensity = 0; // aux is the brakelight
+  const int auxLedLowIntensity = 255;
+  const int auxLedMediumIntensity = 255;
+  const int auxLedHighIntensity = 255;
+  const int auxLedMaxIntensity = 255;
 #endif
 

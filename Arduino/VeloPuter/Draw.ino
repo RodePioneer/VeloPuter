@@ -15,11 +15,12 @@ void drawSplash ()
   /*
     // A splash schreen
   */
+  u8g.begin();  
   u8g.firstPage();
   do {
     u8g.drawBitmapP (22, 24, 10, 10,  icoSplash);
   } while ( u8g.nextPage() );
-  delay (1000);
+  delay (2000);
 }
 
 void drawScreen ()
@@ -27,7 +28,11 @@ void drawScreen ()
   /*
     // This is the main function which makes sure all information is plotted in the OLED display.
   */
+
+
+
   u8g.firstPage();
+  //  u8g.begin();  
   do {
     drawBatteryText();
     drawLightIcons();
@@ -37,19 +42,20 @@ void drawScreen ()
     drawSensors();
     drawDebug();
   } while ( u8g.nextPage() );
+  //u8g.begin();
 }
 
 
-void drawClear ()
-{
-  /*
-    // To clear the screen we only need an empty picture loop.
-  */
-  u8g.firstPage();
-  do {
-    //drawClear ();
-  } while ( u8g.nextPage() );
-}
+//void drawClear ()
+//{
+//  /*
+//    // To clear the screen we only need an empty picture loop.
+//  */
+//  u8g.firstPage();
+//  do {
+//    //drawClear ();
+//  } while ( u8g.nextPage() );
+//}
 
 void blinkScreen (byte doBlink)
 {
@@ -120,7 +126,7 @@ void drawBatteryText()
 
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (0, 68);
-  u8g.print (cellVoltage_v);
+  u8g.print (float(cellVoltage_mv)/1000);
 }
 
 void drawBatteryIcon()

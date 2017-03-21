@@ -16,6 +16,7 @@
 #include "Draw_Icons.cpp"
 #include "Constants.h"
 #include <TimerOne.h>
+//#include <TimerThree.h>
 #include <avr/interrupt.h>
 #include <avr/power.h>
 #include <avr/sleep.h>
@@ -24,10 +25,10 @@
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // The proper contructor for the display currently used.
 
 Led leftLed, rightLed, rearLed, headLed, auxLed;
-Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch;
+Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch, alarmSwitch, configSwitch;
 
 int batteryPercentage_pct = 99;
-float cellVoltage_v = 4.2;
+int cellVoltage_mv = 4200;
 int speed_kmh = 0;
 int cadence_rpm = 0;
 
@@ -50,6 +51,7 @@ void loop ()
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
   updateSleep();   // See is we need to powerdown the Arduino
+  updateConfig();  // Updte the config. For now: only the 
   drawScreen();    // Write all the information to the display.
 }
 
