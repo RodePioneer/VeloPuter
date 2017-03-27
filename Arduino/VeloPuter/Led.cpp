@@ -25,18 +25,17 @@ public:
     ledIntensity = newIntensity;
 
     // Because we Timer1 pin 9 and 10 are broken for analogwrite
-    if (pin == 9 or pin == 10 ) 
-    {
-      //Timer1.pwm(pin, 4*ledIntensity); // I suspect Timer1 form the sometimes weird behaviour for the display. 
-      digitalWrite(pin, ledIntensity > 0);
-    }
-    else
-    {
+//    if (pin == 9 or pin == 10 ) 
+//    {
+//      //Timer1.pwm(pin, 4*ledIntensity); // I suspect Timer1 form the sometimes weird behaviour for the display. 
+//      digitalWrite(pin, ledIntensity > 0);
+//    }
+//    else
+//    {
       analogWrite(pin, ledIntensity);
-    }
+//    }
     // tracer on a specific or all pins. 
     //if (pin == 11) Serial.println ("Setting pin " +String(pin) + " to " + String(ledIntensity) );
-  
   }
 
   byte getLedIntensity () // return the current intensity of the led.

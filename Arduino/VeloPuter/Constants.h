@@ -71,7 +71,7 @@ const byte voltagePin =         A0;
    Other constants which are used throughout the programm:
 
 */
-const long tSleep_ms = 30000;              // 3 minutes 60000 = 1 min 15000 = 15 sec 600000 = 10 min 300000 = 5 min
+const long tSleep_ms = 300000;              // 3 minutes 60000 = 1 min 15000 = 15 sec 600000 = 10 min 300000 = 5 min
 const long tSleepNoCadSpd_ms = 1800000;     // Half an hour
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz
 const byte numTimesToBlink = 4;             // 7 times high, 6 times low, = 13 = 4.3 s
@@ -85,13 +85,13 @@ const int  wheelCircumvention_mm = 1526;    // 406-28 wheel
 #endif
 
 const byte speakerVolume = 50;
- byte setOledIntensity = 255;
+ byte setOledIntensity = 0 ;
 
 
 
 //const unsigned long tSoftwareTimerInterrupt_us = 10000; // run the timer at 100 Hz.
 //const unsigned long tSoftwareTimerInterrupt_us = 40000; // run the timer at 25 Hz.
-const unsigned long tSoftwareTimerInterrupt_us = 50000; // run the timer at 25 H
+//const unsigned long tSoftwareTimerInterrupt_us = 50000; // run the timer at 25 H
 //const unsigned long tSoftwareTimerInterrupt_us = 100000; // run the timer at 10 Hz. == too slow
 
 /*

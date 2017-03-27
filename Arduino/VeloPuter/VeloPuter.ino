@@ -15,8 +15,6 @@
 #include "Led.cpp"
 #include "Draw_Icons.cpp"
 #include "Constants.h"
-#include <TimerOne.h>
-//#include <TimerThree.h>
 #include <avr/interrupt.h>
 #include <avr/power.h>
 #include <avr/sleep.h>
@@ -31,6 +29,10 @@ int batteryPercentage_pct = 99;
 int cellVoltage_mv = 4200;
 int speed_kmh = 0;
 int cadence_rpm = 0;
+
+// 
+long DEBUGTlast = 0;
+long DEBUGTnow = 0;
 
 enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED};
 byte statusBattery = BATTERY_GREEN;
@@ -47,35 +49,21 @@ byte stateAlarmBlinkersOn = false;
 */
 void loop ()
 {
-  updateBattery(); // Read out and calculate the acutual battery status
-  updateSpeed();   // Check the speed based on the interupts which have been.
-  updateCadence(); // Check the cadence based on the interupts which have been.
-  updateSleep();   // See is we need to powerdown the Arduino
-  updateConfig();  // Updte the config. For now: only the 
-  drawScreen();    // Write all the information to the display.
-}
-
-/**********************************************************************************************
-   Interupt functions
- **********************************************************************************************
-
-  These are the functions which are done at a fixed interval Note that the processin time of these functions
-  MAY NEVER be more that the interupt time. Keep in mind that they themselves are interuped by hardware interupts.
-
-*/
-void interruptServiceRoutinePinsAndLEDs ()
-{
-  if (statusPowerDown == false) // we want to avoid that lights are set to ON when goinig down. 
-  {
-    interrupts(); // make sure the speed and cadence interupts can go through.
-    // Note 1: the blinkers are out due to timing issues and crashes.
-    // Note 2: the brake will be coupled to the D7 pin with interupt. Perhaps we will not use the timed interupt then.
-    // Note 3: the interupts screw up some of the PWM timers causing the lights to behave weirdly.
-    updateHead();
-    updateRear();
+  u8g.firstPage();
+  do {
+    
+    updateHead();    // change headlight intensity
+    updateRear();    // update rear lights. This includes the brakelight when applicable.
     updateBlinkers();// Update the blinkers
-    noInterrupts(); // end that interupts can go through.
-  }
+
+    updateBattery(); // Read out and calculate the acutual battery status
+    updateSpeed();   // Check the speed based on the interupts which have been.
+    updateCadence(); // Check the cadence based on the interupts which have been.
+    updateSleep();   // See is we need to powerdown the Arduino
+    updateConfig();  // Updte the config. For now: only the 
+    
+    drawScreen();    // Write all the information to the display.
+  } while ( u8g.nextPage() );
 }
 
 /**********************************************************************************************

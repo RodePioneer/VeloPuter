@@ -1,10 +1,8 @@
 
 void setup()   {
   // Timer interupt
-  Timer1.initialize(tSoftwareTimerInterrupt_us); 
-  Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
-  //Timer3.initialize(tSoftwareTimerInterrupt_us); 
-  //Timer3.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
+//  Timer1.initialize(tSoftwareTimerInterrupt_us); 
+//  Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
 
   // define serial if we want to sent serial information to the serial monitor
 //  Serial.begin(9600);

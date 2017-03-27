@@ -517,6 +517,10 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.upLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
+    
+    #if defined(QUATRO)
+    auxLed.setLedOff();
+    #endif
   }
 
   // Brake is on, down has changed
@@ -525,6 +529,10 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.downLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
+    
+    #if defined(QUATRO)
+    auxLed.setLedOff();
+    #endif
   }
 }
 

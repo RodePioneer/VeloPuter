@@ -15,12 +15,14 @@ void drawSplash ()
   /*
     // A splash schreen
   */
-  u8g.begin();  
+  u8g.begin();
+  u8g.setContrast(setOledIntensity);
   u8g.firstPage();
   do {
     u8g.drawBitmapP (22, 24, 10, 10,  icoSplash);
+    u8g.setContrast(setOledIntensity);
   } while ( u8g.nextPage() );
-  delay (2000);
+  delay (1000);
 }
 
 void drawScreen ()
@@ -28,12 +30,6 @@ void drawScreen ()
   /*
     // This is the main function which makes sure all information is plotted in the OLED display.
   */
-
-
-
-  u8g.firstPage();
-  //  u8g.begin();  
-  do {
     drawBatteryText();
     drawLightIcons();
     drawSpeed();
@@ -41,21 +37,7 @@ void drawScreen ()
     drawBatteryIcon();
     drawSensors();
     drawDebug();
-  } while ( u8g.nextPage() );
-  //u8g.begin();
 }
-
-
-//void drawClear ()
-//{
-//  /*
-//    // To clear the screen we only need an empty picture loop.
-//  */
-//  u8g.firstPage();
-//  do {
-//    //drawClear ();
-//  } while ( u8g.nextPage() );
-//}
 
 void blinkScreen (byte doBlink)
 {
@@ -198,7 +180,6 @@ void drawBatteryIcon()
 
 
     byte Delta_px = 0.707 * dCircle_px + 2.5;
-    //    Serial.println (String(cCircle_px-Delta_px) +" " + String(rCircle_px-Delta_px)+" " +  String(cCircle_px+Delta_px)+" " +  String(rCircle_px+Delta_px));
     u8g.setColorIndex(1);
 
     for (int i = -2; i <= 2; i++)
@@ -255,10 +236,9 @@ void drawSensors()
 
 void drawDebug()
 {
-
-//  u8g.setPrintPos (100, 32);
-//  u8g.print (batteryPercentage_pct);
-
+//
+// Display which config is loaded
+//
 u8g.setPrintPos (97, 17);
 
 #if defined(QUILTJE)
@@ -269,19 +249,6 @@ u8g.print (3);
 u8g.print (1);
 #endif
 
-//
-//  u8g.setPrintPos (25, 17);
-//  u8g.print (10 * (cadenceSwitch.getTSinceLastChange_ms() != 0) + (speedSwitch.getTSinceLastChange_ms() != 0));
-
-  //  u8g.setPrintPos (25,36);
-  //  u8g.print (10*(cadenceSwitch.getInteruptActive())+(speedSwitch.getInteruptActive()!=0));
-
-//  u8g.setPrintPos (25, 34);
-//  u8g.print (cadenceSwitch.getInteruptActive());
-//
-//
-//  u8g.setPrintPos (25, 52);
-//  u8g.print (speedSwitch.getInteruptActive());
 }
 
 
