@@ -5,6 +5,11 @@
 
  **********************************************************************************************/
 
+/*********************************************************************************************************
+
+    Determine if we need to go to sleep or not.
+
+ *********************************************************************************************************/
 void updateSleep ()
 {
   long tLastStateChange_ms = 0;
@@ -28,9 +33,9 @@ void updateSleep ()
 
   if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()) tWait_ms = tSleep_ms;
 
-//Serial.println ("Wait1 : " + String(tWait_ms));
-//Serial.println ("Wait2 : " + String(cadenceSwitch.getTSinceLastChange_ms())) ;
-//Serial.println ("Wait3 : " + String(speedSwitch.getTSinceLastChange_ms())) ;
+  //Serial.println ("Wait1 : " + String(tWait_ms));
+  //Serial.println ("Wait2 : " + String(cadenceSwitch.getTSinceLastChange_ms())) ;
+  //Serial.println ("Wait3 : " + String(speedSwitch.getTSinceLastChange_ms())) ;
 
   if ((tNow_ms - tLastStateChange_ms > tWait_ms) && (stateAlarmBlinkersOn == false))
   {
@@ -40,7 +45,7 @@ void updateSleep ()
     // make sure leds stay off when set to off.
     //Timer1.detachInterrupt (); // it wil reattached during the setup
     // TODO: use a semaphore to block the interupts.
-    
+
     // clear the screen
     u8g.sleepOn();
 
@@ -72,12 +77,12 @@ void updateSleep ()
     rightLed.setLedOff();
     rearLed.setLedLow();
     headLed.setLedLow();
-    #if defined(QUILTJE)  || defined(STRADA)
+#if defined(QUILTJE)  || defined(STRADA)
     auxLed.setLedLow();
-    #elif defined(QUILTJE)  
+#elif defined(QUILTJE)
     auxLed.setLedOff();
-    #endif
-    
+#endif
+
     //Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
     //setup ();
 
@@ -85,6 +90,12 @@ void updateSleep ()
   }
 }
 
+
+/*********************************************************************************************************
+
+    Update the battery
+
+ *********************************************************************************************************/
 void updateBattery()
 {
   /*
@@ -136,149 +147,163 @@ void updateBattery()
      3.4 = 5%
      V = [4.2, 4.0, 3.75, 3.4]
      C = [100, 90, 50, 0]
-    
+
   */
   const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
-  const int C[6] = {100,    90,   75,   50,   10,    0};      // % capacity
-  //int cellVoltage_mv = cellVoltage_v * 1000 ; 
-  
+  const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
+  //int cellVoltage_mv = cellVoltage_v * 1000 ;
+
   // 84-100% full :
-  if      (cellVoltage_mv >= V[1]) batteryPercentage_pct = int((C[0]-C[1]) * (cellVoltage_mv - V[1]) / (V[0] - V[1]) + C[1]);
+  if      (cellVoltage_mv >= V[1]) batteryPercentage_pct = int((C[0] - C[1]) * (cellVoltage_mv - V[1]) / (V[0] - V[1]) + C[1]);
   // 49-84% full
-  else if (cellVoltage_mv >= V[2]) batteryPercentage_pct = int((C[1]-C[2]) * (cellVoltage_mv - V[2]) / (V[1] - V[2]) + C[2]);
+  else if (cellVoltage_mv >= V[2]) batteryPercentage_pct = int((C[1] - C[2]) * (cellVoltage_mv - V[2]) / (V[1] - V[2]) + C[2]);
   // 12-49% full
-  else if (cellVoltage_mv >= V[3]) batteryPercentage_pct = int((C[2]-C[3]) * (cellVoltage_mv - V[3]) / (V[2] - V[3]) + C[3]);
+  else if (cellVoltage_mv >= V[3]) batteryPercentage_pct = int((C[2] - C[3]) * (cellVoltage_mv - V[3]) / (V[2] - V[3]) + C[3]);
   // 3-12 % full
-  else if (cellVoltage_mv >= V[4]) batteryPercentage_pct = int((C[3]-C[4]) * (cellVoltage_mv - V[4]) / (V[3] - V[4]) + C[4]);
+  else if (cellVoltage_mv >= V[4]) batteryPercentage_pct = int((C[3] - C[4]) * (cellVoltage_mv - V[4]) / (V[3] - V[4]) + C[4]);
   // < 3% full
-  else if (cellVoltage_mv >= V[5]) batteryPercentage_pct = int((C[4]-C[5]) * (cellVoltage_mv - V[5]) / (V[4] - V[5]) + C[5]);
-//
-//// 84-100% full :
-//  if      (cellVoltage_v >= 4.0) batteryPercentage_pct = int(16.0 * (cellVoltage_v - 4.0) / (4.2 - 4.0) + 84.5);
-//  // 49-84% full
-//  else if (cellVoltage_v >= 3.8) batteryPercentage_pct = int(35.0 * (cellVoltage_v - 3.8) / (4.0 - 3.8) + 49.5);
-//  // 12-49% full
-//  else if (cellVoltage_v >= 3.75) batteryPercentage_pct = int(37.0 * (cellVoltage_v - 3.7) / (3.8 - 3.7) + 12.5);
-//  // 3-12 % full
-//  else if (cellVoltage_v >= 3.4) batteryPercentage_pct = int(9.0  * (cellVoltage_v - 3.4) / (3.7 - 3.4) + 3.5);
-//  // < 3% full
-//  else if (cellVoltage_v <  3.4) batteryPercentage_pct = int(3.0  * (cellVoltage_v - 3.4) / (3.4 - 3.2) + 0.5);
-  
-  
+  else if (cellVoltage_mv >= V[5]) batteryPercentage_pct = int((C[4] - C[5]) * (cellVoltage_mv - V[5]) / (V[4] - V[5]) + C[5]);
+  //
+  //// 84-100% full :
+  //  if      (cellVoltage_v >= 4.0) batteryPercentage_pct = int(16.0 * (cellVoltage_v - 4.0) / (4.2 - 4.0) + 84.5);
+  //  // 49-84% full
+  //  else if (cellVoltage_v >= 3.8) batteryPercentage_pct = int(35.0 * (cellVoltage_v - 3.8) / (4.0 - 3.8) + 49.5);
+  //  // 12-49% full
+  //  else if (cellVoltage_v >= 3.75) batteryPercentage_pct = int(37.0 * (cellVoltage_v - 3.7) / (3.8 - 3.7) + 12.5);
+  //  // 3-12 % full
+  //  else if (cellVoltage_v >= 3.4) batteryPercentage_pct = int(9.0  * (cellVoltage_v - 3.4) / (3.7 - 3.4) + 3.5);
+  //  // < 3% full
+  //  else if (cellVoltage_v <  3.4) batteryPercentage_pct = int(3.0  * (cellVoltage_v - 3.4) / (3.4 - 3.2) + 0.5);
+
+
   batteryPercentage_pct = constrain(batteryPercentage_pct, 0, 99);
 
   /*
      Determnine battery regime
   */
-  const int Batt_pct[3] = {20,10,5};
-  if (batteryPercentage_pct < Batt_pct[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
-  {
-    /*
-       No high beam
-    */
-    statusBattery = BATTERY_ORANGE;
+  if (doBatteryCheck) {
+    const int Batt_pct[3] = {20, 10, 5};
+    if (batteryPercentage_pct < Batt_pct[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
+    {
+      /*
+         No high beam
+      */
+      statusBattery = BATTERY_ORANGE;
 
-    headLed.highIntensity = headLedMediumIntensity;
-    headLed.maxIntensity = headLedMediumIntensity ;
-    headLed.setLedIntensity (min(headLed.getLedIntensity(),headLedMediumIntensity));
+      headLed.highIntensity = headLedMediumIntensity;
+      headLed.maxIntensity = headLedMediumIntensity ;
+      headLed.setLedIntensity (min(headLed.getLedIntensity(), headLedMediumIntensity));
 
-    auxLed.highIntensity = auxLedMediumIntensity;
-    auxLed.maxIntensity = auxLedMediumIntensity;
-    auxLed.setLedIntensity (min(auxLed.getLedIntensity(),auxLedMediumIntensity));
-
-
-  }
-  if (batteryPercentage_pct < Batt_pct[1]  && statusBattery == BATTERY_ORANGE)
-  {
-    /*
-       We are now more pressen for power consumption. 
-       Dim blinkers, > just a little hint during the night. No more. Too dim for bright days. 
-       No brakelight 
-       No fog light
-       
-    */
-    rightLed.offIntensity = 0;
-    rightLed.lowIntensity = 0;
-    rightLed.mediumIntensity = 0; 
-    rightLed.highIntensity = 64; // 1/2th the power
-    rightLed.maxIntensity = 64;
-    rightLed.setLedIntensity (min(rightLed.getLedIntensity(),rightLedMediumIntensity));
+      auxLed.highIntensity = auxLedMediumIntensity;
+      auxLed.maxIntensity = auxLedMediumIntensity;
+      auxLed.setLedIntensity (min(auxLed.getLedIntensity(), auxLedMediumIntensity));
 
 
-    leftLed.offIntensity = 0;
-    leftLed.lowIntensity = 0;
-    leftLed.mediumIntensity = 0;
-    leftLed.highIntensity = 64;
-    leftLed.maxIntensity = 64;
-    leftLed.setLedIntensity (min(leftLed.getLedIntensity(),leftLedMediumIntensity));
+    }
+    if (batteryPercentage_pct < Batt_pct[1]  && statusBattery == BATTERY_ORANGE)
+    {
+      /*
+         We are now more pressen for power consumption.
+         Dim blinkers, > just a little hint during the night. No more. Too dim for bright days.
+         No brakelight
+         No fog light
 
-    rearLed.setPin(ledRearPin);
-    rearLed.offIntensity = rearLedOffIntensity;
-    rearLed.lowIntensity = rearLedLowIntensity;
-    rearLed.mediumIntensity = rearLedLowIntensity; 
-    rearLed.highIntensity = rearLedLowIntensity;
-    rearLed.maxIntensity = rearLedLowIntensity;
-    rearLed.setLedIntensity (min(rearLed.getLedIntensity(),rearLedMediumIntensity));
+      */
+      rightLed.offIntensity = 0;
+      rightLed.lowIntensity = 0;
+      rightLed.mediumIntensity = 0;
+      rightLed.highIntensity = 64; // 1/2th the power
+      rightLed.maxIntensity = 64;
+      rightLed.setLedIntensity (min(rightLed.getLedIntensity(), rightLedMediumIntensity));
 
-    statusBattery = BATTERY_RED;
-  }
-  if (batteryPercentage_pct < Batt_pct[2]  && statusBattery == BATTERY_RED)
-  {
-    /*
-       The battery is almost dead. We now power it down.
-       No more fun. Only option: switch off and on again. 
-    */
-    statusPowerDown =  true;
-    
-    detachInterrupt(digitalPinToInterrupt(switchSpdPin)); // 0 = interupt on pin 2
-    detachInterrupt(digitalPinToInterrupt(switchCadPin)); // 0 = interupt on pin 2
 
-    // switch off all lichts.
-    leftLed.setLedIntensity(0);
-    rightLed.setLedIntensity(0);
-    rearLed.setLedIntensity(0);
-    headLed.setLedIntensity(0);
-    auxLed.setLedIntensity(0);
+      leftLed.offIntensity = 0;
+      leftLed.lowIntensity = 0;
+      leftLed.mediumIntensity = 0;
+      leftLed.highIntensity = 64;
+      leftLed.maxIntensity = 64;
+      leftLed.setLedIntensity (min(leftLed.getLedIntensity(), leftLedMediumIntensity));
 
-    
-    u8g.sleepOn();// Power down the display
+      rearLed.setPin(ledRearPin);
+      rearLed.offIntensity = rearLedOffIntensity;
+      rearLed.lowIntensity = rearLedLowIntensity;
+      rearLed.mediumIntensity = rearLedLowIntensity;
+      rearLed.highIntensity = rearLedLowIntensity;
+      rearLed.maxIntensity = rearLedLowIntensity;
+      rearLed.setLedIntensity (min(rearLed.getLedIntensity(), rearLedMediumIntensity));
 
-    // Powerdown the Arduino. Note that it only is to be revided by power cycling or the reset button.
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    sleep_enable();
-    sleep_mode(); //sleep until ever because the interupts are disabled. 
+      statusBattery = BATTERY_RED;
+    }
+    if (batteryPercentage_pct < Batt_pct[2]  && statusBattery == BATTERY_RED)
+    {
+      /*
+         The battery is almost dead. We now power it down.
+         No more fun. Only option: switch off and on again.
+      */
+      statusPowerDown =  true;
 
+      detachInterrupt(digitalPinToInterrupt(switchSpdPin)); // 0 = interupt on pin 2
+      detachInterrupt(digitalPinToInterrupt(switchCadPin)); // 0 = interupt on pin 2
+
+      // switch off all lichts.
+      leftLed.setLedIntensity(0);
+      rightLed.setLedIntensity(0);
+      rearLed.setLedIntensity(0);
+      headLed.setLedIntensity(0);
+      auxLed.setLedIntensity(0);
+
+
+      u8g.sleepOn();// Power down the display
+
+      // Powerdown the Arduino. Note that it only is to be revided by power cycling or the reset button.
+      set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+      sleep_enable();
+      sleep_mode(); //sleep until ever because the interupts are disabled.
+
+    }
   }
 }
 
+/*********************************************************************************************************
+
+    Update the headlights
+
+ *********************************************************************************************************/
 void updateHead()
 {
   //static int currentState = rearState.getState();
   upSwitch.ReadOut();
   downSwitch.ReadOut();
 
-  if (upSwitch.getState() == LOW && upSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH)
+  if (upSwitch.getState() == LOW && upSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH && configSwitch.getState() == HIGH)
   {
     headLed.upLed();
-    #if defined(QUILTJE)  || defined(STRADA)
-      auxLed.upLed();
-    #endif
+#if defined(QUILTJE)  || defined(STRADA)
+    auxLed.upLed();
+#endif
   }
 
-  if (downSwitch.getState() == LOW && downSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH)
+  if (downSwitch.getState() == LOW && downSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH && configSwitch.getState() == HIGH)
   {
     headLed.downLed();
 
     //
     // Only the strada and Quiltje have double headlights.
-    // 
-    #if defined(QUILTJE)  || defined(STRADA)
+    //
+#if defined(QUILTJE)  || defined(STRADA)
     auxLed.downLed();
-    #endif
-    
+#endif
+
   }
 }
 
+
+
+/*********************************************************************************************************
+
+    Update the blinkers
+
+ *********************************************************************************************************/
 void updateBlinkers()
 {
   /*
@@ -300,32 +325,32 @@ void updateBlinkers()
   rightSwitch.ReadOut();
   alarmSwitch.ReadOut();
 
-  #if defined(QUATRO)
-    if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW ) 
+#if defined(QUATRO) || defined(STRADA)
+  if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW )
+  {
+    stateAlarmBlinkersOn = !stateAlarmBlinkersOn;
+
+    if (stateAlarmBlinkersOn == false)
     {
-      stateAlarmBlinkersOn = !stateAlarmBlinkersOn;
-    
-    if (stateAlarmBlinkersOn == false) 
-      {
       numTimesToBlinkLeft = 0;
       numTimesToBlinkRight = 0;
-      // Just in case.... otherwise they might stay on. 
+      // Just in case.... otherwise they might stay on.
       rightLed.setLedOff();
       leftLed.setLedOff();
-      }
-}
-  #endif
+    }
+  }
+#endif
 
   if (stateAlarmBlinkersOn)
   { // We are blinking alarm lights. Continue to stop?
-    #if defined(QUATRO)
+#if defined(QUATRO)|| defined(STRADA)
     //
     // Quatro
     //
-      numTimesToBlinkLeft = 1;
-      numTimesToBlinkRight = 1;
+    numTimesToBlinkLeft = 1;
+    numTimesToBlinkRight = 1;
 
-    #elif defined(QUILTJE)  || defined(STRADA)
+#elif defined(QUILTJE)
     //
     // Code for the Strada & Quiltje
     // Confirm alarm state by checking of there is still an blinker switch on
@@ -342,11 +367,11 @@ void updateBlinkers()
       stateAlarmBlinkersOn = false;
       numTimesToBlinkLeft = 0;
       numTimesToBlinkRight = 0;
-      // Just in case.... otherwise they might stay on. 
+      // Just in case.... otherwise they might stay on.
       rightLed.setLedOff();
       leftLed.setLedOff();
     }
-    #endif
+#endif
   }
   else
   { // regular stuff to do.
@@ -385,19 +410,19 @@ void updateBlinkers()
       }
       numTimesToBlinkRight = 0;
     }
-//    else if (leftSwitch.getState() == HIGH && leftSwitch.getState() == HIGH && (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0))
-//    {
-//      // Apearently the leds are still on while the blinker switch is in the off setting. 
-//      rightLed.setLedOff();
-//      leftLed.setLedOff();
-//    }
+    //    else if (leftSwitch.getState() == HIGH && leftSwitch.getState() == HIGH && (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0))
+    //    {
+    //      // Apearently the leds are still on while the blinker switch is in the off setting.
+    //      rightLed.setLedOff();
+    //      leftLed.setLedOff();
+    //    }
 
   }
 
   /*
      Do the actual blinking
   */
-  
+
   //
   // See if enough time has passed since the last change of the leds.
   //
@@ -406,7 +431,7 @@ void updateBlinkers()
 
     // Zoomer ands screen blinking in sync with the actual leds. Don't keep track.
     BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
-    
+
     tStartBlink_ms = tNow_ms;
 
     // blink left
@@ -447,15 +472,15 @@ void updateBlinkers()
     }
     else if (numTimesToBlinkRight == 0 && numTimesToBlinkLeft == 0 && BlinkOn)
     {
-      // Apearently the leds are still on while the blinker switch is in the off setting and we no longer need to do anything 
-        rightLed.setLedOff();
-        leftLed.setLedOff();
+      // Apearently the leds are still on while the blinker switch is in the off setting and we no longer need to do anything
+      rightLed.setLedOff();
+      leftLed.setLedOff();
     }
 
     // blink the screen
     BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
 
-    if (BlinkOn) 
+    if (BlinkOn)
     {
       u8g.begin(); // Make sure the display gets reset when we blink
       u8g.setContrast(setOledIntensity);
@@ -464,19 +489,25 @@ void updateBlinkers()
     else u8g.sleepOff();
 
     // zoomer
-    if (stateAlarmBlinkersOn == false)  
+    if (stateAlarmBlinkersOn == false)
     {
       analogWrite(speakerPin, BlinkOn * speakerVolume);
     }
     else
     {
-      // set to zero during Alarm. 
+      // set to zero during Alarm.
       analogWrite(speakerPin, 0);
     }
   }
 
 }
 
+
+/*********************************************************************************************************
+
+    Update the rearlight
+
+ *********************************************************************************************************/
 void updateRear()
 {
   /*
@@ -494,21 +525,19 @@ void updateRear()
   {
     ledPreviousIntensity = rearLed.getLedIntensity();
     rearLed.setLedMax();
-
-    #if defined(QUATRO)
+#if defined(QUATRO)
     auxLed.setLedMax();
-    #endif
+#endif
     //DEBUG_CV = DEBUG_CV - 3;
   }
 
-  // brake is off -> return to previous state. Only when the brakeled is max. 
+  // brake is off -> return to previous state. Only when the brakeled is max.
   else if (brakeSwitch.getState() == HIGH && brakeSwitch.hasStateChanged() && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
-
-    #if defined(QUATRO)
+#if defined(QUATRO)
     auxLed.setLedOff();
-    #endif
+#endif
   }
 
   // Brake is on, up has changed- > default goes up
@@ -517,10 +546,9 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.upLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-    
-    #if defined(QUATRO)
+#if defined(QUATRO)
     auxLed.setLedOff();
-    #endif
+#endif
   }
 
   // Brake is on, down has changed
@@ -529,33 +557,51 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.downLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-    
-    #if defined(QUATRO)
+#if defined(QUATRO)
     auxLed.setLedOff();
-    #endif
+#endif
   }
 }
 
+
+/*********************************************************************************************************
+
+    The configuration interface
+
+ *********************************************************************************************************/
 void updateConfig()
+{
+  configSwitch.ReadOut();
+
+  // See of there is also a up or down switch active: disable or enable the battery check.
+  if ( configSwitch.getState() == LOW && downSwitch.getState() == LOW)
+  {
+    doBatteryCheck = false;
+  }
+  else if (configSwitch.getState() == LOW && upSwitch.getState() == LOW )
+  {
+    doBatteryCheck = true;
+  }
+  else if (configSwitch.hasStateChanged() && configSwitch.getState() == LOW )
+  {
+    if (setOledIntensity == 255)
     {
-    #if defined(QUATRO)
-      configSwitch.ReadOut();
-      if (configSwitch.hasStateChanged() && configSwitch.getState() == LOW ) 
-      {
-        if (setOledIntensity == 255)
-        {
-          setOledIntensity = 0;
-        }
-        else
-        {
-          setOledIntensity = 255;
-        }
-        u8g.begin();
-        u8g.setContrast(setOledIntensity);
-      }
-    #endif
+      setOledIntensity = 0;
     }
-    
+    else
+    {
+      setOledIntensity = 255;
+    }
+    u8g.begin();
+    u8g.setContrast(setOledIntensity);
+  }
+}
+
+/*********************************************************************************************************
+
+    Calculate the speed
+
+ *********************************************************************************************************/
 void updateSpeed()
 {
   /*
@@ -567,6 +613,11 @@ void updateSpeed()
 
 }
 
+/*********************************************************************************************************
+
+    Calculate the cadence
+
+ *********************************************************************************************************/
 void updateCadence()
 {
   /*
@@ -576,3 +627,34 @@ void updateCadence()
   cadenceSwitch.ReadOut();
   cadence_rpm = 60 * cadenceSwitch.getInteruptFrequency(2500);
 }
+
+/*********************************************************************************************************
+
+    Calculate the cadence
+
+ *********************************************************************************************************/
+void updateGear()
+{
+  //
+  // Teeth Rear =  Cadence (Hz) /  axel Speed (Hz * Teeth chain ring
+  //
+  gearOnCassette_teeth = float(setTeethOnCainring) * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
+
+  //
+  // Find the minimum
+  //
+  float minError = 99;
+  float currentError = 99;
+
+  int iEnd = sizeof (setTeethOnCassette) / sizeof (setTeethOnCassette[0]) - 1;
+  for (byte i = 0; i <= iEnd; i++)
+  {
+    currentError  = abs(gearOnCassette_teeth - setTeethOnCassette[i]);
+    if (currentError < minError)
+    {
+      minError = currentError;
+      gearOnCassette_index = setTeethOnCassette[i];
+    }
+  }
+}
+

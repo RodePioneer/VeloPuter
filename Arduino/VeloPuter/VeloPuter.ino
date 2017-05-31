@@ -29,12 +29,16 @@ int batteryPercentage_pct = 99;
 int cellVoltage_mv = 4200;
 int speed_kmh = 0;
 int cadence_rpm = 0;
+float gearOnCassette_teeth = 0.00;
+int gearOnCassette_index = 0;
+
 
 // 
 long DEBUGTlast = 0;
 long DEBUGTnow = 0;
 
 enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED};
+byte doBatteryCheck = true;
 byte statusBattery = BATTERY_GREEN;
 volatile byte statusPowerDown = false;
 byte stateAlarmBlinkersOn = false;
@@ -51,19 +55,21 @@ void loop ()
 {
   u8g.firstPage();
   do {
-    
     updateHead();    // change headlight intensity
     updateRear();    // update rear lights. This includes the brakelight when applicable.
     updateBlinkers();// Update the blinkers
-
-    updateBattery(); // Read out and calculate the acutual battery status
-    updateSpeed();   // Check the speed based on the interupts which have been.
-    updateCadence(); // Check the cadence based on the interupts which have been.
-    updateSleep();   // See is we need to powerdown the Arduino
-    updateConfig();  // Updte the config. For now: only the 
-    
     drawScreen();    // Write all the information to the display.
   } while ( u8g.nextPage() );
+
+  updateBattery(); // Read out and calculate the acutual battery status
+  updateSpeed();   // Check the speed based on the interupts which have been.
+  updateCadence(); // Check the cadence based on the interupts which have been.
+  #if defined(QUATRO)
+    updateGear();    // Figure out which gear we are using at the moment.
+  #endif
+  updateSleep();   // See is we need to powerdown the Arduino
+  updateConfig();  // Updte the config. For now: only the 
+
 }
 
 /**********************************************************************************************

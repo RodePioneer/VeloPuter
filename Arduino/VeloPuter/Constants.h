@@ -42,11 +42,11 @@ const byte switchCadPin =       0;      // NOTE: 0 and 1 are the RX and TX pins.
 const byte switchSpdPin =       1;      // NOTE: 0 and 1 are the RX and TX pins.
 const byte OLED_SDA =           2;      // used for the oled display through u8glib
 const byte OLED_SCL =           3;      // used for the oled display through u8glib
-const byte switchAlarmPin =     4;
+const byte switchConfigPin =    4;
 const byte ledHeadPin =         5;
 const byte ledAuxPin =          6;
-const byte switchBrakePin =     7;      // 7 had an interupt so use it for the brake.
-const byte switchConfigPin =    8;
+const byte switchBrakePin =     7;
+const byte switchAlarmPin =     8;
 const byte ledRightPin =        9;
 const byte ledLeftPin =         10;
 const byte ledRearPin =         11;
@@ -55,44 +55,43 @@ const byte speakerPin =         13;
 const byte voltagePin =         A0;
 
 #if defined(STRADA) 
-  const byte switchHeadUpPin =    A2; // switch up and down for the STRADA to sync all head light switches.
+  const byte switchHeadUpPin =    A2; 
   const byte switchHeadDownPin =  A1;
   const byte switchRightPin =     A3;
   const byte switchLeftPin =      A4;
-  const byte UNUSED4 =            A5;
 #elif defined(QUILTJE)  || defined(QUATRO)
   const byte switchRightPin =     A1;
   const byte switchLeftPin =      A2;
   const byte switchHeadDownPin =  A3;
-  const byte switchHeadUpPin =    A4;     // switch up and down for the STRADA to sync all head light switches.
+  const byte switchHeadUpPin =    A4;     
 #endif
+const byte UNUSED4 =            A5;
+
 
 /*
    Other constants which are used throughout the programm:
-
 */
-const long tSleep_ms = 300000;              // 3 minutes 60000 = 1 min 15000 = 15 sec 600000 = 10 min 300000 = 5 min
-const long tSleepNoCadSpd_ms = 1800000;     // Half an hour
-const int  tPeriodBlink_ms = 333;           // 1.5 Hz
+const long tSleep_ms = 300000;              // Timeout until sleep when cadence and speed sensor are active
+const long tSleepNoCadSpd_ms = 1800000;     // Timeout until sleep when cadence and speed sensor are NOT active
+const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const byte numTimesToBlink = 4;             // 7 times high, 6 times low, = 13 = 4.3 s
 //
 #if defined(STRADA) 
-const int  wheelCircumvention_mm = 1590;    // 406-50 wheel
+  const int  wheelCircumvention_mm = 1590;    // 406-50 wheel  
 #elif defined(QUILTJE)
-const int  wheelCircumvention_mm = 1450;    // 406-28 wheel
+  const int  wheelCircumvention_mm = 1450;    // 406-28 wheel
 #elif defined(QUATRO)
-const int  wheelCircumvention_mm = 1526;    // 406-28 wheel
+  const int  wheelCircumvention_mm = 1540;   // 406-40 wheel
 #endif
 
 const byte speakerVolume = 50;
- byte setOledIntensity = 0 ;
+const byte setBrakeMaxTimeOn_s =  15; // max time for a brakelight to be on. 
+byte setOledIntensity = 0;
 
+const byte setTeethOnCainring = 70;
+const byte setTeethOnCassette[10] = {11,13,15,17,19,22,25,28,32,36};
+//const byte setTeethOnCassette[10] = {11,12,14,16,18,20,22,25,28,32}; // Stefan
 
-
-//const unsigned long tSoftwareTimerInterrupt_us = 10000; // run the timer at 100 Hz.
-//const unsigned long tSoftwareTimerInterrupt_us = 40000; // run the timer at 25 Hz.
-//const unsigned long tSoftwareTimerInterrupt_us = 50000; // run the timer at 25 H
-//const unsigned long tSoftwareTimerInterrupt_us = 100000; // run the timer at 10 Hz. == too slow
 
 /*
   Defaullt intensiteiten
@@ -143,7 +142,7 @@ const int rearLedMaxIntensity = 255;
 
 #elif defined(QUATRO)
   const int headLedOffIntensity = 0;
-  const int headLedLowIntensity = 16;
+  const int headLedLowIntensity = 32;
   const int headLedMediumIntensity = 96;
   const int headLedHighIntensity = 255;
   const int headLedMaxIntensity = 255;

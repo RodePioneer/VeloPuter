@@ -30,13 +30,15 @@ void drawScreen ()
   /*
     // This is the main function which makes sure all information is plotted in the OLED display.
   */
-    drawBatteryText();
-    drawLightIcons();
-    drawSpeed();
-    drawCadence();
-    drawBatteryIcon();
-    drawSensors();
-    drawDebug();
+  drawBatteryText();
+  drawLightIcons();
+  drawSpeed();
+  drawCadence();
+  drawGear();
+  drawBatteryIcon();
+  //drawSensors();
+  //drawDebug();
+
 }
 
 void blinkScreen (byte doBlink)
@@ -68,11 +70,11 @@ void drawSpeed()
 
   // The starting potion depends on the number of characters to display.
   if (speed_kmh < 10)
-    u8g.setPrintPos (39 - 5, 0);
+    u8g.setPrintPos (39 - 6, 0);
   else if (speed_kmh < 100)
-    u8g.setPrintPos (27 - 5, 0);
+    u8g.setPrintPos (27 - 6, 0);
   else
-    u8g.setPrintPos (15 - 5, 0);
+    u8g.setPrintPos (15 - 6, 0);
 
   u8g.print (speed_kmh);
   u8g.undoScale();
@@ -89,11 +91,17 @@ void drawCadence()
 
   // The starting potion depends on the number of characters to display.
   if (cadence_rpm < 10)
-    u8g.setPrintPos (118, 48); // cad <10
+  {
+    u8g.setPrintPos (118, 49); // cad <10
+  }
   else if (cadence_rpm < 100)
-    u8g.setPrintPos (109, 48); // cad >= 10, <100
+  {
+    u8g.setPrintPos (109, 49); // cad >= 10, <100
+  }
   else
-    u8g.setPrintPos (99, 48); // cad >= 100
+  {
+    u8g.setPrintPos (99, 49); // cad >= 100
+  }
   u8g.print (cadence_rpm);
 }
 
@@ -108,7 +116,7 @@ void drawBatteryText()
 
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (0, 68);
-  u8g.print (float(cellVoltage_mv)/1000);
+  u8g.print (float(cellVoltage_mv) / 1000);
 }
 
 void drawBatteryIcon()
@@ -134,6 +142,8 @@ void drawBatteryIcon()
   byte rKnob_px = rBattery_px;
   byte rBody_px = hKnob_px - 2 * lineWidth_px;
 
+if (doBatteryCheck)
+{
   // The bar in the battery
   byte hBar_px = (batteryPercentage_pct * (hBody_px - 4 * lineWidth_px)) / 100 ;
   byte rBar_px = rBody_px + hBattery_px - hBar_px - 4 * lineWidth_px;
@@ -186,8 +196,12 @@ void drawBatteryIcon()
     {
       u8g.drawLine (cCircle_px - Delta_px + i, rCircle_px - Delta_px , cCircle_px + Delta_px + i, rCircle_px + Delta_px);
     }
-
   }
+}
+else
+{
+  
+}
 }
 
 void drawLightIcons ()
@@ -222,33 +236,77 @@ void drawLightIcons ()
 void drawSensors()
 {
   /*
-   * Draw indicators for the interust sensitive sensors. 
-   */
+     Draw indicators for the interust sensitive sensors.
+  */
   if (speedSwitch.getInteruptActive())
   {
-  u8g.drawDisc (120, 4, 3);
+    u8g.drawDisc (120, 4, 3);
   }
   if (cadenceSwitch.getInteruptActive())
   {
-  u8g.drawDisc (110, 4, 3);
+    u8g.drawDisc (110, 4, 3);
   }
 }
 
 void drawDebug()
 {
-//
-// Display which config is loaded
-//
-u8g.setPrintPos (97, 17);
+  //
+  // Display which config is loaded
+  //
+  u8g.setPrintPos (97, 17);
 
 #if defined(QUILTJE)
-u8g.print (2);
+  u8g.print (2);
 #elif defined(QUATRO)
-u8g.print (3);
+  u8g.print (3);
 #elif defined(STRADA)
-u8g.print (1);
+  u8g.print (1);
 #endif
 
+}
+
+void drawGear()
+{
+  //
+  // Display which gear we are riding in
+  //
+
+#if defined(QUATRO)
+  if (gearOnCassette_teeth > 0 and gearOnCassette_teeth < 500) // no NAN and inf on display.
+  {
+    // the actual number of teeth currently measured
+    if (gearOnCassette_teeth >= 10)
+    {
+      u8g.setPrintPos (94, 17);
+    }
+    else
+    {
+      u8g.setPrintPos (104, 17);
+    }
+    u8g.print (float(gearOnCassette_teeth));
+
+    // Either the
+    if (gearOnCassette_index >= 10)
+    {
+      u8g.setPrintPos (109, 33);
+    }
+    else
+    {
+      u8g.setPrintPos (119, 33);
+    }
+    u8g.print (gearOnCassette_index);
+
+  }
+  else
+  {
+    u8g.setPrintPos (117, 17);
+    u8g.print ('x');
+
+
+    u8g.setPrintPos (117, 33);
+    u8g.print ('x');
+  }
+#endif
 }
 
 
