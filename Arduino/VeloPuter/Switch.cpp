@@ -50,12 +50,12 @@ class Switch
     byte getInteruptActive (void)
     {
       /*
-       * An interupt s NOT active when there are zeros left in the 
-       */
+         An interupt s NOT active when there are zeros left in the
+      */
       byte numOfZeros = false;
       for (byte i = 0; i <= iEnd; i++)
       {
-        numOfZeros  += (tInterupts_ms[i] == 0); 
+        numOfZeros  += (tInterupts_ms[i] == 0);
       }
       //Serial.println ("numZEros pin " + String(numOfZeros)  );
       return (numOfZeros == 0);
@@ -85,8 +85,8 @@ class Switch
         // Now: find out how many timestamps in the timestamp are within the last delay time.
         for (byte i = 1; i <= iEnd; i++)
         {
-          if ( ((tInterupts_ms[iEnd] - tInterupts_ms[iEnd-i]) < tMaxDelay_ms) &&\
-               (tInterupts_ms[i] != tInterupts_ms[i+1])) // added this condition to prevent start uip effects counting too many zeroes. 
+          if ( ((tInterupts_ms[iEnd] - tInterupts_ms[iEnd - i]) < tMaxDelay_ms) && \
+               (tInterupts_ms[i] != tInterupts_ms[i + 1])) // added this condition to prevent start uip effects counting too many zeroes.
           {
             numOfInterupts++;
           }
@@ -109,7 +109,7 @@ class Switch
         //String Message = String (frequency) + " = " + String(numOfInterupts ) + " / (" + String (tInterupts_ms[iEnd] - tInterupts_ms[iEnd - numOfInterupts]) + " = " + String (tInterupts_ms[iEnd] ) + " - " + String(tInterupts_ms[iEnd - numOfInterupts]) + ")";
         //Serial.println(Message);
         //Serial.println(DEBUG);
-      
+
 
       }
       return frequency;

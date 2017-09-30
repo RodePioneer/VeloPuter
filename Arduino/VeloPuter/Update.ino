@@ -127,11 +127,16 @@ void updateBattery()
 
   // Assume the cells are no less then 3.2 V and no more 4.2V.
   // cutoffs for 3 cells between 9.0 and 12.8 V.
+  
+  /* For 3 or 4 cell lipo
   if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
   else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
   else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
   else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
   else numOfCells = 1;                               // 1,2 cells or other than lipo
+*/
+
+  numOfCells = 1;
 
   cellVoltage_mv = batteryVoltage_mv / numOfCells;
 
@@ -149,8 +154,18 @@ void updateBattery()
      C = [100, 90, 50, 0]
 
   */
-  const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
-  const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
+  //
+  // LiPo
+  //
+//  const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+//  const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
+
+  //
+  // LiFePO4
+  //
+  const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
+  const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
+  
   //int cellVoltage_mv = cellVoltage_v * 1000 ;
 
   // 84-100% full :
@@ -325,7 +340,7 @@ void updateBlinkers()
   rightSwitch.ReadOut();
   alarmSwitch.ReadOut();
 
-#if defined(QUATRO) || defined(STRADA)
+  //#if defined(QUATRO) || defined(STRADA)
   if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW )
   {
     stateAlarmBlinkersOn = !stateAlarmBlinkersOn;
@@ -339,39 +354,12 @@ void updateBlinkers()
       leftLed.setLedOff();
     }
   }
-#endif
+  //#endif
 
   if (stateAlarmBlinkersOn)
-  { // We are blinking alarm lights. Continue to stop?
-#if defined(QUATRO)|| defined(STRADA)
-    //
-    // Quatro
-    //
+  { // We are blinking alarm lights.
     numTimesToBlinkLeft = 1;
     numTimesToBlinkRight = 1;
-
-#elif defined(QUILTJE)
-    //
-    // Code for the Strada & Quiltje
-    // Confirm alarm state by checking of there is still an blinker switch on
-    // if not: leave the alarm state.
-    //
-    if (leftSwitch.getState() == LOW || rightSwitch.getState() == LOW)
-    { // Still the switch is either left or right. Keep on blinking.
-      // blink when a certain amount of time has elapsed.
-      numTimesToBlinkLeft = 1;
-      numTimesToBlinkRight = 1;
-    }
-    else
-    { // leave the alarm state.
-      stateAlarmBlinkersOn = false;
-      numTimesToBlinkLeft = 0;
-      numTimesToBlinkRight = 0;
-      // Just in case.... otherwise they might stay on.
-      rightLed.setLedOff();
-      leftLed.setLedOff();
-    }
-#endif
   }
   else
   { // regular stuff to do.
@@ -410,13 +398,6 @@ void updateBlinkers()
       }
       numTimesToBlinkRight = 0;
     }
-    //    else if (leftSwitch.getState() == HIGH && leftSwitch.getState() == HIGH && (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0))
-    //    {
-    //      // Apearently the leds are still on while the blinker switch is in the off setting.
-    //      rightLed.setLedOff();
-    //      leftLed.setLedOff();
-    //    }
-
   }
 
   /*
@@ -640,20 +621,32 @@ void updateGear()
   //
   gearOnCassette_teeth = float(setTeethOnCainring) * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
 
+  //gearOnCassette_teeth = float(millis())/1000;
+
+  // when the slumpf is in 1:2.5 mode: devide the # of teeth by 2.5.
+  //  gearSlumpfOn = gearOnCassette_teeth > 36.75;
+  //  if (gearSlumpfOn)
+  //  {
+  //    gearOnCassette_teeth = gearOnCassette_teeth / 2.5;
+  //  }
+  //
+
   //
   // Find the minimum
   //
-  float minError = 99;
-  float currentError = 99;
+  float minError = 99.9;
+  float currentError = 99.9;
 
   int iEnd = sizeof (setTeethOnCassette) / sizeof (setTeethOnCassette[0]) - 1;
   for (byte i = 0; i <= iEnd; i++)
   {
     currentError  = abs(gearOnCassette_teeth - setTeethOnCassette[i]);
+
     if (currentError < minError)
     {
       minError = currentError;
-      gearOnCassette_index = setTeethOnCassette[i];
+      //      gearOnCassette_index = setTeethOnCassette[i];
+      gearOnCassette_string = setTeethOnCassette_string[i];
     }
   }
 }

@@ -142,66 +142,66 @@ void drawBatteryIcon()
   byte rKnob_px = rBattery_px;
   byte rBody_px = hKnob_px - 2 * lineWidth_px;
 
-if (doBatteryCheck)
-{
-  // The bar in the battery
-  byte hBar_px = (batteryPercentage_pct * (hBody_px - 4 * lineWidth_px)) / 100 ;
-  byte rBar_px = rBody_px + hBattery_px - hBar_px - 4 * lineWidth_px;
-  byte cBar_px = cBattery_px + 2 * lineWidth_px;
-  byte wBar_px = wBattery_px - 4 * lineWidth_px;
-
-  // draw the knob (non moving part)
-  u8g.setColorIndex(1);
-  u8g.drawRBox (cKnob_px, rKnob_px, wKnob_px, hKnob_px, 2);
-
-  // draw the body (non moving part)
-  u8g.setColorIndex(1);
-  u8g.drawRBox (cBattery_px, rBody_px, wBattery_px, hBody_px, 1);
-  u8g.setColorIndex(0);
-  u8g.drawRBox (cBattery_px + lineWidth_px, rBody_px + lineWidth_px, wBattery_px - 2 * lineWidth_px, hBody_px - 2 * lineWidth_px, 1);
-
-  // draw the content/status (moving part)
-  u8g.setColorIndex(1);
-  if (hBar_px > 4)
-    u8g.drawRBox (cBar_px, rBar_px, wBar_px, hBar_px, 1);
-  else if (hBar_px > 1)
-    u8g.drawBox  (cBar_px, rBar_px, wBar_px, hBar_px);
-
-  // Battery level indication
-
-  if (statusBattery == BATTERY_ORANGE)
+  if (doBatteryCheck)
   {
-    //Serial.println ("Draw Orange");
-    u8g.setColorIndex(1);
-    u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + 4, 3, hBody_px / 2 - 2);
-    u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + hBody_px / 2 + 5, 3, 3);
+    // The bar in the battery
+    byte hBar_px = (batteryPercentage_pct * (hBody_px - 4 * lineWidth_px)) / 100 ;
+    byte rBar_px = rBody_px + hBattery_px - hBar_px - 4 * lineWidth_px;
+    byte cBar_px = cBattery_px + 2 * lineWidth_px;
+    byte wBar_px = wBattery_px - 4 * lineWidth_px;
 
-  }
-  else if (statusBattery == BATTERY_RED)
-  {
-    //Serial.println ("Draw Red");
+    // draw the knob (non moving part)
     u8g.setColorIndex(1);
-    byte rCircle_px = hBattery_px / 2;
-    byte cCircle_px = wBattery_px / 2 + cBattery_px;
-    byte dCircle_px = wBattery_px / 2 ;
-    u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 5);
+    u8g.drawRBox (cKnob_px, rKnob_px, wKnob_px, hKnob_px, 2);
+
+    // draw the body (non moving part)
+    u8g.setColorIndex(1);
+    u8g.drawRBox (cBattery_px, rBody_px, wBattery_px, hBody_px, 1);
     u8g.setColorIndex(0);
-    u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 2);
+    u8g.drawRBox (cBattery_px + lineWidth_px, rBody_px + lineWidth_px, wBattery_px - 2 * lineWidth_px, hBody_px - 2 * lineWidth_px, 1);
 
-
-    byte Delta_px = 0.707 * dCircle_px + 2.5;
+    // draw the content/status (moving part)
     u8g.setColorIndex(1);
+    if (hBar_px > 4)
+      u8g.drawRBox (cBar_px, rBar_px, wBar_px, hBar_px, 1);
+    else if (hBar_px > 1)
+      u8g.drawBox  (cBar_px, rBar_px, wBar_px, hBar_px);
 
-    for (int i = -2; i <= 2; i++)
+    // Battery level indication
+
+    if (statusBattery == BATTERY_ORANGE)
     {
-      u8g.drawLine (cCircle_px - Delta_px + i, rCircle_px - Delta_px , cCircle_px + Delta_px + i, rCircle_px + Delta_px);
+      //Serial.println ("Draw Orange");
+      u8g.setColorIndex(1);
+      u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + 4, 3, hBody_px / 2 - 2);
+      u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + hBody_px / 2 + 5, 3, 3);
+
+    }
+    else if (statusBattery == BATTERY_RED)
+    {
+      //Serial.println ("Draw Red");
+      u8g.setColorIndex(1);
+      byte rCircle_px = hBattery_px / 2;
+      byte cCircle_px = wBattery_px / 2 + cBattery_px;
+      byte dCircle_px = wBattery_px / 2 ;
+      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 5);
+      u8g.setColorIndex(0);
+      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 2);
+
+
+      byte Delta_px = 0.707 * dCircle_px + 2.5;
+      u8g.setColorIndex(1);
+
+      for (int i = -2; i <= 2; i++)
+      {
+        u8g.drawLine (cCircle_px - Delta_px + i, rCircle_px - Delta_px , cCircle_px + Delta_px + i, rCircle_px + Delta_px);
+      }
     }
   }
-}
-else
-{
-  
-}
+  else
+  {
+
+  }
 }
 
 void drawLightIcons ()
@@ -272,38 +272,39 @@ void drawGear()
   //
 
 #if defined(QUATRO)
-  if (gearOnCassette_teeth > 0 and gearOnCassette_teeth < 500) // no NAN and inf on display.
+  if (gearOnCassette_teeth > 9 and gearOnCassette_teeth < 100) // no NAN and inf on display.
   {
-    // the actual number of teeth currently measured
-    if (gearOnCassette_teeth >= 10)
-    {
-      u8g.setPrintPos (94, 17);
-    }
-    else
-    {
-      u8g.setPrintPos (104, 17);
-    }
-    u8g.print (float(gearOnCassette_teeth));
+
 
     // Either the
-    if (gearOnCassette_index >= 10)
-    {
-      u8g.setPrintPos (109, 33);
-    }
-    else
-    {
-      u8g.setPrintPos (119, 33);
-    }
-    u8g.print (gearOnCassette_index);
+    //    if (gearOnCassette_index >= 10)
+    //    {
+    //      u8g.setPrintPos (109, 17);
+    //    }
+    //    else
+    //    {
+    //      u8g.setPrintPos (119, 17);
+    //    }
+
+ //   int col = 129 - 10 * gearOnCassette_string.length();
+ //   u8g.setPrintPos (col, 17);
+ //   u8g.print (gearOnCassette_string);
+
+    // temp: also print the actual number
+    u8g.setPrintPos (94,17); //94 when float
+    u8g.print (gearOnCassette_teeth);
+
+        // temp: also print the actual number
+    u8g.setPrintPos (109,33); //94 when float
+    int gearOnCassette_teeth_int = round(gearOnCassette_teeth + 0.5);
+    u8g.print (gearOnCassette_teeth_int);
 
   }
   else
   {
-    u8g.setPrintPos (117, 17);
+    u8g.setPrintPos (119, 17);
     u8g.print ('x');
-
-
-    u8g.setPrintPos (117, 33);
+    u8g.setPrintPos (119, 33);
     u8g.print ('x');
   }
 #endif
