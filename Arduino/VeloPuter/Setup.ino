@@ -94,7 +94,7 @@ void setup()   {
   auxLed.maxIntensity = auxLedMaxIntensity;
 #if defined(QUILTJE)  || defined(STRADA)
   auxLed.setLedLow();
-#elif defined(QUATRO)
+#elif defined(QUATRO) || defined(ICB_DF)
   auxLed.setLedOff();
 #endif
 
