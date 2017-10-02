@@ -257,7 +257,7 @@ void drawDebug()
 
 #if defined(QUILTJE)
   u8g.print (2);
-#elif defined(QUATRO)
+#elif defined(QUATRO) || defined(ICB_DF)
   u8g.print (3);
 #elif defined(STRADA)
   u8g.print (1);
@@ -271,7 +271,7 @@ void drawGear()
   // Display which gear we are riding in
   //
 
-#if defined(QUATRO)
+#if defined(QUATRO) || defined(ICB_DF)
   if (gearOnCassette_teeth > 9 and gearOnCassette_teeth < 100) // no NAN and inf on display.
   {
 
@@ -303,9 +303,9 @@ void drawGear()
   else
   {
     u8g.setPrintPos (119, 17);
-    u8g.print ('x');
+    u8g.print ('-');
     u8g.setPrintPos (119, 33);
-    u8g.print ('x');
+    u8g.print ('-');
   }
 #endif
 }

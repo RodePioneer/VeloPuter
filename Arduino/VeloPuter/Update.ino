@@ -26,7 +26,7 @@ void updateSleep ()
 
   /*
     TODO:
-    - Disable interunst when going to sleep
+    - Disable interupts when going to sleep
     - do not go to sleep while in alarm
     - Go to sleep after longer time when the cad and speed have not been set...
   */
@@ -59,7 +59,7 @@ void updateSleep ()
     //    Serial.println ("Done ");
 
     //
-    // Sleep state is low power sleep. The Arduino only reactis to the ahrdware interupts (cad en spd).
+    // Sleep state is low power sleep. The Arduino only reactis to the hardware interupts (cad en spd).
     // This is -appart from power down- the only way to revive the arduino from it's sleep.
     // Only when it gets an hardware interupt the aduino wakes again and willl continue to function as normal.
     // Until that moment it is "trapped" in sleep_mode().
@@ -141,7 +141,7 @@ void updateBattery()
   cellVoltage_mv = batteryVoltage_mv / numOfCells;
 
   /*
-     Determine the battery percentage. This is a measures dischage curve for LiPo.
+     Determine the battery percentage. This is a measured dischage curve for LiPo.
 
      measurement data
      Vlow   Vmid  Vhigh   C
@@ -270,7 +270,7 @@ void updateBattery()
 
       u8g.sleepOn();// Power down the display
 
-      // Powerdown the Arduino. Note that it only is to be revided by power cycling or the reset button.
+      // Powerdown the Arduino. Note that it only is to be revived by power cycling or the reset button.
       set_sleep_mode(SLEEP_MODE_PWR_DOWN);
       sleep_enable();
       sleep_mode(); //sleep until ever because the interupts are disabled.
@@ -506,7 +506,7 @@ void updateRear()
   {
     ledPreviousIntensity = rearLed.getLedIntensity();
     rearLed.setLedMax();
-#if defined(QUATRO)
+#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedMax();
 #endif
     //DEBUG_CV = DEBUG_CV - 3;
@@ -516,7 +516,7 @@ void updateRear()
   else if (brakeSwitch.getState() == HIGH && brakeSwitch.hasStateChanged() && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
-#if defined(QUATRO)
+#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedOff();
 #endif
   }
@@ -527,7 +527,7 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.upLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-#if defined(QUATRO)
+#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedOff();
 #endif
   }
@@ -538,7 +538,7 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.downLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-#if defined(QUATRO)
+#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedOff();
 #endif
   }
@@ -590,7 +590,7 @@ void updateSpeed()
     then from that calculate the speed in km/h.
   */
   speedSwitch.ReadOut();
-  speed_kmh = 3.6 * wheelCircumvention_mm * speedSwitch.getInteruptFrequency(1250) / 1000;
+  speed_kmh = 3.6 * wheelCircumference_mm * speedSwitch.getInteruptFrequency(1250) / 1000;
 
 }
 
@@ -617,9 +617,10 @@ void updateCadence()
 void updateGear()
 {
   //
-  // Teeth Rear =  Cadence (Hz) /  axel Speed (Hz * Teeth chain ring
+  // Teeth Rear =  Teeth chain ring * Cadence (Hz) /  axle Speed (Hz)
+  // axle speed = front axle speed * (front wheel circumference / read wheel circumference)
   //
-  gearOnCassette_teeth = float(setTeethOnCainring) * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
+  gearOnCassette_teeth = float(setTeethOnCainring) * gearOnCassette_scaling * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
 
   //gearOnCassette_teeth = float(millis())/1000;
 
