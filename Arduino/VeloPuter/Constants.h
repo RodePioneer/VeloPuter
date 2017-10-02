@@ -95,7 +95,7 @@ const int  rearWheelCircumference_mm = wheelCircumference_mm; // identical
 const int  wheelCircumference_mm = 1450;    // 406-28 wheel
 const int  rearWheelCircumference_mm = 1990; // 559-35 wheel
 #endif
-const float gearOnCassette_scaling = ((float)wheelCircumference_mm/(float)rearWheelCircumference_mm);
+const float gearOnCassette_scaling = ((float)rearWheelCircumference_mm/(float)wheelCircumference_mm);
 
 const byte speakerVolume = 50;
 const byte setBrakeMaxTimeOn_s =  15; // max time for a brakelight to be on.
@@ -111,19 +111,18 @@ const byte setTeethOnCainring = 53; // MaartenS: 53
 
 
 #if defined(QUATRO)
-const float setTeethOnCassette[20] = {11.0, 13.0, 15.0, 17.0, 19.0, 22.0, 25.0, 28.0, 32.0, 36.0,
-                                      2750.0,  3250.0,  37.5, 42.5, 47.5, 55.0, 62.5, 70.0, 80.0, 90.0
+const byte setTeethOnCassette[20] = {11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
+                                      2750,  3250,  37, 42, 47, 55, 62, 70, 80, 90
                                      }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
 const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
-                                             }; // Quatro
-//const byte setTeethOnCassette[10] = {11,12,14,16,18,20,22,25,28,32}; // Stefan
+                                             };
 #elif defined(ICB_DF)
 const byte setTeethOnCassette[10] = {11,12,14,15,17,19,22,25,28,32};
 const String setTeethOnCassette_string[10] = {"11","12","14","15","17","19","22","25","28","32"};
 #else
-const float setTeethOnCassette[20] = {11.0, 13.0, 15.0, 17.0, 19.0, 22.0, 25.0, 28.0, 32.0, 36.0,
-                                      2750.0,  3250.0,  37.5, 42.5, 47.5, 55.0, 62.5, 70.0, 80.0, 90.0
+const byte setTeethOnCassette[20] = {11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
+                                      2750,  3250,  37, 42, 47, 55, 62, 70, 80, 90
                                      }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
 const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
@@ -197,11 +196,11 @@ const int headLedMediumIntensity = 96;
 const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255;
 
-const int auxLedOffIntensity = 0; // aux is the brakelight
-const int auxLedLowIntensity = 255;
-const int auxLedMediumIntensity = 255;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
+const int auxLedOffIntensity = 0; // aux is not connected in the ICB_DF
+const int auxLedLowIntensity = 0;
+const int auxLedMediumIntensity = 0;
+const int auxLedHighIntensity = 0;
+const int auxLedMaxIntensity = 0;
 
 #endif
 
