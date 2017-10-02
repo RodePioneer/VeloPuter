@@ -119,8 +119,8 @@ const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22"
                                              }; // Quatro
 //const byte setTeethOnCassette[10] = {11,12,14,16,18,20,22,25,28,32}; // Stefan
 #elif defined(ICB_DF)
-const byte setTeethOnCassette[10] = {11,12,14,15,17,19,22,25,28,32};
-const String setTeethOnCassette_string[10] = {"11","12","14","15","17","19","22","25","28","32"};
+const byte setTeethOnCassette[10] = {11, 12, 13, 15, 17, 19, 22, 25, 28, 32};
+const String setTeethOnCassette_string[10] = {"11", "12", "13", "15", "17", "19", "22", "25", "28", "32"};
 #else
 const float setTeethOnCassette[20] = {11.0, 13.0, 15.0, 17.0, 19.0, 22.0, 25.0, 28.0, 32.0, 36.0,
                                       2750.0,  3250.0,  37.5, 42.5, 47.5, 55.0, 62.5, 70.0, 80.0, 90.0
