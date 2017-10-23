@@ -75,7 +75,7 @@ class Switch
       byte numOfInterupts = 0;
       float frequency = 0;
 
-      String DEBUG = "T: " ;
+      //String DEBUG = "T: " ;
 
       tNow_ms = millis();
 

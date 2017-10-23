@@ -112,21 +112,21 @@ const byte setTeethOnCainring = 53; // MaartenS: 53
 
 #if defined(QUATRO)
 const byte setTeethOnCassette[20] = {11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
-                                      2750,  3250,  37, 42, 47, 55, 62, 70, 80, 90
+                                      255,  255,  37, 42, 47, 55, 62, 70, 80, 90
                                      }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
-const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
-                                              "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
-                                             };
+// const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
+//                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
+//                                              };
 #elif defined(ICB_DF)
 const byte setTeethOnCassette[10] = {11, 12, 13, 15, 17, 19, 22, 25, 28, 32};
-const String setTeethOnCassette_string[10] = {"11", "12", "13", "15", "17", "19", "22", "25", "28", "32"};
+// const String setTeethOnCassette_string[10] = {"11", "12", "13", "15", "17", "19", "22", "25", "28", "32"};
 #else
 const byte setTeethOnCassette[20] = {11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
-                                      2750,  3250,  37, 42, 47, 55, 62, 70, 80, 90
+                                      255,  255,  37, 42, 47, 55, 62, 70, 80, 90
                                      }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
-const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
-                                              "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
-                                             }; // Quatro
+// const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
+//                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
+//                                              }; // Quatro
 #endif
 
 /*

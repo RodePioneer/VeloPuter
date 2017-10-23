@@ -113,13 +113,11 @@ void updateBattery()
   int PinValue = analogRead(voltagePin);
   static int PinMean = PinValue; // it is inutialised at the fist value and then kept in memory.
 
-  const byte numSamples = 10;
+  const byte numSamples = 20;
   const float VRef = 5.00;
 
   int batteryVoltage_mv;
   byte numOfCells;
-
-
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
@@ -590,7 +588,7 @@ void updateSpeed()
     then from that calculate the speed in km/h.
   */
   speedSwitch.ReadOut();
-  speed_kmh = 3.6 * wheelCircumference_mm * speedSwitch.getInteruptFrequency(1250) / 1000;
+  speed_kmh = 0.0036 * wheelCircumference_mm * speedSwitch.getInteruptFrequency(1250);
 
 }
 
@@ -620,7 +618,7 @@ void updateGear()
   // Teeth Rear =  Teeth chain ring * Cadence (Hz) /  axle Speed (Hz)
   // axle speed = front axle speed * (front wheel circumference / read wheel circumference)
   //
-  gearOnCassette_teeth = float(setTeethOnCainring) * gearOnCassette_scaling * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
+  float gearOnCassette = float(setTeethOnCainring) * gearOnCassette_scaling * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
 
   //gearOnCassette_teeth = float(millis())/1000;
 
@@ -637,17 +635,22 @@ void updateGear()
   //
   float minError = 99.9;
   float currentError = 99.9;
-
-  int iEnd = sizeof (setTeethOnCassette) / sizeof (setTeethOnCassette[0]) - 1;
-  for (byte i = 0; i <= iEnd; i++)
+  
+  if (2*gearOnCassette < setTeethOnCassette[0]){
+    gearOnCassette_teeth = 1;
+    return;
+  }
+  
+  int iEnd = sizeof (setTeethOnCassette) / sizeof (setTeethOnCassette[0]);
+  for (byte i = 0; i < iEnd; i++)
   {
-    currentError  = abs(gearOnCassette_teeth - setTeethOnCassette[i]);
+    currentError  = fabs(gearOnCassette - setTeethOnCassette[i]);
 
     if (currentError < minError)
     {
       minError = currentError;
-      //      gearOnCassette_index = setTeethOnCassette[i];
-      gearOnCassette_string = setTeethOnCassette_string[i];
+      gearOnCassette_index = iEnd - i;
+      gearOnCassette_teeth = setTeethOnCassette[i];
     }
   }
 }

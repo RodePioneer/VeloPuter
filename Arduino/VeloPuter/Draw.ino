@@ -272,39 +272,46 @@ void drawGear()
   //
 
 #if defined(QUATRO) || defined(ICB_DF)
-  if (gearOnCassette_teeth > 9 and gearOnCassette_teeth < 100) // no NAN and inf on display.
+  if (gearOnCassette_teeth > 8 and gearOnCassette_teeth < 100) // no NAN and inf on display.
   {
-
-
-    // Either the
-    //    if (gearOnCassette_index >= 10)
-    //    {
-    //      u8g.setPrintPos (109, 17);
-    //    }
-    //    else
-    //    {
-    //      u8g.setPrintPos (119, 17);
-    //    }
-
- //   int col = 129 - 10 * gearOnCassette_string.length();
- //   u8g.setPrintPos (col, 17);
- //   u8g.print (gearOnCassette_string);
-
-    // temp: also print the actual number
-    u8g.setPrintPos (94,17); //94 when float
+    // The starting potion depends on the number of characters to display.
+    
+    // number of teeth on current gear
+    if (gearOnCassette_teeth < 10)
+    {
+      u8g.setPrintPos (118, 17); // teeth <10
+    }
+    else if (gearOnCassette_teeth < 100)
+    {
+      u8g.setPrintPos (109, 17); // teeth >= 10, <100
+    }
+    else
+    {
+      u8g.setPrintPos (99, 17); // teeth >= 100
+    }
     u8g.print (gearOnCassette_teeth);
-
-        // temp: also print the actual number
+    
+    // Which gear are we in?
+    if (gearOnCassette_index < 10)
+    {
+      u8g.setPrintPos (118, 33); // index <10
+    }
+    else if (gearOnCassette_index < 100)
+    {
+      u8g.setPrintPos (109, 33); // index >= 10, <100
+    }
+    else
+    {
+      u8g.setPrintPos (99, 33); // index >= 100
+    }
     u8g.setPrintPos (109,33); //94 when float
-    int gearOnCassette_teeth_int = round(gearOnCassette_teeth + 0.5);
-    u8g.print (gearOnCassette_teeth_int);
-
+    u8g.print (gearOnCassette_index);
   }
   else
   {
-    u8g.setPrintPos (119, 17);
+    u8g.setPrintPos (118, 17);
     u8g.print ('-');
-    u8g.setPrintPos (119, 33);
+    u8g.setPrintPos (118, 33);
     u8g.print ('-');
   }
 #endif
