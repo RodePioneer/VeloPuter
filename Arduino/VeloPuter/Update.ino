@@ -165,17 +165,12 @@ void updateBattery()
   const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
   
   //int cellVoltage_mv = cellVoltage_v * 1000 ;
-
-  // 84-100% full :
-  if      (cellVoltage_mv >= V[1]) batteryPercentage_pct = int((C[0] - C[1]) * (cellVoltage_mv - V[1]) / (V[0] - V[1]) + C[1]);
-  // 49-84% full
-  else if (cellVoltage_mv >= V[2]) batteryPercentage_pct = int((C[1] - C[2]) * (cellVoltage_mv - V[2]) / (V[1] - V[2]) + C[2]);
-  // 12-49% full
-  else if (cellVoltage_mv >= V[3]) batteryPercentage_pct = int((C[2] - C[3]) * (cellVoltage_mv - V[3]) / (V[2] - V[3]) + C[3]);
-  // 3-12 % full
-  else if (cellVoltage_mv >= V[4]) batteryPercentage_pct = int((C[3] - C[4]) * (cellVoltage_mv - V[4]) / (V[3] - V[4]) + C[4]);
-  // < 3% full
-  else if (cellVoltage_mv >= V[5]) batteryPercentage_pct = int((C[4] - C[5]) * (cellVoltage_mv - V[5]) / (V[4] - V[5]) + C[5]);
+  batteryPercentage_pct = 0;
+  for (int i=5; i > 0; i--)
+  {
+    if (cellVoltage_mv >= V[i]) 
+      batteryPercentage_pct = int((C[i-1] - C[i]) * (cellVoltage_mv - V[i]) / (V[i-1] - V[i]) + C[i]);
+  }
   //
   //// 84-100% full :
   //  if      (cellVoltage_v >= 4.0) batteryPercentage_pct = int(16.0 * (cellVoltage_v - 4.0) / (4.2 - 4.0) + 84.5);
