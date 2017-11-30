@@ -588,7 +588,7 @@ void updateSpeed()
     then from that calculate the speed in km/h.
   */
   speedSwitch.ReadOut();
-  speed_kmh = 0.0036 * wheelCircumference_mm * speedSwitch.getInteruptFrequency(1250);
+  speed_kmh = byte(round(0.0036 * wheelCircumference_mm * speedSwitch.getInteruptFrequency(1250)));
 
 }
 
@@ -604,7 +604,7 @@ void updateCadence()
     then from that calculate the cadens in RPM.
   */
   cadenceSwitch.ReadOut();
-  cadence_rpm = 60 * cadenceSwitch.getInteruptFrequency(2500);
+  cadence_rpm = byte(round(60 * cadenceSwitch.getInteruptFrequency(2500)));
 }
 
 /*********************************************************************************************************
@@ -636,6 +636,7 @@ void updateGear()
   float minError = 99.9;
   float currentError = 99.9;
   
+  // If the calculated gear is smaller than 2/3 of the smallest (first) gear on the cassette, then we're freewheeling
   if (2*gearOnCassette < setTeethOnCassette[0]){
     gearOnCassette_teeth = 1;
     return;

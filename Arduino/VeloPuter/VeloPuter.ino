@@ -28,12 +28,11 @@ Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, 
 int batteryPercentage_pct = 99;
 int cellVoltage_mv = 4200;
 
-int speed_kmh = 0;
-int cadence_rpm = 0;
-float gearOnCassette_teeth = 0.00;
+byte speed_kmh = 0;
+byte cadence_rpm = 0;
+byte gearOnCassette_teeth = 1;
 byte gearOnCassette_index = 0;
-
-int gearSlumpfOn = 0;
+byte gearSlumpfOn = 0;
 
 
 //
