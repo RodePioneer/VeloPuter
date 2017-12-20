@@ -4,7 +4,7 @@
 
 */
 #include <Arduino.h>
-#include <TimerOne.h>
+//#include <TimerOne.h>
 
 class Led
 {

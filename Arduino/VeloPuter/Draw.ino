@@ -275,7 +275,7 @@ void drawGear()
   if (gearOnCassette_teeth > 8 and gearOnCassette_teeth < 100) // no NAN and inf on display.
   {
     // The starting potion depends on the number of characters to display.
-    
+
     // number of teeth on current gear
     if (gearOnCassette_teeth < 10)
     {
@@ -289,8 +289,14 @@ void drawGear()
     {
       u8g.setPrintPos (99, 17); // teeth >= 100
     }
-    u8g.print (gearOnCassette_teeth);
-    
+    if (gearOnCassette_teeth < 37.4)
+    {
+      u8g.print (round(gearOnCassette_teeth));
+    }
+    else
+    {
+      u8g.print (round(gearOnCassette_teeth / 2.5));
+    }
     // Which gear are we in?
     if (gearOnCassette_index < 10)
     {
@@ -304,7 +310,7 @@ void drawGear()
     {
       u8g.setPrintPos (99, 33); // index >= 100
     }
-    u8g.setPrintPos (109,33); //94 when float
+    u8g.setPrintPos (109, 33); //94 when float
     u8g.print (gearOnCassette_index);
   }
   else

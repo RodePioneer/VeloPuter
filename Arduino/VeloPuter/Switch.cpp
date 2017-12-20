@@ -27,7 +27,7 @@ class Switch
       Pin = pin;
     }
 
-    long getTSinceLastChange_ms (void)
+    long getTimeLastChange_ms (void)
     {
       return tLastStateChange_ms;
     }
@@ -75,8 +75,6 @@ class Switch
       byte numOfInterupts = 0;
       float frequency = 0;
 
-      //String DEBUG = "T: " ;
-
       tNow_ms = millis();
 
       // First check is the last interupt was within the last tMaxDelay_ms .
@@ -101,16 +99,6 @@ class Switch
         {
           frequency = float(1000.0 * numOfInterupts) / (tInterupts_ms[iEnd] - tInterupts_ms[iEnd - numOfInterupts]);
         }
-
-
-        //for (byte i = 0 ; i <=9; i++) DEBUG = DEBUG + String (i) +":" + String(tInterupts_ms[i]) + " ";
-
-
-        //String Message = String (frequency) + " = " + String(numOfInterupts ) + " / (" + String (tInterupts_ms[iEnd] - tInterupts_ms[iEnd - numOfInterupts]) + " = " + String (tInterupts_ms[iEnd] ) + " - " + String(tInterupts_ms[iEnd - numOfInterupts]) + ")";
-        //Serial.println(Message);
-        //Serial.println(DEBUG);
-
-
       }
       return frequency;
     }
@@ -140,8 +128,6 @@ class Switch
         if (StateChanged)
         {
           tLastStateChange_ms = tNow_ms;
-          //Serial.println ("Switch pin " + String(Pin) + " changed to " + String(State) );
-
         }
       }
     }

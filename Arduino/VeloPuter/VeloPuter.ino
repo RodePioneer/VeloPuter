@@ -27,10 +27,10 @@ Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, 
 
 int batteryPercentage_pct = 99;
 int cellVoltage_mv = 4200;
-
 byte speed_kmh = 0;
 byte cadence_rpm = 0;
-byte gearOnCassette_teeth = 1;
+
+float gearOnCassette_teeth = 0.00;
 byte gearOnCassette_index = 0;
 byte gearSlumpfOn = 0;
 
@@ -66,9 +66,11 @@ void loop ()
   updateBattery(); // Read out and calculate the acutual battery status
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
+  
 #if defined(QUATRO) || defined(ICB_DF)
   updateGear();    // Figure out which gear we are using at the moment.
 #endif
+
   updateSleep();   // See is we need to powerdown the Arduino
   updateConfig();  // Updte the config. For now: only the
 

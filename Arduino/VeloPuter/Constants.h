@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <U8glib.h>
 
-#define ICB_DF   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
+#define QUATRO   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
 
 #define Ug82
 
@@ -81,6 +81,7 @@ const long tSleep_ms = 300000;              // Timeout until sleep when cadence 
 const long tSleepNoCadSpd_ms = 1800000;     // Timeout until sleep when cadence and speed sensor are NOT active
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const byte numTimesToBlink = 5;             // 7 times high, 6 times low, = 13 = 4.3 s
+const long tDurationBrakeLight_ms = 10000;   // 
 //
 #if defined(STRADA)
 const int  wheelCircumference_mm = 1590;    // 406-50 wheel
@@ -111,8 +112,8 @@ const byte setTeethOnCainring = 53; // MaartenS: 53
 
 
 #if defined(QUATRO)
-const byte setTeethOnCassette[20] = {11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
-                                      255,  255,  37, 42, 47, 55, 62, 70, 80, 90
+const float setTeethOnCassette[20] = {11,  13,   15,   17,   19, 22,   25, 28, 32, 36,
+                                     255, 255, 37.5, 42.5, 47.5, 55, 62.5, 70, 80, 90
                                      }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
 // const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
 //                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"

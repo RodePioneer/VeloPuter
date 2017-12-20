@@ -16,12 +16,12 @@ void updateSleep ()
   long tNow_ms             = millis();
   long tWait_ms            = tSleepNoCadSpd_ms;
 
-  tLastStateChange_ms = max(upSwitch.getTSinceLastChange_ms(), downSwitch.getTSinceLastChange_ms());
-  tLastStateChange_ms = max(tLastStateChange_ms, leftSwitch.getTSinceLastChange_ms());
-  tLastStateChange_ms = max(tLastStateChange_ms, rightSwitch.getTSinceLastChange_ms());
-  tLastStateChange_ms = max(tLastStateChange_ms, brakeSwitch.getTSinceLastChange_ms());
-  tLastStateChange_ms = max(tLastStateChange_ms, cadenceSwitch.getTSinceLastChange_ms());
-  tLastStateChange_ms = max(tLastStateChange_ms, speedSwitch.getTSinceLastChange_ms());
+  tLastStateChange_ms = max(upSwitch.getTimeLastChange_ms(), downSwitch.getTimeLastChange_ms());
+  tLastStateChange_ms = max(tLastStateChange_ms, leftSwitch.getTimeLastChange_ms());
+  tLastStateChange_ms = max(tLastStateChange_ms, rightSwitch.getTimeLastChange_ms());
+  tLastStateChange_ms = max(tLastStateChange_ms, brakeSwitch.getTimeLastChange_ms());
+  tLastStateChange_ms = max(tLastStateChange_ms, cadenceSwitch.getTimeLastChange_ms());
+  tLastStateChange_ms = max(tLastStateChange_ms, speedSwitch.getTimeLastChange_ms());
 
 
   /*
@@ -34,8 +34,8 @@ void updateSleep ()
   if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()) tWait_ms = tSleep_ms;
 
   //Serial.println ("Wait1 : " + String(tWait_ms));
-  //Serial.println ("Wait2 : " + String(cadenceSwitch.getTSinceLastChange_ms())) ;
-  //Serial.println ("Wait3 : " + String(speedSwitch.getTSinceLastChange_ms())) ;
+  //Serial.println ("Wait2 : " + String(cadenceSwitch.getTimeLastChange_ms())) ;
+  //Serial.println ("Wait3 : " + String(speedSwitch.getTimeLastChange_ms())) ;
 
   if ((tNow_ms - tLastStateChange_ms > tWait_ms) && (stateAlarmBlinkersOn == false))
   {
@@ -125,14 +125,14 @@ void updateBattery()
 
   // Assume the cells are no less then 3.2 V and no more 4.2V.
   // cutoffs for 3 cells between 9.0 and 12.8 V.
-  
+
   /* For 3 or 4 cell lipo
-  if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
-  else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
-  else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
-  else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
-  else numOfCells = 1;                               // 1,2 cells or other than lipo
-*/
+    if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
+    else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
+    else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
+    else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
+    else numOfCells = 1;                               // 1,2 cells or other than lipo
+  */
 
   numOfCells = 1;
 
@@ -155,21 +155,21 @@ void updateBattery()
   //
   // LiPo
   //
-//  const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
-//  const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
+    const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+    const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
 
   //
   // LiFePO4
   //
-  const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
-  const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
-  
+  //const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
+  //const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
+
   //int cellVoltage_mv = cellVoltage_v * 1000 ;
   batteryPercentage_pct = 0;
-  for (int i=5; i > 0; i--)
+  for (int i = 5; i > 0; i--)
   {
-    if (cellVoltage_mv >= V[i]) 
-      batteryPercentage_pct = int((C[i-1] - C[i]) * (cellVoltage_mv - V[i]) / (V[i-1] - V[i]) + C[i]);
+    if (cellVoltage_mv >= V[i])
+      batteryPercentage_pct = int((C[i - 1] - C[i]) * (cellVoltage_mv - V[i]) / (V[i - 1] - V[i]) + C[i]);
   }
   //
   //// 84-100% full :
@@ -356,15 +356,7 @@ void updateBlinkers()
   }
   else
   { // regular stuff to do.
-    if ((leftSwitch.getState() == LOW || rightSwitch.getState() == LOW) && \
-        (upSwitch.getState() == LOW || downSwitch.getState() == LOW) && \
-        brakeSwitch.getState() == LOW)
-    { // We go to the alarm phase. Next pass the lights will blink.
-      stateAlarmBlinkersOn = true;
-      numTimesToBlinkLeft = 1;
-      numTimesToBlinkRight = 1;
-    }
-    else if (rightSwitch.getState() == LOW )
+    if (rightSwitch.getState() == LOW )
     { // blink right
       if (rightSwitch.hasStateChanged())
       {
@@ -481,7 +473,18 @@ void updateBlinkers()
 
     Update the rearlight
 
- *********************************************************************************************************/
+*********************************************************************************************************
+
+  The rear lights are normally at a nominal intensity.
+  There are four intensities at which the rear lights are run:
+  1) low intensity when riding convoy.
+  2) default intensity
+  3) higher intensity when riding in fog or other situations in which higer visibility is needed.
+  4) brakelight: max intensity  when brakeing. Note that this is independant of the brakelight itself.
+   TODO: switch this off after 10 seconds of brakelight.
+
+*/
+
 void updateRear()
 {
   /*
@@ -491,10 +494,13 @@ void updateRear()
     Note that we keep track of the return state when the brake is released here here.
   */
   static byte ledPreviousIntensity = rearLedOffIntensity;
+  long tNow_ms = millis();
 
   brakeSwitch.ReadOut();
 
-  // only brake is on
+  //
+  // only brakeswitch is on, and changed
+  //
   if (brakeSwitch.getState() == LOW && brakeSwitch.hasStateChanged() && upSwitch.getState() == HIGH && downSwitch.getState() == HIGH)
   {
     ledPreviousIntensity = rearLed.getLedIntensity();
@@ -504,8 +510,35 @@ void updateRear()
 #endif
     //DEBUG_CV = DEBUG_CV - 3;
   }
+  //
+  // When the brakeswitch is applied too long switch off the breaklights.
+  //
+  else if (brakeSwitch.getState() == LOW && !brakeSwitch.hasStateChanged())
+  {
+    if (tNow_ms - brakeSwitch.getTimeLastChange_ms() > tDurationBrakeLight_ms && rearLed.getLedIntensity() == rearLed.maxIntensity)
+    {
+      rearLed.setLedIntensity(ledPreviousIntensity);
+#if defined(QUATRO)
+      auxLed.setLedOff();
+#endif
+    }
+  }
 
-  // brake is off -> return to previous state. Only when the brakeled is max.
+  //
+  // only brakeswitch is on, and has been for a while and we push up or down
+  //
+  else if (brakeSwitch.getState() == LOW && !brakeSwitch.hasStateChanged() && upSwitch.getState() == HIGH && downSwitch.getState() == HIGH)
+  {
+    ledPreviousIntensity = rearLed.getLedIntensity();
+    rearLed.setLedMax();
+#if defined(QUATRO) || defined(ICB_DF)
+    auxLed.setLedMax();
+#endif
+    //DEBUG_CV = DEBUG_CV - 3;
+  }
+  //
+  // brakeswitch is off -> return to previous state. Only when the brakeled is max.
+  //
   else if (brakeSwitch.getState() == HIGH && brakeSwitch.hasStateChanged() && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
@@ -514,7 +547,9 @@ void updateRear()
 #endif
   }
 
-  // Brake is on, up has changed- > default goes up
+  //
+  // Brakeswitch is on, upswitch has changed- > default goes up as fog light
+  //
   else if (brakeSwitch.getState() == LOW && upSwitch.getState() == LOW && upSwitch.hasStateChanged())
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
@@ -525,7 +560,9 @@ void updateRear()
 #endif
   }
 
-  // Brake is on, down has changed
+  //
+  // Brakeswicht is on, downswitch has changed -> turn off fog light or go to dim
+  //
   else if (brakeSwitch.getState() == LOW && downSwitch.getState() == LOW && downSwitch.hasStateChanged())
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
@@ -613,40 +650,43 @@ void updateGear()
   // Teeth Rear =  Teeth chain ring * Cadence (Hz) /  axle Speed (Hz)
   // axle speed = front axle speed * (front wheel circumference / read wheel circumference)
   //
-  float gearOnCassette = float(setTeethOnCainring) * gearOnCassette_scaling * float(cadenceSwitch.getInteruptFrequency(1500)) / float(speedSwitch.getInteruptFrequency(1500));
-
-  //gearOnCassette_teeth = float(millis())/1000;
-
-  // when the slumpf is in 1:2.5 mode: devide the # of teeth by 2.5.
-  //  gearSlumpfOn = gearOnCassette_teeth > 36.75;
-  //  if (gearSlumpfOn)
-  //  {
-  //    gearOnCassette_teeth = gearOnCassette_teeth / 2.5;
-  //  }
-  //
+  float gearOnCassette = float(setTeethOnCainring) * gearOnCassette_scaling * cadenceSwitch.getInteruptFrequency(1500) / speedSwitch.getInteruptFrequency(1500);
 
   //
   // Find the minimum
   //
-  float minError = 99.9;
-  float currentError = 99.9;
-  
+  float minError = 999.9;
+  float currentError = 999.9;
+
   // If the calculated gear is smaller than 2/3 of the smallest (first) gear on the cassette, then we're freewheeling
-  if (2*gearOnCassette < setTeethOnCassette[0]){
+  if (2 * gearOnCassette < setTeethOnCassette[0]) {
     gearOnCassette_teeth = 1;
     return;
   }
-  
+
   int iEnd = sizeof (setTeethOnCassette) / sizeof (setTeethOnCassette[0]);
   for (byte i = 0; i < iEnd; i++)
   {
     currentError  = fabs(gearOnCassette - setTeethOnCassette[i]);
 
-    if (currentError < minError)
+    if (cadenceSwitch.getInteruptFrequency(1500) > 0 && speedSwitch.getInteruptFrequency(1500) > 0) 
     {
-      minError = currentError;
-      gearOnCassette_index = iEnd - i;
-      gearOnCassette_teeth = setTeethOnCassette[i];
+      int iEnd = sizeof (setTeethOnCassette) / sizeof (setTeethOnCassette[0]);
+      for (byte i = 0; i < iEnd; i++)
+      {
+        currentError  = fabs(gearOnCassette - setTeethOnCassette[i]);
+
+        if (currentError < minError)
+        {
+          minError = currentError;
+          gearOnCassette_index = iEnd - i;
+          gearOnCassette_teeth = setTeethOnCassette[i];
+        }
+      }
+    }
+    else
+    { gearOnCassette_teeth = 1;
+      return;
     }
   }
 }
