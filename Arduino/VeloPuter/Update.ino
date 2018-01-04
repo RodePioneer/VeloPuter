@@ -126,15 +126,15 @@ void updateBattery()
   // Assume the cells are no less then 3.2 V and no more 4.2V.
   // cutoffs for 3 cells between 9.0 and 12.8 V.
 
-  /* For 3 or 4 cell lipo
+  /* For 3 or 4 cell lipo*/
     if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
     else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
     else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
     else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
     else numOfCells = 1;                               // 1,2 cells or other than lipo
-  */
+  
 
-  numOfCells = 1;
+  //numOfCells = 1;
 
   cellVoltage_mv = batteryVoltage_mv / numOfCells;
 
