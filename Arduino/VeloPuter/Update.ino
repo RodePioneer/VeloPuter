@@ -117,7 +117,8 @@ void updateBattery()
   const float VRef = 5.00;
 
   int batteryVoltage_mv;
-  byte numOfCells;
+  int cellVoltage_mv;
+  byte numOfCells = 1;
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
@@ -127,6 +128,7 @@ void updateBattery()
   // cutoffs for 3 cells between 9.0 and 12.8 V.
 
   /* For 3 or 4 cell lipo*/
+#if defined(BATTERY_LIPO)
     if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
     else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
     else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
@@ -136,7 +138,7 @@ void updateBattery()
 
   //numOfCells = 1;
 
-  cellVoltage_mv = batteryVoltage_mv / numOfCells;
+  
 
   /*
      Determine the battery percentage. This is a measured dischage curve for LiPo.
@@ -157,14 +159,18 @@ void updateBattery()
   //
     const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
     const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
+#endif
 
+#if defined(BATTERY_LIFEPO4)
   //
   // LiFePO4
   //
-  //const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
-  //const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
+  const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
+  const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
+#endif
 
-  //int cellVoltage_mv = cellVoltage_v * 1000 ;
+  cellVoltage_mv = batteryVoltage_mv / numOfCells;
+  
   batteryPercentage_pct = 0;
   for (int i = 5; i > 0; i--)
   {
@@ -481,7 +487,6 @@ void updateBlinkers()
   2) default intensity
   3) higher intensity when riding in fog or other situations in which higer visibility is needed.
   4) brakelight: max intensity  when brakeing. Note that this is independant of the brakelight itself.
-   TODO: switch this off after 10 seconds of brakelight.
 
 */
 

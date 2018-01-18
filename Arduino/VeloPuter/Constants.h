@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <U8glib.h>
 
-#define QUATRO   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
+#define ICB_DF   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
+#define BATTERY_LIFEPO4 // Battry type BATTERY_LIPO BATTERY_LIFEPO4
 
 #define Ug82
 
