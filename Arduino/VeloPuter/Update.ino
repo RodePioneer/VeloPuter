@@ -117,7 +117,8 @@ void updateBattery()
   const float VRef = 5.00;
 
   int batteryVoltage_mv;
-  int cellVoltage_mv;
+  // is a global variable, do not declare here.
+  // int cellVoltage_mv;
   byte numOfCells;
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
