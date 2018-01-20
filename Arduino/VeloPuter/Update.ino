@@ -42,10 +42,6 @@ void updateSleep ()
     // This semaphore disables interupts from updating the leds.
     statusPowerDown = true;
 
-    // make sure leds stay off when set to off.
-    //Timer1.detachInterrupt (); // it wil reattached during the setup
-    // TODO: use a semaphore to block the interupts.
-
     // clear the screen
     u8g.sleepOn();
 
@@ -55,8 +51,6 @@ void updateSleep ()
     rearLed.setLedIntensity(0);
     headLed.setLedIntensity(0);
     auxLed.setLedIntensity(0);
-
-    //    Serial.println ("Done ");
 
     //
     // Sleep state is low power sleep. The Arduino only reactis to the hardware interupts (cad en spd).
@@ -77,14 +71,7 @@ void updateSleep ()
     rightLed.setLedOff();
     rearLed.setLedLow();
     headLed.setLedLow();
-#if defined(QUILTJE)  || defined(STRADA)
     auxLed.setLedLow();
-#elif defined(QUILTJE)
-    auxLed.setLedOff();
-#endif
-
-    //Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
-    //setup ();
 
     statusPowerDown = false;
   }
