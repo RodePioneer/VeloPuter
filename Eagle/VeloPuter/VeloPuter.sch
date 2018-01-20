@@ -19922,12 +19922,12 @@ measurement</text>
 <instance part="AUX_OUT" gate=".4" x="335.28" y="-33.02" rot="R180"/>
 <instance part="AUX_OUT" gate=".5" x="208.28" y="73.66" rot="R180"/>
 <instance part="AUX_OUT" gate=".6" x="208.28" y="66.04" rot="R180"/>
-<instance part="Q3" gate="1" x="317.5" y="162.56"/>
-<instance part="Q4" gate="G$1" x="330.2" y="167.64" rot="MR180"/>
-<instance part="R1" gate="G$1" x="322.58" y="170.18" rot="R90">
-<attribute name="OC_NEWARK" x="322.58" y="170.18" size="1.778" layer="96" display="off"/>
-<attribute name="MF" x="322.58" y="170.18" size="1.778" layer="96" display="off"/>
-<attribute name="MPN" x="322.58" y="170.18" size="1.778" layer="96" display="off"/>
+<instance part="Q3" gate="1" x="317.5" y="165.1"/>
+<instance part="Q4" gate="G$1" x="330.2" y="172.72" rot="MR180"/>
+<instance part="R1" gate="G$1" x="322.58" y="175.26" rot="R90">
+<attribute name="OC_NEWARK" x="322.58" y="175.26" size="1.778" layer="96" display="off"/>
+<attribute name="MF" x="322.58" y="175.26" size="1.778" layer="96" display="off"/>
+<attribute name="MPN" x="322.58" y="175.26" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="JP1" gate="A" x="327.66" y="149.86" rot="R270"/>
 <instance part="GND17" gate="1" x="320.04" y="147.32"/>
@@ -20094,7 +20094,7 @@ measurement</text>
 </segment>
 <segment>
 <pinref part="Q3" gate="1" pin="S"/>
-<wire x1="320.04" y1="157.48" x2="325.12" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="320.04" y1="160.02" x2="325.12" y2="160.02" width="0.1524" layer="91"/>
 <pinref part="GND16" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -20300,7 +20300,7 @@ measurement</text>
 <pinref part="LIGHTS" gate=".1" pin="SK"/>
 <pinref part="Q4" gate="G$1" pin="S"/>
 <wire x1="332.74" y1="154.94" x2="335.28" y2="154.94" width="0.1524" layer="91"/>
-<wire x1="332.74" y1="162.56" x2="332.74" y2="154.94" width="0.1524" layer="91"/>
+<wire x1="332.74" y1="167.64" x2="332.74" y2="154.94" width="0.1524" layer="91"/>
 <junction x="332.74" y="154.94"/>
 </segment>
 </net>
@@ -20372,7 +20372,7 @@ measurement</text>
 </net>
 <net name="PWM_FRONT" class="0">
 <segment>
-<wire x1="307.34" y1="165.1" x2="312.42" y2="162.56" width="0.1524" layer="91"/>
+<wire x1="307.34" y1="165.1" x2="312.42" y2="165.1" width="0.1524" layer="91"/>
 <pinref part="Q3" gate="1" pin="G"/>
 <label x="307.34" y="165.1" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -20566,6 +20566,7 @@ measurement</text>
 <wire x1="142.24" y1="12.7" x2="142.24" y2="15.24" width="0.1524" layer="91"/>
 <label x="149.86" y="12.7" size="1.778" layer="95" xref="yes"/>
 <wire x1="142.24" y1="12.7" x2="149.86" y2="12.7" width="0.1524" layer="91"/>
+<junction x="142.24" y="12.7"/>
 </segment>
 </net>
 <net name="PWM_BUZZER" class="0">
@@ -20671,11 +20672,11 @@ measurement</text>
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
 <pinref part="Q4" gate="G$1" pin="D"/>
-<wire x1="332.74" y1="175.26" x2="332.74" y2="172.72" width="0.1524" layer="91"/>
-<wire x1="332.74" y1="175.26" x2="322.58" y2="175.26" width="0.1524" layer="91"/>
+<wire x1="332.74" y1="180.34" x2="332.74" y2="177.8" width="0.1524" layer="91"/>
+<wire x1="332.74" y1="180.34" x2="322.58" y2="180.34" width="0.1524" layer="91"/>
 <label x="317.5" y="175.26" size="1.778" layer="95" rot="R180"/>
-<wire x1="317.5" y1="175.26" x2="322.58" y2="175.26" width="0.1524" layer="91"/>
-<junction x="322.58" y="175.26"/>
+<wire x1="317.5" y1="180.34" x2="322.58" y2="180.34" width="0.1524" layer="91"/>
+<junction x="322.58" y="180.34"/>
 </segment>
 <segment>
 <pinref part="U$5" gate="G$1" pin="DCIN+"/>
@@ -20773,9 +20774,9 @@ measurement</text>
 <pinref part="Q3" gate="1" pin="D"/>
 <pinref part="Q4" gate="G$1" pin="G"/>
 <pinref part="R1" gate="G$1" pin="1"/>
-<junction x="320.04" y="167.64"/>
-<wire x1="320.04" y1="167.64" x2="325.12" y2="165.1" width="0.1524" layer="91"/>
-<wire x1="322.58" y1="165.1" x2="320.04" y2="167.64" width="0.1524" layer="91"/>
+<junction x="320.04" y="170.18"/>
+<wire x1="320.04" y1="170.18" x2="325.12" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="322.58" y1="170.18" x2="320.04" y2="170.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$20" class="0">
