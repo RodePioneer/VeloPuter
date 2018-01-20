@@ -118,27 +118,24 @@ void updateBattery()
 
   int batteryVoltage_mv;
   int cellVoltage_mv;
-  byte numOfCells = 1;
+  byte numOfCells;
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
   batteryVoltage_mv = 4326 * (VRef / 1023) * PinMean; // 4.326 was measured useing a voltage meter
 
+#if defined(BATTERY_LIPO)
   // Assume the cells are no less then 3.2 V and no more 4.2V.
   // cutoffs for 3 cells between 9.0 and 12.8 V.
 
   /* For 3 or 4 cell lipo*/
-#if defined(BATTERY_LIPO)
     if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
     else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
     else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
     else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
     else numOfCells = 1;                               // 1,2 cells or other than lipo
   
-
   //numOfCells = 1;
-
-  
 
   /*
      Determine the battery percentage. This is a measured dischage curve for LiPo.
@@ -159,14 +156,16 @@ void updateBattery()
   //
     const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
     const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
-#endif
-
-#if defined(BATTERY_LIFEPO4)
+#elif defined(BATTERY_LIFEPO4)
   //
   // LiFePO4
   //
+  
+  // Constants from manual, better data is gathered.
+  
   const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
   const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
+  numOfCells = 1;
 #endif
 
   cellVoltage_mv = batteryVoltage_mv / numOfCells;
@@ -196,8 +195,8 @@ void updateBattery()
      Determnine battery regime
   */
   if (doBatteryCheck) {
-    const int Batt_pct[3] = {20, 10, 5};
-    if (batteryPercentage_pct < Batt_pct[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
+    const int Batt_pct_limits[3] = {20, 10, 5};
+    if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
     {
       /*
          No high beam
@@ -214,7 +213,7 @@ void updateBattery()
 
 
     }
-    if (batteryPercentage_pct < Batt_pct[1]  && statusBattery == BATTERY_ORANGE)
+    if (batteryPercentage_pct < Batt_pct_limits[1]  && statusBattery == BATTERY_ORANGE)
     {
       /*
          We are now more pressen for power consumption.
@@ -248,7 +247,7 @@ void updateBattery()
 
       statusBattery = BATTERY_RED;
     }
-    if (batteryPercentage_pct < Batt_pct[2]  && statusBattery == BATTERY_RED)
+    if (batteryPercentage_pct < Batt_pct_limits[2]  && statusBattery == BATTERY_RED)
     {
       /*
          The battery is almost dead. We now power it down.

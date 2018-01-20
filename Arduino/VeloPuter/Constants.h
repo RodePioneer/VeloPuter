@@ -1,8 +1,11 @@
 #include <Arduino.h>
 #include <U8glib.h>
 
-#define ICB_DF   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
-#define BATTERY_LIFEPO4 // Battry type BATTERY_LIPO BATTERY_LIFEPO4
+#include "VeloPuter_Config.h"
+
+// now via VeloPuter_Config.h
+//#define ICB_DF   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
+//#define BATTERY_LIFEPO4 // Battry type BATTERY_LIPO BATTERY_LIFEPO4
 
 #define Ug82
 
@@ -66,7 +69,7 @@ const byte switchRightPin =     A3; //A1;
 const byte switchLeftPin =      A4; //A2;
 const byte switchHeadDownPin =  A1; //A3;
 const byte switchHeadUpPin =    A2; //A4;
-#elif defined(QUATRO) ||defined(ICB_DF)
+#elif defined(QUATRO) || defined(ICB_DF)
 const byte switchRightPin =     A1;
 const byte switchLeftPin =      A2;
 const byte switchHeadDownPin =  A3;
@@ -81,9 +84,11 @@ const byte UNUSED4 =            A5;
 const long tSleep_ms = 300000;              // Timeout until sleep when cadence and speed sensor are active
 const long tSleepNoCadSpd_ms = 1800000;     // Timeout until sleep when cadence and speed sensor are NOT active
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
-const byte numTimesToBlink = 5;             // 7 times high, 6 times low, = 13 = 4.3 s
+const byte numTimesToBlink = VP_BLINK_COUNT;             // 7 times high, 6 times low, = 13 = 4.3 s
 const long tDurationBrakeLight_ms = 10000;   // 
-//
+
+// now via VeloPuter_Config.h
+/* 
 #if defined(STRADA)
 const int  wheelCircumference_mm = 1590;    // 406-50 wheel
 const int  rearWheelCircumference_mm = 2075; // 559-50 wheel
@@ -97,12 +102,22 @@ const int  rearWheelCircumference_mm = wheelCircumference_mm; // identical
 const int  wheelCircumference_mm = 1450;    // 406-28 wheel
 const int  rearWheelCircumference_mm = 1990; // 559-35 wheel
 #endif
+ */
+
+const int  wheelCircumference_mm = VP_FRONTWHEEL;
+const int  rearWheelCircumference_mm = VP_REARWHEEL;
+
 const float gearOnCassette_scaling = ((float)rearWheelCircumference_mm/(float)wheelCircumference_mm);
 
 const byte speakerVolume = 50;
-const byte setBrakeMaxTimeOn_s =  15; // max time for a brakelight to be on.
+
+// not used
+// const byte setBrakeMaxTimeOn_s =  15; // max time for a brakelight to be on.
+
 byte setOledIntensity = 0;
 
+// now via VeloPuter_Config.h
+/* 
 #if defined(ICB_DF)
 const byte setTeethOnCainring = 53; // MaartenS: 53
 #elif defined(QUATRO)
@@ -110,7 +125,9 @@ const byte setTeethOnCainring = 70; //Gert: 70, STefan: 75 MaartenS: 53
 #else
 const byte setTeethOnCainring = 53; // MaartenS: 53
 #endif
+ */
 
+const byte setTeethOnCainring = VP_CHAINRING;
 
 #if defined(QUATRO)
 const float setTeethOnCassette[20] = {11,  13,   15,   17,   19, 22,   25, 28, 32, 36,
@@ -119,17 +136,10 @@ const float setTeethOnCassette[20] = {11,  13,   15,   17,   19, 22,   25, 28, 3
 // const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
 //                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
 //                                              };
-#elif defined(ICB_DF)
-const byte setTeethOnCassette[10] = {11, 12, 13, 15, 17, 19, 22, 25, 28, 32};
-// const String setTeethOnCassette_string[10] = {"11", "12", "13", "15", "17", "19", "22", "25", "28", "32"};
 #else
-const byte setTeethOnCassette[20] = {11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
-                                      255,  255,  37, 42, 47, 55, 62, 70, 80, 90
-                                     }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
-// const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
-//                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
-//                                              }; // Quatro
+const byte setTeethOnCassette[VP_CASSETTE_LENGHT] = {VP_CASSETTE_VALUES};
 #endif
+
 
 /*
   Defaullt intensiteiten
