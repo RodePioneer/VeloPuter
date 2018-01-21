@@ -14,7 +14,7 @@ def main():
     parser.add_argument("-b", "--blinkers", metavar="N", type=int, 
                         help="Number of times the blinkers will blink when cornering. Default 5", 
                         default=5)
-    parser.add_argument("-C", "--cassette", metavar="N", type=int, default=None,
+    parser.add_argument("-C", "--cassette", metavar="N", type=float, default=None,
                         nargs="+", help="Number of teeth on the rear cassette. Default 11-36 + Schlumpf")
     parser.add_argument("-f", "--chainring", metavar="N", type=int, default=70,
                         help="Number of teeth on the fron chainring. Default 70")
@@ -55,10 +55,10 @@ def main():
     
     contents.append("/* define cassette */")
     if args.cassette is None:
-        args.cassette = [11, 13, 15, 17, 19, 22, 25, 28, 32, 36,
-                         255,  255,  37, 42, 47, 55, 62, 70, 80, 90]
+        args.cassette = [11.0, 13.0, 15.0, 17.0, 19.0, 22.0, 25.0, 28.0, 32.0, 36.0,
+                         255.0, 255.0, 37.5, 42.5, 47.5, 55.0, 62.5, 70.0, 80.0, 90.0]
     contents.append("#define VP_CASSETTE_LENGHT %d" % (len(args.cassette), ))
-    contents.append("#define VP_CASSETTE_VALUES %s" % (",".join(["%d" % (v,) for v in args.cassette]), ))
+    contents.append("#define VP_CASSETTE_VALUES %s" % (",".join(["%.1f" % (v,) for v in args.cassette]), ))
     contents.append("")
     
     contents.append("/* define chainring */")
