@@ -491,9 +491,12 @@ void updateRear()
   brakeSwitch.ReadOut();
 
   //
-  // only brakeswitch is on, and changed
+  // only brakeswitch is on, and changed -> turn on brake light to Max.
   //
-  if (brakeSwitch.getState() == LOW && brakeSwitch.hasStateChanged() && upSwitch.getState() == HIGH && downSwitch.getState() == HIGH)
+  if (brakeSwitch.getState() == LOW 
+      && brakeSwitch.hasStateChanged() 
+      && upSwitch.getState() == HIGH 
+      && downSwitch.getState() == HIGH)
   {
     ledPreviousIntensity = rearLed.getLedIntensity();
     rearLed.setLedMax();
@@ -505,21 +508,26 @@ void updateRear()
   //
   // When the brakeswitch is applied too long switch off the breaklights.
   //
-  else if (brakeSwitch.getState() == LOW && !brakeSwitch.hasStateChanged())
+  else if (brakeSwitch.getState() == LOW 
+           && !brakeSwitch.hasStateChanged() 
+           && tNow_ms - brakeSwitch.getTimeLastChange_ms() > tDurationBrakeLight_ms 
+           && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
-    if (tNow_ms - brakeSwitch.getTimeLastChange_ms() > tDurationBrakeLight_ms && rearLed.getLedIntensity() == rearLed.maxIntensity)
-    {
       rearLed.setLedIntensity(ledPreviousIntensity);
 #if defined(QUATRO)
       auxLed.setLedOff();
 #endif
-    }
   }
 
+/* Don't understand this one */
+/*
   //
   // only brakeswitch is on, and has been for a while and we push up or down
   //
-  else if (brakeSwitch.getState() == LOW && !brakeSwitch.hasStateChanged() && upSwitch.getState() == HIGH && downSwitch.getState() == HIGH)
+  else if (brakeSwitch.getState() == LOW 
+           && !brakeSwitch.hasStateChanged() 
+           && upSwitch.getState() == HIGH 
+           && downSwitch.getState() == HIGH)
   {
     ledPreviousIntensity = rearLed.getLedIntensity();
     rearLed.setLedMax();
@@ -528,10 +536,13 @@ void updateRear()
 #endif
     //DEBUG_CV = DEBUG_CV - 3;
   }
+*/
   //
   // brakeswitch is off -> return to previous state. Only when the brakeled is max.
   //
-  else if (brakeSwitch.getState() == HIGH && brakeSwitch.hasStateChanged() && rearLed.getLedIntensity() == rearLed.maxIntensity)
+  else if (brakeSwitch.getState() == HIGH 
+           && brakeSwitch.hasStateChanged() 
+           && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
 #if defined(QUATRO) || defined(ICB_DF)
@@ -542,7 +553,9 @@ void updateRear()
   //
   // Brakeswitch is on, upswitch has changed- > default goes up as fog light
   //
-  else if (brakeSwitch.getState() == LOW && upSwitch.getState() == LOW && upSwitch.hasStateChanged())
+  else if (brakeSwitch.getState() == LOW 
+           && upSwitch.getState() == LOW 
+           && upSwitch.hasStateChanged())
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.upLed();
@@ -555,7 +568,9 @@ void updateRear()
   //
   // Brakeswicht is on, downswitch has changed -> turn off fog light or go to dim
   //
-  else if (brakeSwitch.getState() == LOW && downSwitch.getState() == LOW && downSwitch.hasStateChanged())
+  else if (brakeSwitch.getState() == LOW 
+           && downSwitch.getState() == LOW 
+           && downSwitch.hasStateChanged())
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.downLed();
