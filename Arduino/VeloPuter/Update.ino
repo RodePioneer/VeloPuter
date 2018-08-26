@@ -113,6 +113,8 @@ void updateBattery()
   batteryVoltage_mv = 4326 * (VRef / 1023) * PinMean; // 4.326 was measured useing a voltage meter
 
 #if defined(BATTERY_LIPO)
+#define NUM_REFDATA 6
+
   // Assume the cells are no less then 3.2 V and no more 4.2V.
   // cutoffs for 3 cells between 9.0 and 12.8 V.
 
@@ -142,24 +144,24 @@ void updateBattery()
   //
   // LiPo
   //
-    const int V[6] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
-    const int C[6] = {100,    90,   75,   50,    7,    0};      // % capacity
+    const int V[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+    const int C[NUM_REFDATA] = {100,    90,   75,   50,    7,    0};      // % capacity
 #elif defined(BATTERY_LIFEPO4)
+#define NUM_REFDATA 7
   //
   // LiFePO4
   //
   
   // Constants from manual, better data is gathered.
-  
-  const int V[6] = {13340, 13270, 13130, 13104, 12899, 9200};  //mV
-  const int C[6] = {100,    80,   60,   40,   20,    0};      // % capacity
+  const int V[NUM_REFDATA] = {13952, 12847, 12733, 12455, 12169, 11755, 10424}; // mV
+  const int C[NUM_REFDATA] = {  100,    75,    50,    20,    10,     5,     0}; // %capacity
   numOfCells = 1;
 #endif
 
   cellVoltage_mv = batteryVoltage_mv / numOfCells;
   
   batteryPercentage_pct = 0;
-  for (int i = 5; i > 0; i--)
+  for (int i = NUM_REFDATA-1; i > 0; i--)
   {
     if (cellVoltage_mv >= V[i])
       batteryPercentage_pct = int((C[i - 1] - C[i]) * (cellVoltage_mv - V[i]) / (V[i - 1] - V[i]) + C[i]);
