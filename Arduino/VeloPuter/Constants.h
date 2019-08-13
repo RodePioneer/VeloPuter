@@ -59,22 +59,10 @@ const byte UNUSED3 =            12;
 const byte speakerPin =         13;
 const byte voltagePin =         A0;
 
-#if defined(STRADA)
-const byte switchHeadUpPin =    A2;
-const byte switchHeadDownPin =  A1;
-const byte switchRightPin =     A3;
-const byte switchLeftPin =      A4;
-#elif defined(QUILTJE)
-const byte switchRightPin =     A3; //A1;
-const byte switchLeftPin =      A4; //A2;
-const byte switchHeadDownPin =  A1; //A3;
-const byte switchHeadUpPin =    A2; //A4;
-#elif defined(QUATRO) || defined(ICB_DF)
 const byte switchRightPin =     A1;
 const byte switchLeftPin =      A2;
 const byte switchHeadDownPin =  A3;
 const byte switchHeadUpPin =    A4;
-#endif
 const byte UNUSED4 =            A5;
 
 
@@ -84,8 +72,10 @@ const byte UNUSED4 =            A5;
 const long tSleep_ms = 300000;              // Timeout until sleep when cadence and speed sensor are active
 const long tSleepNoCadSpd_ms = 1800000;     // Timeout until sleep when cadence and speed sensor are NOT active
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
+const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
+const int  tFogFlashLow_ms = 1900;           // 1.5 Hz Note that it actually is have a period.
 const byte numTimesToBlink = VP_BLINK_COUNT;             // 7 times high, 6 times low, = 13 = 4.3 s
-const long tDurationBrakeLight_ms = 10000;   // 
+const long tDurationBrakeLight_ms = 15000;   // 
 
 // now via VeloPuter_Config.h
 /* 
@@ -129,16 +119,16 @@ const byte setTeethOnCainring = 53; // MaartenS: 53
 
 const byte setTeethOnCainring = VP_CHAINRING;
 
-#if defined(QUATRO)
-const float setTeethOnCassette[20] = {11,  13,   15,   17,   19, 22,   25, 28, 32, 36,
-                                     255, 255, 37.5, 42.5, 47.5, 55, 62.5, 70, 80, 90
-                                     }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
+//#if defined(QUATRO)
+//const float setTeethOnCassette[20] = {11,  13,   15,   17,   19, 22,   25, 28, 32, 36,
+//                                     255, 255, 37.5, 42.5, 47.5, 55, 62.5, 70, 80, 90
+//                                     }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
 // const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
 //                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
 //                                              };
-#else
-const byte setTeethOnCassette[VP_CASSETTE_LENGHT] = {VP_CASSETTE_VALUES};
-#endif
+//#else
+//const byte setTeethOnCassette[VP_CASSETTE_LENGHT] = {VP_CASSETTE_VALUES};
+//#endif
 
 
 /*
@@ -147,13 +137,13 @@ const byte setTeethOnCassette[VP_CASSETTE_LENGHT] = {VP_CASSETTE_VALUES};
 const int leftLedOffIntensity = 0; // Note that currently pwm is disabled for the blinker pins. See of this has anything to do with the failing display/.
 const int leftLedLowIntensity = 255;
 const int leftLedMediumIntensity = 255;
-const int leftLedHighIntensity = 255;
+const int leftLedHighIntensity = 64;
 const int leftLedMaxIntensity = 255;
 
 const int rightLedOffIntensity = 0;
 const int rightLedLowIntensity = 255;
 const int rightLedMediumIntensity = 255;
-const int rightLedHighIntensity = 255;
+const int rightLedHighIntensity = 64;
 const int rightLedMaxIntensity = 255;
 
 const int rearLedOffIntensity = 8;
@@ -162,33 +152,7 @@ const int rearLedMediumIntensity = 64;
 const int rearLedHighIntensity = 64; // Note that this stops the up/down!
 const int rearLedMaxIntensity = 255;
 
-#if  defined(STRADA)
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 16;
-const int headLedMediumIntensity = 96;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
-
-const int auxLedOffIntensity = 0; //aux is just an other headlinght
-const int auxLedLowIntensity = 16;
-const int auxLedMediumIntensity = 96;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
-
-#elif defined(QUILTJE)
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 32;
-const int headLedMediumIntensity = 128;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
-
-const int auxLedOffIntensity = 0; // aux is the floodlight
-const int auxLedLowIntensity = 16;
-const int auxLedMediumIntensity = 32;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
-
-#elif defined(QUATRO)
+#if defined(QUATRO)
 const int headLedOffIntensity = 0;
 const int headLedLowIntensity = 32;
 const int headLedMediumIntensity = 96;
@@ -196,7 +160,7 @@ const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255;
 
 const int auxLedOffIntensity = 0; // aux is the brakelight
-const int auxLedLowIntensity = 255;
+const int auxLedLowIntensity = 0; // remember that hte brakelight comes back into low.
 const int auxLedMediumIntensity = 255;
 const int auxLedHighIntensity = 255;
 const int auxLedMaxIntensity = 255;
@@ -215,4 +179,3 @@ const int auxLedHighIntensity = 0;
 const int auxLedMaxIntensity = 0;
 
 #endif
-

@@ -31,7 +31,6 @@ byte speed_kmh = 0;
 byte cadence_rpm = 0;
 
 float gearOnCassette_teeth = 0.00;
-byte gearOnCassette_index = 0;
 byte gearSlumpfOn = 0;
 
 
@@ -44,7 +43,6 @@ byte doBatteryCheck = true;
 byte statusBattery = BATTERY_GREEN;
 volatile byte statusPowerDown = false;
 byte stateAlarmBlinkersOn = false;
-
 
 /**********************************************************************************************
    The Loop the engine of the system. This is the slow train.
@@ -60,19 +58,16 @@ void loop ()
     updateHead();    // change headlight intensity
     updateRear();    // update rear lights. This includes the brakelight when applicable.
     updateBlinkers();// Update the blinkers
+    updateConfig();  // Updte the config. For now: only the
     drawScreen();    // Write all the information to the display.
   } while ( u8g.nextPage() );
 
   updateBattery(); // Read out and calculate the acutual battery status
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
-  
-#if defined(QUATRO) || defined(ICB_DF)
   updateGear();    // Figure out which gear we are using at the moment.
-#endif
 
   updateSleep();   // See is we need to powerdown the Arduino
-  updateConfig();  // Updte the config. For now: only the
 
 }
 
@@ -93,26 +88,3 @@ void interruptServiceRoutineCadence()
 {
   cadenceSwitch.Interupt();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -271,7 +271,6 @@ void drawGear()
   // Display which gear we are riding in
   //
 
-#if defined(QUATRO) || defined(ICB_DF)
   if (gearOnCassette_teeth > 8 and gearOnCassette_teeth < 100) // no NAN and inf on display.
   {
     // The starting potion depends on the number of characters to display.
@@ -297,6 +296,8 @@ void drawGear()
     {
       u8g.print (round(gearOnCassette_teeth / 2.5));
     }
+
+    /*
     // Which gear are we in?
     if (gearOnCassette_index < 10)
     {
@@ -309,18 +310,17 @@ void drawGear()
     else
     {
       u8g.setPrintPos (99, 33); // index >= 100
-    }
+    }    
     u8g.setPrintPos (109, 33); //94 when float
     u8g.print (gearOnCassette_index);
+    */
   }
+  
   else
   {
     u8g.setPrintPos (118, 17);
     u8g.print ('-');
-    u8g.setPrintPos (118, 33);
-    u8g.print ('-');
+//    u8g.setPrintPos (118, 33);
+//    u8g.print ('-');
   }
-#endif
 }
-
-

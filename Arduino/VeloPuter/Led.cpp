@@ -11,6 +11,7 @@ class Led
     //private:
   private:
     volatile byte ledIntensity = lowIntensity;
+    volatile long tLastStateChange_ms = 0;
     byte pin;
 
   public:
@@ -23,24 +24,18 @@ class Led
     void setLedIntensity (byte newIntensity) // directly set the new LED value, either digital or analog.
     {
       ledIntensity = newIntensity;
-
-      // Because we Timer1 pin 9 and 10 are broken for analogwrite
-      //    if (pin == 9 or pin == 10 )
-      //    {
-      //      //Timer1.pwm(pin, 4*ledIntensity); // I suspect Timer1 form the sometimes weird behaviour for the display.
-      //      digitalWrite(pin, ledIntensity > 0);
-      //    }
-      //    else
-      //    {
       analogWrite(pin, ledIntensity);
-      //    }
-      // tracer on a specific or all pins.
-      //if (pin == 11) Serial.println ("Setting pin " +String(pin) + " to " + String(ledIntensity) );
+      tLastStateChange_ms = millis();
     }
 
     byte getLedIntensity () // return the current intensity of the led.
     {
       return ledIntensity;
+    }
+
+    long getTimeLastChange_ms (void)
+    {
+      return tLastStateChange_ms;
     }
 
     void setPin (byte Pin)
@@ -99,5 +94,3 @@ class Led
       else if (ledIntensity == maxIntensity) setLedHigh();
     }
 };
-
-

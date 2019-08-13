@@ -71,12 +71,16 @@ void updateSleep ()
     rightLed.setLedOff();
     rearLed.setLedLow();
     headLed.setLedLow();
-    auxLed.setLedLow();
+    auxLed.setLedOff();
+
+    brakeSwitch.ReadOut();
+    upSwitch.ReadOut();
+    downSwitch.ReadOut();
+
 
     statusPowerDown = false;
   }
 }
-
 
 /*********************************************************************************************************
 
@@ -181,13 +185,22 @@ void updateBattery()
 
   /*
      Determnine battery regime
+
+      Green: normal operation
+      Orange: we need to preserve power.
+      Red: okay now we are almost fucked.
+      Black: down. We are now dead.
+     
   */
   if (doBatteryCheck) {
-    const int Batt_pct_limits[3] = {20, 10, 5};
+    const int Batt_pct_limits[3] = {25, 15, 5};
     if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
-    {
-      /*
+    { /*
+       * ORANGE
+       * 
          No high beam
+         dim blinkers
+         dim brakelight
       */
       statusBattery = BATTERY_ORANGE;
 
@@ -195,42 +208,71 @@ void updateBattery()
       headLed.maxIntensity = headLedMediumIntensity ;
       headLed.setLedIntensity (min(headLed.getLedIntensity(), headLedMediumIntensity));
 
+      rearLed.maxIntensity = rearLedHighIntensity;
+      rearLed.setLedIntensity (min(rearLed.getLedIntensity(), rearLedMediumIntensity));
+
+      /*
+       * Less bright brakelight
+       * 
+       */
       auxLed.highIntensity = auxLedMediumIntensity;
       auxLed.maxIntensity = auxLedMediumIntensity;
       auxLed.setLedIntensity (min(auxLed.getLedIntensity(), auxLedMediumIntensity));
+
+      rightLed.offIntensity =    rightLedOffIntensity;
+      rightLed.lowIntensity =    rightLedOffIntensity;
+      rightLed.mediumIntensity = rightLedOffIntensity;
+      rightLed.highIntensity =   rightLedHighIntensity; // 1/2th the power
+      rightLed.maxIntensity =    rightLedHighIntensity;
+      rightLed.setLedIntensity (min(rightLed.getLedIntensity(), rightLedMediumIntensity));
+
+
+      leftLed.offIntensity =    leftLedOffIntensity;
+      leftLed.lowIntensity =    leftLedOffIntensity;
+      leftLed.mediumIntensity = leftLedOffIntensity;
+      leftLed.highIntensity =   leftLedHighIntensity;
+      leftLed.maxIntensity =    leftLedHighIntensity;
+      leftLed.setLedIntensity (min(leftLed.getLedIntensity(), leftLedMediumIntensity));
 
 
     }
     if (batteryPercentage_pct < Batt_pct_limits[1]  && statusBattery == BATTERY_ORANGE)
     {
-      /*
+      /* RED
+       * 
          We are now more pressen for power consumption.
-         Dim blinkers, > just a little hint during the night. No more. Too dim for bright days.
+         nu blinkers, > just a little hint during the night. No more. Too dim for bright days.
          No brakelight
          No fog light
 
       */
-      rightLed.offIntensity = 0;
-      rightLed.lowIntensity = 0;
-      rightLed.mediumIntensity = 0;
-      rightLed.highIntensity = 64; // 1/2th the power
-      rightLed.maxIntensity = 64;
+
+      headLed.highIntensity = headLedLowIntensity;
+      headLed.maxIntensity = headLedLowIntensity ;
+      headLed.setLedIntensity (min(headLed.getLedIntensity(), headLedMediumIntensity));
+
+      rightLed.offIntensity =    rightLedOffIntensity;
+      rightLed.lowIntensity =    rightLedOffIntensity;
+      rightLed.mediumIntensity = rightLedOffIntensity;
+      rightLed.highIntensity =   rightLedOffIntensity; // 1/2th the power
+      rightLed.maxIntensity =    rightLedOffIntensity;
       rightLed.setLedIntensity (min(rightLed.getLedIntensity(), rightLedMediumIntensity));
 
 
-      leftLed.offIntensity = 0;
-      leftLed.lowIntensity = 0;
-      leftLed.mediumIntensity = 0;
-      leftLed.highIntensity = 64;
-      leftLed.maxIntensity = 64;
+      leftLed.offIntensity =    leftLedOffIntensity;
+      leftLed.lowIntensity =    leftLedOffIntensity;
+      leftLed.mediumIntensity = leftLedOffIntensity;
+      leftLed.highIntensity =   leftLedOffIntensity;
+      leftLed.maxIntensity =    leftLedOffIntensity;
       leftLed.setLedIntensity (min(leftLed.getLedIntensity(), leftLedMediumIntensity));
 
+
       rearLed.setPin(ledRearPin);
-      rearLed.offIntensity = rearLedOffIntensity;
-      rearLed.lowIntensity = rearLedLowIntensity;
+      rearLed.offIntensity =    rearLedOffIntensity;
+      rearLed.lowIntensity =    rearLedLowIntensity;
       rearLed.mediumIntensity = rearLedLowIntensity;
-      rearLed.highIntensity = rearLedLowIntensity;
-      rearLed.maxIntensity = rearLedLowIntensity;
+      rearLed.highIntensity =   rearLedLowIntensity;
+      rearLed.maxIntensity =    rearLedLowIntensity;
       rearLed.setLedIntensity (min(rearLed.getLedIntensity(), rearLedMediumIntensity));
 
       statusBattery = BATTERY_RED;
@@ -279,26 +321,13 @@ void updateHead()
   if (upSwitch.getState() == LOW && upSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH && configSwitch.getState() == HIGH)
   {
     headLed.upLed();
-#if defined(QUILTJE)  || defined(STRADA)
-    auxLed.upLed();
-#endif
   }
 
   if (downSwitch.getState() == LOW && downSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH && configSwitch.getState() == HIGH)
   {
     headLed.downLed();
-
-    //
-    // Only the strada and Quiltje have double headlights.
-    //
-#if defined(QUILTJE)  || defined(STRADA)
-    auxLed.downLed();
-#endif
-
   }
 }
-
-
 
 /*********************************************************************************************************
 
@@ -436,7 +465,10 @@ void updateBlinkers()
       leftLed.setLedOff();
     }
 
+
+    //
     // blink the screen
+    //
     BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
 
     if (BlinkOn)
@@ -447,7 +479,9 @@ void updateBlinkers()
     }
     else u8g.sleepOff();
 
+    // 
     // zoomer
+    //
     if (stateAlarmBlinkersOn == false)
     {
       analogWrite(speakerPin, BlinkOn * speakerVolume);
@@ -461,24 +495,23 @@ void updateBlinkers()
 
 }
 
-
 /*********************************************************************************************************
 
     Update the rearlight
-
-*********************************************************************************************************
-
-  The rear lights are normally at a nominal intensity.
-  There are four intensities at which the rear lights are run:
-  1) low intensity when riding convoy.
-  2) default intensity
-  3) higher intensity when riding in fog or other situations in which higer visibility is needed.
-  4) brakelight: max intensity  when brakeing. Note that this is independant of the brakelight itself.
-
-*/
-
+ 
+ **********************************************************************************************************/
 void updateRear()
 {
+  /*
+    The rear lights are normally at a nominal intensity.
+    There are four intensities at which the rear lights are run:
+    1) low intensity when riding convoy.
+    2) default intensity
+    3) higher intensity when riding in fog or other situations in which higer visibility is needed.
+    4) brakelight: max intensity  when brakeing. Note that this is independant of the brakelight itself.
+  
+  */
+
   /*
     First we determine how the state changed
     Second we adapt the led settings.
@@ -487,23 +520,24 @@ void updateRear()
   */
   static byte ledPreviousIntensity = rearLedOffIntensity;
   long tNow_ms = millis();
+  int setNotMoving = (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
 
   brakeSwitch.ReadOut();
 
   //
-  // only brakeswitch is on, and changed -> turn on brake light to Max.
+  // only brakeswitch is on, and changed and we are moving -> turn on brake light to Max.
   //
   if (brakeSwitch.getState() == LOW 
       && brakeSwitch.hasStateChanged() 
       && upSwitch.getState() == HIGH 
       && downSwitch.getState() == HIGH)
   {
-    ledPreviousIntensity = rearLed.getLedIntensity();
-    rearLed.setLedMax();
-#if defined(QUATRO) || defined(ICB_DF)
-    auxLed.setLedMax();
-#endif
-    //DEBUG_CV = DEBUG_CV - 3;
+    if (not setNotMoving)
+    {
+      ledPreviousIntensity = rearLed.getLedIntensity();
+      rearLed.setLedMax();
+      auxLed.setLedMax();
+    }
   }
   //
   // When the brakeswitch is applied too long switch off the breaklights.
@@ -514,29 +548,8 @@ void updateRear()
            && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
       rearLed.setLedIntensity(ledPreviousIntensity);
-#if defined(QUATRO)
       auxLed.setLedOff();
-#endif
   }
-
-/* Don't understand this one */
-/*
-  //
-  // only brakeswitch is on, and has been for a while and we push up or down
-  //
-  else if (brakeSwitch.getState() == LOW 
-           && !brakeSwitch.hasStateChanged() 
-           && upSwitch.getState() == HIGH 
-           && downSwitch.getState() == HIGH)
-  {
-    ledPreviousIntensity = rearLed.getLedIntensity();
-    rearLed.setLedMax();
-#if defined(QUATRO) || defined(ICB_DF)
-    auxLed.setLedMax();
-#endif
-    //DEBUG_CV = DEBUG_CV - 3;
-  }
-*/
   //
   // brakeswitch is off -> return to previous state. Only when the brakeled is max.
   //
@@ -545,9 +558,7 @@ void updateRear()
            && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
-#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedOff();
-#endif
   }
 
   //
@@ -560,9 +571,7 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.upLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedOff();
-#endif
   }
 
   //
@@ -575,12 +584,45 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.downLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-#if defined(QUATRO) || defined(ICB_DF)
     auxLed.setLedOff();
-#endif
   }
-}
 
+
+  //
+  // When standing still AND not pedaling, turn it off. Note this only works when both speed and cadende are working
+  //
+  if (setNotMoving
+      && brakeSwitch.getState() == LOW)
+    {
+      rearLed.setLedIntensity(ledPreviousIntensity);
+      auxLed.setLedOff();
+    }
+
+  //
+  // When riding with fog lights (ie rear set to rearLedMediumIntensity we flash the rear light once every N seconds. 
+  // Do not do this when the brake is applied
+  //
+  if (rearLed.getLedIntensity() == rearLedMediumIntensity 
+      && brakeSwitch.getState() == HIGH)
+  {
+      // When high, set to off
+      if (auxLed.getLedIntensity() == auxLedMaxIntensity 
+          // Go high for 1/4th of the blink frequency duration
+          && (tNow_ms - auxLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms)
+          {
+              auxLed.setLedOff();
+          }
+      // when off set to high
+      else if (auxLed.getLedIntensity() == auxLedOffIntensity 
+          // Go low for 10 times the blink duration
+          && (tNow_ms - auxLed.getTimeLastChange_ms()) >= tFogFlashLow_ms)
+          {
+              auxLed.setLedMax();
+          }
+
+  }
+  
+}
 
 /*********************************************************************************************************
 
@@ -659,6 +701,9 @@ void updateGear()
   //
   float gearOnCassette = float(setTeethOnCainring) * gearOnCassette_scaling * cadenceSwitch.getInteruptFrequency(1500) / speedSwitch.getInteruptFrequency(1500);
 
+  gearOnCassette_teeth = round(gearOnCassette);
+
+/*
   //
   // Find the minimum
   //
@@ -696,5 +741,5 @@ void updateGear()
       return;
     }
   }
+  */
 }
-

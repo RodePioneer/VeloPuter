@@ -50,7 +50,7 @@ class Switch
     byte getInteruptActive (void)
     {
       /*
-         An interupt s NOT active when there are zeros left in the
+         An interupt is NOT active when there are zeros left in the
       */
       byte numOfZeros = false;
       for (byte i = 0; i <= iEnd; i++)
@@ -175,10 +175,3 @@ class Switch
       }
     }
 };
-
-
-
-
-
-
-
