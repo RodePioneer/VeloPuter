@@ -73,7 +73,7 @@ const long tSleep_ms = 300000;              // Timeout until sleep when cadence 
 const long tSleepNoCadSpd_ms = 1800000;     // Timeout until sleep when cadence and speed sensor are NOT active
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
-const int  tFogFlashLow_ms = 1900;           // 1.5 Hz Note that it actually is have a period.
+const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // 1.5 Hz Note that it actually is have a period.
 const byte numTimesToBlink = VP_BLINK_COUNT;             // 7 times high, 6 times low, = 13 = 4.3 s
 const long tDurationBrakeLight_ms = 15000;   // 
 

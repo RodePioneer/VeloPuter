@@ -602,8 +602,9 @@ void updateRear()
 
   //
   // When riding with fog lights (ie rear set to rearLedMediumIntensity we flash the rear light once every N seconds. 
-  // Do not do this when the brake is applied
+  // Do not do this when the brake is applied. Only for the QuatroVelo, DF & other three-wheelers don't have aux light.
   //
+#if defined(QUATRO)
   if (rearLed.getLedIntensity() == rearLedMediumIntensity 
       && brakeSwitch.getState() == HIGH)
   {
@@ -623,6 +624,7 @@ void updateRear()
           }
 
   }
+#endif
   
 }
 

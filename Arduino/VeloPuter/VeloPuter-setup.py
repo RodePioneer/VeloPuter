@@ -5,7 +5,7 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description="Setup of the veloputer")
     parser.add_argument("-m", "--model", metavar="MODEL", 
-                        choices=("STRADA", "QUILTJE", "QUATTRO", "DF"),
+                        choices=("QUATTRO", "DF"),
                         default="QUATTRO",
                         help="Basic model, determines default settings. Values STRADA, QUILTJE, QUATTRO, or DF")
     parser.add_argument("-c", "--battery", metavar="TYPE",
@@ -40,8 +40,8 @@ def main():
     contents.append("#define VELOPUTER_CONFIG_H")
     contents.append("")
     
-    model_map = {"STRADA":"STRADA", "QUILTJE":"QUILTJE", "QUATTRO":"QUATRO", "DF":"ICB_DF"}
-    contents.append("/* define model of hte velomobile */")
+    model_map = {"QUATTRO":"QUATRO", "DF":"ICB_DF"}
+    contents.append("/* define model of the velomobile */")
     contents.append("#define %s" % (model_map[args.model], ))
     contents.append("")
     
