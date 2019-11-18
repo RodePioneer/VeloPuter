@@ -160,7 +160,7 @@ const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255;
 
 const int auxLedOffIntensity = 0; // aux is the brakelight
-const int auxLedLowIntensity = 0; // remember that hte brakelight comes back into low.
+const int auxLedLowIntensity = 0; // remember that the brakelight comes back into low.
 const int auxLedMediumIntensity = 255;
 const int auxLedHighIntensity = 255;
 const int auxLedMaxIntensity = 255;
@@ -168,7 +168,7 @@ const int auxLedMaxIntensity = 255;
 #elif defined(ICB_DF)
 const int headLedOffIntensity = 0;
 const int headLedLowIntensity = 32;
-const int headLedMediumIntensity = 96;
+const int headLedMediumIntensity = VP_DIMMED_INTENSITY;
 const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255;
 

@@ -1,27 +1,35 @@
 #!/usr/bin/env python
 
 import argparse
+from functools import partial
+
+def range_type(astr, min=0, max=101):
+    value = int(astr)
+    if min<= value <= max:
+        return value
+    else:
+        raise argparse.ArgumentTypeError('value not in range %s-%s'%(min,max))
 
 def main():
     parser = argparse.ArgumentParser(description="Setup of the veloputer")
     parser.add_argument("-m", "--model", metavar="MODEL", 
                         choices=("QUATTRO", "DF"),
                         default="QUATTRO",
-                        help="Basic model, determines default settings. Values STRADA, QUILTJE, QUATTRO, or DF")
+                        help="Basic model, determines default settings. Values QUATTRO, or DF")
     parser.add_argument("-c", "--battery", metavar="TYPE",
                         choices=("LiPo", "LiFePO4"), default="LiPo",
                         help="Battery chemistry, determines discharge curve and protection logic. Values LiPo or LiFePO4")
     parser.add_argument("-b", "--blinkers", metavar="N", type=int, 
                         help="Number of times the blinkers will blink when cornering. Default 5", 
                         default=5)
-    parser.add_argument("-C", "--cassette", metavar="N", type=float, default=None,
-                        nargs="+", help="Number of teeth on the rear cassette. Default 11-36 + Schlumpf")
     parser.add_argument("-f", "--chainring", metavar="N", type=int, default=70,
                         help="Number of teeth on the fron chainring. Default 70")
     parser.add_argument("-w", "--wheel", metavar="LENGTH", type=int, default=1540,
                         help="Circumference of the front wheels in mm. Default 1540 (40-406)")
     parser.add_argument("-W", "--rear-wheel", metavar="LENGTH", type=int, default=None,
                         help="Circumference of the rear wheel in mm. Default same as front wheels.")
+    parser.add_argument("-d", "--dimintens", metavar="VALUE", type=partial(range_type, min=0, max=255), default=96, 
+                        help="Intensity of dimmed lights.")
     
     args = parser.parse_args()
     
@@ -52,15 +60,7 @@ def main():
     contents.append("/* define blink-count */")
     contents.append("#define VP_BLINK_COUNT %d" % (args.blinkers, ))
     contents.append("")
-    
-    contents.append("/* define cassette */")
-    if args.cassette is None:
-        args.cassette = [11.0, 13.0, 15.0, 17.0, 19.0, 22.0, 25.0, 28.0, 32.0, 36.0,
-                         255.0, 255.0, 37.5, 42.5, 47.5, 55.0, 62.5, 70.0, 80.0, 90.0]
-    contents.append("#define VP_CASSETTE_LENGHT %d" % (len(args.cassette), ))
-    contents.append("#define VP_CASSETTE_VALUES %s" % (",".join(["%.1f" % (v,) for v in args.cassette]), ))
-    contents.append("")
-    
+        
     contents.append("/* define chainring */")
     contents.append("#define VP_CHAINRING %d" % (args.chainring, ))
     contents.append("")
@@ -71,6 +71,10 @@ def main():
     
     contents.append("/* define rear wheel circumference */")
     contents.append("#define VP_REARWHEEL %d" % (args.rear_wheel if args.rear_wheel is not None else args.wheel, ))
+    contents.append("")
+    
+    contents.append("/* intensity of dimmed lights */")
+    contents.append("#define VP_DIMMED_INTENSITY %d" % (args.dimintens,))
     contents.append("")
     
     contents.append("#endif /* #if VELOPUTER_CONFIG_H */")
