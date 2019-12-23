@@ -12,6 +12,7 @@ def range_type(astr, min=0, max=101):
 
 def main():
     parser = argparse.ArgumentParser(description="Setup of the veloputer")
+    parser.add_argument("-u", "--user", metavar="USER", help"User identifier to add a label to the file.", default=None)
     parser.add_argument("-m", "--model", metavar="MODEL", 
                         choices=("QUATTRO", "DF"),
                         default="QUATTRO",
@@ -36,17 +37,19 @@ def main():
     contents = []
     contents.append("""/* Header with configuration of this VeloPuter.
  * Note that this file is generated with the VeloPuter-setup.py script.
- * If you want to make changes, you probably want to run the script again.
- *
+ * If you want to make changes, you probably want to run the script again.""")
+    if args.user is not None:
+        contents.append(" * This file is generated for {0}".format(args.user))
+    contents.append(""" *
  * This file is not under version control because it is generated 
  */
 
 
-/* Ensure this header is only loaded once */ """)
-    
-    contents.append("#if !defined(VELOPUTER_CONFIG_H)")
-    contents.append("#define VELOPUTER_CONFIG_H")
-    contents.append("")
+/* Ensure this header is only loaded once */ 
+#if !defined(VELOPUTER_CONFIG_H)
+#define VELOPUTER_CONFIG_H
+
+""")
     
     model_map = {"QUATTRO":"QUATRO", "DF":"ICB_DF"}
     contents.append("/* define model of the velomobile */")

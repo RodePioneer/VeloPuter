@@ -134,6 +134,11 @@ const byte setTeethOnCainring = VP_CHAINRING;
 /*
   Defaullt intensiteiten
 */
+#if !defined(VP_DIMMED_INTENSITY)
+/* This makes the setting accessible through the python configuration script */
+#define VP_DIMMED_INTENSITY 96
+#endif
+
 const int leftLedOffIntensity = 0; // Note that currently pwm is disabled for the blinker pins. See of this has anything to do with the failing display/.
 const int leftLedLowIntensity = 255;
 const int leftLedMediumIntensity = 255;
@@ -155,7 +160,7 @@ const int rearLedMaxIntensity = 255;
 #if defined(QUATRO)
 const int headLedOffIntensity = 0;
 const int headLedLowIntensity = 32;
-const int headLedMediumIntensity = 96;
+const int headLedMediumIntensity = VP_DIMMED_INTENSITY;
 const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255;
 
