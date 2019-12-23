@@ -12,7 +12,7 @@ def range_type(astr, min=0, max=101):
 
 def main():
     parser = argparse.ArgumentParser(description="Setup of the veloputer")
-    parser.add_argument("-u", "--user", metavar="USER", help"User identifier to add a label to the file.", default=None)
+    parser.add_argument("-u", "--user", metavar="USER", help="User identifier to add a label to the file.", default=None)
     parser.add_argument("-m", "--model", metavar="MODEL", 
                         choices=("QUATTRO", "DF"),
                         default="QUATTRO",
