@@ -11,6 +11,7 @@ class Led
     //private:
   private:
     volatile byte ledIntensity = lowIntensity;
+    volatile byte flashOn = false;
     volatile long tLastStateChange_ms = 0;
     byte pin;
 
@@ -24,6 +25,7 @@ class Led
     void setLedIntensity (byte newIntensity) // directly set the new LED value, either digital or analog.
     {
       ledIntensity = newIntensity;
+      flashOn = true;
       analogWrite(pin, ledIntensity);
       tLastStateChange_ms = millis();
     }
@@ -32,7 +34,28 @@ class Led
     {
       return ledIntensity;
     }
-
+    
+    byte getFlashOnStatus()
+    {
+      return flashOn;
+    }
+    
+    void toggleFlashLed() // set led intensity to max intensity, without changing internal led intensity (for easy reset)
+    {
+      if (flashOn)
+      {
+        analogWrite(pin, ledIntensity);
+        flashOn = false;
+        tLastStateChange_ms = millis();
+      }
+      else
+      {
+        analogWrite(pin, maxIntensity);
+        flashOn = true;
+        tLastStateChange_ms = millis();
+      }  
+    }
+        
     long getTimeLastChange_ms (void)
     {
       return tLastStateChange_ms;

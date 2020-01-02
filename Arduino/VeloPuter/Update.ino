@@ -625,6 +625,17 @@ void updateRear()
 
   }
 #endif
+#if defined(ICB_DF)
+if (rearLed.getLedIntensity() == rearLedMediumIntensity 
+      && brakeSwitch.getState() == HIGH)
+  {
+    if (   (rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms) 
+        || (!rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashLow_ms))
+    {
+        rearLed.toggleFlashLed();
+    }
+  }
+#endif
   
 }
 
