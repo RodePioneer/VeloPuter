@@ -19650,7 +19650,7 @@ grid 2.54 mm</description>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
-<part name="R6" library="resistor" deviceset="R-EU_" device="0207/10" value="1 ohm">
+<part name="R6" library="resistor" deviceset="R-EU_" device="0207/10" value="1 Ω">
 <attribute name="MF" value=""/>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
@@ -19755,7 +19755,7 @@ grid 2.54 mm</description>
 <attribute name="MPN" value=""/>
 <attribute name="OC_NEWARK" value="unknown"/>
 </part>
-<part name="JP6" library="jumper" deviceset="JP1E" device="" value=" "/>
+<part name="JP" library="jumper" deviceset="JP1E" device="" value=" "/>
 <part name="GND26" library="supply1" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" deviceset="GND" device=""/>
 </parts>
@@ -19979,7 +19979,7 @@ measurement</text>
 <attribute name="MF" x="322.58" y="-7.62" size="1.778" layer="96" display="off"/>
 <attribute name="MPN" x="322.58" y="-7.62" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="JP6" gate="A" x="327.66" y="-27.94" rot="R270"/>
+<instance part="JP" gate="A" x="327.66" y="-27.94" rot="R270"/>
 <instance part="GND26" gate="1" x="320.04" y="-30.48"/>
 <instance part="GND27" gate="1" x="325.12" y="-20.32"/>
 </instances>
@@ -20149,7 +20149,7 @@ measurement</text>
 </segment>
 <segment>
 <pinref part="GND26" gate="1" pin="GND"/>
-<pinref part="JP6" gate="A" pin="1"/>
+<pinref part="JP" gate="A" pin="1"/>
 <wire x1="320.04" y1="-27.94" x2="325.12" y2="-27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -20844,7 +20844,7 @@ measurement</text>
 <segment>
 <pinref part="U$1" gate="G$1" pin="DCOUT-"/>
 <pinref part="AUX_OUT" gate=".4" pin="SK"/>
-<pinref part="JP6" gate="A" pin="2"/>
+<pinref part="JP" gate="A" pin="2"/>
 <wire x1="325.12" y1="-30.48" x2="325.12" y2="-33.02" width="0.1524" layer="91"/>
 <wire x1="309.88" y1="-33.02" x2="325.12" y2="-33.02" width="0.1524" layer="91"/>
 <junction x="325.12" y="-33.02"/>
