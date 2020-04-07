@@ -22,7 +22,7 @@ void drawSplash ()
     u8g.drawBitmapP (22, 24, 10, 10,  icoSplash);
     u8g.setContrast(setOledIntensity);
   } while ( u8g.nextPage() );
-  delay (1000);
+  delay (2000);
 }
 
 void drawScreen ()
@@ -36,9 +36,6 @@ void drawScreen ()
   drawCadence();
   drawGear();
   drawBatteryIcon();
-  //drawSensors();
-  //drawDebug();
-
 }
 
 void blinkScreen (byte doBlink)

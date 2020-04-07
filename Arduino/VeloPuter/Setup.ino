@@ -1,12 +1,10 @@
 
 void setup()   {
-  // Timer interupt
-  //  Timer1.initialize(tSoftwareTimerInterrupt_us);
-  //  Timer1.attachInterrupt(interruptServiceRoutinePinsAndLEDs);
 
-  // define serial if we want to sent serial information to the serial monitor
-  //  Serial.begin(9600);
-  //  Serial.println ("Started sketch ");
+  // Turn on the power to the display, the 5Vout and all the powersources
+  pinMode(powerOnOffPin, OUTPUT);
+  digitalWrite(powerOnOffPin, 1);
+
 
   // setup display
   u8g.setColorIndex(1); // Instructs the display to draw with a pixel on.
@@ -98,9 +96,19 @@ void setup()   {
   auxLed.setLedOff();
 #endif
 
+pinMode(ledAux2Pin, OUTPUT);
+  aux2Led.setPin(ledAux2Pin);
+  aux2Led.offIntensity = aux2LedOffIntensity;
+  aux2Led.lowIntensity = aux2LedLowIntensity;
+  aux2Led.mediumIntensity = aux2LedMediumIntensity;
+  aux2Led.highIntensity = aux2LedHighIntensity;
+  aux2Led.maxIntensity = aux2LedMaxIntensity;
+  aux2Led.setLedLow();
+
 
   pinMode(speakerPin, OUTPUT);
 
+  // Start display
+  delay (100); 
   drawSplash ();
-  delay (1000);
 }

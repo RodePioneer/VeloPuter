@@ -49,13 +49,15 @@ const byte OLED_SDA =           2;      // used for the oled display through u8g
 const byte OLED_SCL =           3;      // used for the oled display through u8glib
 const byte switchConfigPin =    4;
 const byte ledHeadPin =         5;
-const byte ledAuxPin =          6;
+//const byte ledAuxPin =          6;   // brake light in the hood
+const byte ledAuxPin =          12;   // brake light in the hood
 const byte switchBrakePin =     7;
 const byte switchAlarmPin =     8;
 const byte ledRightPin =        9;
 const byte ledLeftPin =         10;
 const byte ledRearPin =         11;
-const byte UNUSED3 =            12;
+//const byte ledAux2Pin =         12; // wide beam inside headlight
+const byte ledAux2Pin =         6; // wide beam inside headlight
 const byte speakerPin =         13;
 const byte voltagePin =         A0;
 
@@ -63,14 +65,14 @@ const byte switchRightPin =     A1;
 const byte switchLeftPin =      A2;
 const byte switchHeadDownPin =  A3;
 const byte switchHeadUpPin =    A4;
-const byte UNUSED4 =            A5;
+const byte powerOnOffPin =      A5;
 
 
 /*
    Other constants which are used throughout the programm:
 */
-const long tSleep_ms = 300000;              // Timeout until sleep when cadence and speed sensor are active
-const long tSleepNoCadSpd_ms = 1800000;     // Timeout until sleep when cadence and speed sensor are NOT active
+const long tSleep_ms = 300000;  // 5 min       // Timeout until sleep when cadence and speed sensor are active
+const long tSleepNoCadSpd_ms = 300000; // 1 min    // Timeout until sleep when cadence and speed sensor are NOT active
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // 1.5 Hz Note that it actually is have a period.
@@ -157,14 +159,21 @@ const int rearLedMediumIntensity = 64;
 const int rearLedHighIntensity = 64; // Note that this stops the up/down!
 const int rearLedMaxIntensity = 255;
 
-#if defined(QUATRO)
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 32;
-const int headLedMediumIntensity = VP_DIMMED_INTENSITY;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
 
-const int auxLedOffIntensity = 0; // aux is the brakelight
+#if defined(QUATRO)
+const int headLedOffIntensity = 255;
+const int headLedLowIntensity = 255-32;
+const int headLedMediumIntensity = 255-VP_DIMMED_INTENSITY;
+const int headLedHighIntensity = 255-255;
+const int headLedMaxIntensity = 255-  255;
+
+const int aux2LedOffIntensity = 0; // aux is the 2nd headlight
+const int aux2LedLowIntensity = 16; // remember that the brakelight comes back into low.Note: the lamp normally has 150 mA current. We up this to 175 (128 of 255 and over two lights)
+const int aux2LedMediumIntensity = 48; // be carefull making this number higher
+const int aux2LedHighIntensity = 128;
+const int aux2LedMaxIntensity = 128;
+
+const int auxLedOffIntensity = 0; // aux2 is the brakelight
 const int auxLedLowIntensity = 0; // remember that the brakelight comes back into low.
 const int auxLedMediumIntensity = 255;
 const int auxLedHighIntensity = 255;
