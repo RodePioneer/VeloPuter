@@ -100,8 +100,8 @@ current distance to the VeloPuter.
 ## Configure display
 
 With all the extra functionality (trip distance, odometer, mean & max
-speed, mean & max cadence, trip time) we can’t fit is all on the display
-at once. Some setting is needed to configura what is shown, or some
+speed, mean & max cadence, trip time) we can’t fit it all on the display
+at once. Some setting is needed to configure what is shown, or some
 other means to cycle through some standard display modes. While we’re at
 it, I’d like to see my cadence in large digits, the speed is less
 important.
