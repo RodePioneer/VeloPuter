@@ -113,9 +113,9 @@ void updateBattery()
       Black: down. We are now dead.
      
   */
-  if (doBatteryCheck) {
+  if (doBatteryCheck && tNow_ms > 1000 * tDelayBatteryCheck_s) {
     const int Batt_pct_limits[3] = {25, 15, 5};
-    if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN && tNow_ms > 10000)
+    if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN )
     { /*
        * ORANGE
        * 

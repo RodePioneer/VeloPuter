@@ -7,7 +7,7 @@ void updateSleep ()
 {
   long tLastStateChange_ms = 0;
   long tNow_ms             = millis();
-  long tWait_ms            = tSleepNoCadSpd_ms;
+  long tWait_s            = tSleepNoCadSpd_min * 60;
 
   tLastStateChange_ms = max(upSwitch.getTimeLastChange_ms(), downSwitch.getTimeLastChange_ms());
   tLastStateChange_ms = max(tLastStateChange_ms, leftSwitch.getTimeLastChange_ms());
@@ -23,9 +23,11 @@ void updateSleep ()
     - Go to sleep after longer time when the cad and speed have not been set...
   */
 
-  if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()) tWait_ms = tSleep_ms;
+  // We detected a cadence or a speed sensor. Reduce the time until sleep.
+  if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()) tWait_s = tSleep_min * 60;
 
-  if ((tNow_ms - tLastStateChange_ms > tWait_ms) && (stateAlarmBlinkersOn == false))
+  // When the time has passed and the alarm blinkers are NOT on go to sleep.
+  if ((tNow_ms - tLastStateChange_ms > 1000 * tWait_s) && (stateAlarmBlinkersOn == false))
   {
     // This semaphore disables interupts from updating the leds.
     statusPowerDown = true;

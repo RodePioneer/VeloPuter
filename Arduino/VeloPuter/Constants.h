@@ -71,30 +71,15 @@ const byte powerOnOffPin =      A5;
 /*
    Other constants which are used throughout the programm:
 */
-const long tSleep_ms = 300000;  // 5 min       // Timeout until sleep when cadence and speed sensor are active
-const long tSleepNoCadSpd_ms = 1800000; // 30 min    // Timeout until sleep when cadence and speed sensor are NOT active
+const long tSleep_min = 5;                // Timeout until sleep when cadence and speed sensor are active. In minutes.
+const long tSleepNoCadSpd_min = 30;       // Timeout until sleep when cadence and speed sensor are NOT active. In minutes.
+const int tDelayBatteryCheck_s = 15;      // How long until the battery management starts. This is the time window after power on in which the battery management van be disabled even when the battery voltage is complety off.
+const long tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action. 
+
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // 1.5 Hz Note that it actually is have a period.
 const byte numTimesToBlink = VP_BLINK_COUNT;             // 7 times high, 6 times low, = 13 = 4.3 s
-const long tDurationBrakeLight_ms = 15000;   // 
-
-// now via VeloPuter_Config.h
-/* 
-#if defined(STRADA)
-const int  wheelCircumference_mm = 1590;    // 406-50 wheel
-const int  rearWheelCircumference_mm = 2075; // 559-50 wheel
-#elif defined(QUILTJE)
-const int  wheelCircumference_mm = 1450;    // 406-28 wheel
-const int  rearWheelCircumference_mm = 1990; // 559-35 wheel
-#elif defined(QUATRO)
-const int  wheelCircumference_mm = 1540;   // 406-40 wheel
-const int  rearWheelCircumference_mm = wheelCircumference_mm; // identical
-#elif defined(ICB_DF)
-const int  wheelCircumference_mm = 1450;    // 406-28 wheel
-const int  rearWheelCircumference_mm = 1990; // 559-35 wheel
-#endif
- */
 
 const int  wheelCircumference_mm = VP_FRONTWHEEL;
 const int  rearWheelCircumference_mm = VP_REARWHEEL;
@@ -103,38 +88,12 @@ const float gearOnCassette_scaling = ((float)rearWheelCircumference_mm/(float)wh
 
 const byte speakerVolume = 50;
 
-// not used
-// const byte setBrakeMaxTimeOn_s =  15; // max time for a brakelight to be on.
-
 byte setOledIntensity = 0;
-
-// now via VeloPuter_Config.h
-/* 
-#if defined(ICB_DF)
-const byte setTeethOnCainring = 53; // MaartenS: 53
-#elif defined(QUATRO)
-const byte setTeethOnCainring = 70; //Gert: 70, STefan: 75 MaartenS: 53
-#else
-const byte setTeethOnCainring = 53; // MaartenS: 53
-#endif
- */
 
 const byte setTeethOnCainring = VP_CHAINRING;
 
-//#if defined(QUATRO)
-//const float setTeethOnCassette[20] = {11,  13,   15,   17,   19, 22,   25, 28, 32, 36,
-//                                     255, 255, 37.5, 42.5, 47.5, 55, 62.5, 70, 80, 90
-//                                     }; // Quatro Note that I put two of the gears to 100 time the number to avoid confusion with the normal low gearing (36 etc). S11 and S13 will not be displayed.
-// const String setTeethOnCassette_string[20] = {"11", "13", "15", "17", "19", "22", "25", "28", "32", "36",
-//                                               "s11", "s13", "s15", "s17", "s19", "s22", "s25", "s28", "s32", "s36"
-//                                              };
-//#else
-//const byte setTeethOnCassette[VP_CASSETTE_LENGHT] = {VP_CASSETTE_VALUES};
-//#endif
-
-
 /*
-  Defaullt intensiteiten
+  Defaullt intensities
 */
 #if !defined(VP_DIMMED_INTENSITY)
 /* This makes the setting accessible through the python configuration script */

@@ -47,7 +47,7 @@ void updateRear()
   //
   else if (brakeSwitch.getState() == LOW 
            && !brakeSwitch.hasStateChanged() 
-           && tNow_ms - brakeSwitch.getTimeLastChange_ms() > tDurationBrakeLight_ms 
+           && tNow_ms - brakeSwitch.getTimeLastChange_ms() > 1000*tDurationBrakeLight_s 
            && rearLed.getLedIntensity() == rearLed.maxIntensity)
   {
       rearLed.setLedIntensity(ledPreviousIntensity);
