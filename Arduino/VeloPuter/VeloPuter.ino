@@ -57,7 +57,7 @@ void loop ()
   do {
     updateHead();    // change headlight intensity
     updateRear();    // update rear lights. This includes the brakelight when applicable.
-    updateBlinkers();// Update the blinkers
+    updateIndicators();// Update the blinkers
     updateConfig();  // Updte the config. For now: only the
     drawScreen();    // Write all the information to the display.
   } while ( u8g.nextPage() );

@@ -72,7 +72,7 @@ const byte powerOnOffPin =      A5;
    Other constants which are used throughout the programm:
 */
 const long tSleep_ms = 300000;  // 5 min       // Timeout until sleep when cadence and speed sensor are active
-const long tSleepNoCadSpd_ms = 300000; // 1 min    // Timeout until sleep when cadence and speed sensor are NOT active
+const long tSleepNoCadSpd_ms = 1800000; // 30 min    // Timeout until sleep when cadence and speed sensor are NOT active
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // 1.5 Hz Note that it actually is have a period.

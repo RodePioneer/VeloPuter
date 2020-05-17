@@ -18,20 +18,24 @@ void updateBattery()
     of a CMA means that the influence of every measurement decays exponentially.
   */
   long tNow_ms = millis();
-  int PinValue = analogRead(voltagePin);
-  static int PinMean = PinValue; // it is inutialised at the fist value and then kept in memory.
+  float PinValue = analogRead(voltagePin);
+  static float PinMean = PinValue; // it is inutialised at the fist value and then kept in memory.
 
-  const byte numSamples = 20;
-  const float VRef = 5.00;
+  const byte numSamples = 10 ; // was 20;
+ // const float VRef = 5.0; // MEASURED 2020-04-18
 
-  int batteryVoltage_mv;
+  float batteryVoltage_mv;
   // is a global variable, do not declare here.
   // int cellVoltage_mv;
   byte numOfCells;
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
-  batteryVoltage_mv = 4326 * (VRef / 1023) * PinMean; // 4.326 was measured useing a voltage meter
+  //batteryVoltage_mv = 4326 * (VRef / 1024) * PinMean; // 4.326 was measured useing a voltage meter
+  // batteryVoltage_mv = 4000 * (VRef / 1024) * PinMean ; // 4.326 was measured useing a voltage meter
+  
+  batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calculated in octave 2020-05-03 @ Boekelo
+                    //0.020824 + 0.020834 * PinMean ; // Voltage measurements done and linear fit calculated in octave 2020-05-03 @ Boekelo
 
 #if defined(BATTERY_LIPO)
 #define NUM_REFDATA 6
@@ -45,8 +49,6 @@ void updateBattery()
     else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
     else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
     else numOfCells = 1;                               // 1,2 cells or other than lipo
-  
-  //numOfCells = 1;
 
   /*
      Determine the battery percentage. This is a measured dischage curve for LiPo.
@@ -214,13 +216,18 @@ void updateBattery()
       headLed.setLedIntensity(0);
       auxLed.setLedIntensity(0);
 
+  
 
       u8g.sleepOn();// Power down the display
 
+      // Turn off everything eccept the Arduino itself.
+      digitalWrite(powerOnOffPin, 0);
+
+      
       // Powerdown the Arduino. Note that it only is to be revived by power cycling or the reset button.
       set_sleep_mode(SLEEP_MODE_PWR_DOWN);
       sleep_enable();
-      sleep_mode(); //sleep until ever because the interupts are disabled.
+      sleep_mode(); //sleep until ever because the interupts are disabled. The only way to boot is to reconnect the battery.
 
     }
   }
