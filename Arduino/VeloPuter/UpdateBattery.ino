@@ -16,39 +16,52 @@ void updateBattery()
 
     Use a cumulative moving average to keep track of the voltage. Note that this implementation
     of a CMA means that the influence of every measurement decays exponentially.
+
+
+    TODO:
+    - use hysteresis to enable going up a state when the battery is switched
+    - use a minimal time below the trhesold before lowering the state
+    - restructure for better readability of the code
   */
   long tNow_ms = millis();
   float PinValue = analogRead(voltagePin);
   static float PinMean = PinValue; // it is inutialised at the fist value and then kept in memory.
 
   const byte numSamples = 10 ; // was 20;
- // const float VRef = 5.0; // MEASURED 2020-04-18
 
   float batteryVoltage_mv;
-  // is a global variable, do not declare here.
-  // int cellVoltage_mv;
-  byte numOfCells;
+  byte numOfCells = 1;
 
   PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
-  //batteryVoltage_mv = 4326 * (VRef / 1024) * PinMean; // 4.326 was measured useing a voltage meter
-  // batteryVoltage_mv = 4000 * (VRef / 1024) * PinMean ; // 4.326 was measured useing a voltage meter
-  
+
   batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calculated in octave 2020-05-03 @ Boekelo
-                    //0.020824 + 0.020834 * PinMean ; // Voltage measurements done and linear fit calculated in octave 2020-05-03 @ Boekelo
 
 #if defined(BATTERY_LIPO)
 #define NUM_REFDATA 6
 
-  // Assume the cells are no less then 3.2 V and no more 4.2V.
-  // cutoffs for 3 cells between 9.0 and 12.8 V.
 
-  /* For 3 or 4 cell lipo*/
-    if (batteryVoltage_mv >= 16800) numOfCells = 1; // 5 or more: dislay voltage 4.2*4 = 16.8
-    else if (batteryVoltage_mv >= 12800) numOfCells = 4; // 4 cells
-    else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
-    else if (batteryVoltage_mv >= 5000) numOfCells  = 2;
-    else numOfCells = 1;                               // 1,2 cells or other than lipo
+  /*
+    Assume the cells are no less then 3.2 V and no more 4.2V. We cut off at 3.5V.
+    cutoffs for 3 cells between 9.0 and 12.8 V.
+
+    For 3 or 4 cell lipo
+    1 cell   3.2 -  3.5 -  4.2
+    2 cell   6.4 -  7.0 -  8.4
+    3 cell   9.6 - 10.5 - 12.6
+    4 cell  12.8 - 14.0 - 16.8
+    5 cell  16.0 - 17.5 - 21.0
+
+    Sensible thresholds lie between de full voltage and the 3.2 or 3.5 V
+
+    Note that 1 cell batteries will not suppy enough voltage for the Veloputer.
+    For most practical purposes the minimun is 3 cells.
+  */
+
+  if (batteryVoltage_mv >= 17000) numOfCells = 1;       // 5 or more: dislay voltage 4.2*4 = 16.8
+  else if (batteryVoltage_mv >= 12800) numOfCells = 4;  // 4 cells
+  else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
+  else if (batteryVoltage_mv >= 6000) numOfCells  = 2;  // 5 cells
 
   /*
      Determine the battery percentage. This is a measured dischage curve for LiPo.
@@ -63,18 +76,16 @@ void updateBattery()
      V = [4.2, 4.0, 3.75, 3.4]
      C = [100, 90, 50, 0]
 
+    LiPo
   */
-  //
-  // LiPo
-  //
-    const int V[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
-    const int C[NUM_REFDATA] = {100,    90,   75,   50,    7,    0};      // % capacity
+  const int V[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+  const int C[NUM_REFDATA] = {100,    90,   75,   50,    7,    0};      // % capacity
 #elif defined(BATTERY_LIFEPO4)
 #define NUM_REFDATA 7
   //
   // LiFePO4
   //
-  
+
   // Constants from manual, better data is gathered.
   const int V[NUM_REFDATA] = {13952, 12847, 12733, 12455, 12169, 11755, 10424}; // mV
   const int C[NUM_REFDATA] = {  100,    75,    50,    20,    10,     5,     0}; // %capacity
@@ -82,25 +93,13 @@ void updateBattery()
 #endif
 
   cellVoltage_mv = batteryVoltage_mv / numOfCells;
-  
+
   batteryPercentage_pct = 0;
-  for (int i = NUM_REFDATA-1; i > 0; i--)
+  for (int i = NUM_REFDATA - 1; i > 0; i--)
   {
     if (cellVoltage_mv >= V[i])
       batteryPercentage_pct = int((C[i - 1] - C[i]) * (cellVoltage_mv - V[i]) / (V[i - 1] - V[i]) + C[i]);
   }
-  //
-  //// 84-100% full :
-  //  if      (cellVoltage_v >= 4.0) batteryPercentage_pct = int(16.0 * (cellVoltage_v - 4.0) / (4.2 - 4.0) + 84.5);
-  //  // 49-84% full
-  //  else if (cellVoltage_v >= 3.8) batteryPercentage_pct = int(35.0 * (cellVoltage_v - 3.8) / (4.0 - 3.8) + 49.5);
-  //  // 12-49% full
-  //  else if (cellVoltage_v >= 3.75) batteryPercentage_pct = int(37.0 * (cellVoltage_v - 3.7) / (3.8 - 3.7) + 12.5);
-  //  // 3-12 % full
-  //  else if (cellVoltage_v >= 3.4) batteryPercentage_pct = int(9.0  * (cellVoltage_v - 3.4) / (3.7 - 3.4) + 3.5);
-  //  // < 3% full
-  //  else if (cellVoltage_v <  3.4) batteryPercentage_pct = int(3.0  * (cellVoltage_v - 3.4) / (3.4 - 3.2) + 0.5);
-
 
   batteryPercentage_pct = constrain(batteryPercentage_pct, 0, 99);
 
@@ -111,17 +110,17 @@ void updateBattery()
       Orange: we need to preserve power.
       Red: okay now we are almost fucked.
       Black: down. We are now dead.
-     
+
   */
   if (doBatteryCheck && tNow_ms > 1000 * tDelayBatteryCheck_s) {
     const int Batt_pct_limits[3] = {25, 15, 5};
     if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN )
     { /*
-       * ORANGE
-       * 
+         ORANGE
+
          No high beam
-         dim blinkers
-         dim brakelight
+         Dim indicators
+         Dim brakelight
       */
       statusBattery = BATTERY_ORANGE;
 
@@ -133,9 +132,9 @@ void updateBattery()
       rearLed.setLedIntensity (min(rearLed.getLedIntensity(), rearLedMediumIntensity));
 
       /*
-       * Less bright brakelight
-       * 
-       */
+         Less bright brakelight
+
+      */
       auxLed.highIntensity = auxLedMediumIntensity;
       auxLed.maxIntensity = auxLedMediumIntensity;
       auxLed.setLedIntensity (min(auxLed.getLedIntensity(), auxLedMediumIntensity));
@@ -160,9 +159,9 @@ void updateBattery()
     if (batteryPercentage_pct < Batt_pct_limits[1]  && statusBattery == BATTERY_ORANGE)
     {
       /* RED
-       * 
+
          We are now more pressen for power consumption.
-         nu blinkers, > just a little hint during the night. No more. Too dim for bright days.
+         No indicators, > just a little hint during the night. No more. Too dim for bright days.
          No brakelight
          No fog light
 
@@ -204,31 +203,10 @@ void updateBattery()
          The battery is almost dead. We now power it down.
          No more fun. Only option: switch off and on again.
       */
-  //    statusPowerDown =  true;
+      detachInterrupt(digitalPinToInterrupt(switchSpdPin));
+      detachInterrupt(digitalPinToInterrupt(switchCadPin));
 
-      detachInterrupt(digitalPinToInterrupt(switchSpdPin)); // 0 = interupt on pin 2
-      detachInterrupt(digitalPinToInterrupt(switchCadPin)); // 0 = interupt on pin 2
-
-      // switch off all lichts.
-      leftLed.setLedIntensity(0);
-      rightLed.setLedIntensity(0);
-      rearLed.setLedIntensity(0);
-      headLed.setLedIntensity(0);
-      auxLed.setLedIntensity(0);
-
-  
-
-      u8g.sleepOn();// Power down the display
-
-      // Turn off everything eccept the Arduino itself.
-      digitalWrite(powerOnOffPin, 0);
-
-      
-      // Powerdown the Arduino. Note that it only is to be revived by power cycling or the reset button.
-      set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-      sleep_enable();
-      sleep_mode(); //sleep until ever because the interupts are disabled. The only way to boot is to reconnect the battery.
-
+      sleepNow ();
     }
   }
 }
