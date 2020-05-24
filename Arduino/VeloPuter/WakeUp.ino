@@ -1,5 +1,6 @@
 
-void setup()   {
+
+  void wakeUp() {
 
   // Turn on the power to the display, the 5Vout and all the powersources
   pinMode(powerOnOffPin, OUTPUT);

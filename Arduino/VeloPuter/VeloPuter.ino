@@ -29,24 +29,18 @@ Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, 
 //
 // Initialise some of the variables
 //
-int batteryPercentage_pct = 99;
+int batteryPercentage_pct = 99; 
 int cellVoltage_mv = 4200;
 byte speed_kmh = 0;
 byte cadence_rpm = 0;
 
 float gearOnCassette_teeth = 0.00;
-byte gearSlumpfOn = 0;
-
-
-//
-//long DEBUGTlast = 0;
-//long DEBUGTnow = 0;
+//byte gearSlumpfOn = 0;
 
 enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED};
 byte doBatteryCheck = true;
 byte setOledIntensity = 0;
 byte statusBattery = BATTERY_GREEN;
-//volatile byte statusPowerDown = false;
 byte stateAlarmBlinkersOn = false;
 
 /**********************************************************************************************
@@ -57,6 +51,10 @@ byte stateAlarmBlinkersOn = false;
 
 */
 // the setup function runs once when you press reset or power the board
+void setup()   {
+  wakeUp();
+}
+
 
 // the loop function runs over and over again forever
 void loop ()
