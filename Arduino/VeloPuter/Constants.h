@@ -39,8 +39,6 @@
   A4              ANA
   A5              ANA
 
-
-
 */
 
 const byte switchCadPin =       0;      // NOTE: 0 and 1 are the RX and TX pins.
@@ -71,10 +69,10 @@ const byte powerOnOffPin =      A5;
 /*
    Other constants which are used throughout the programm:
 */
-const long tSleep_min = 5;                // Timeout until sleep when cadence and speed sensor are active. In minutes.
-const long tSleepNoCadSpd_min = 30;       // Timeout until sleep when cadence and speed sensor are NOT active. In minutes.
+const byte tSleepCadSpd_min = 5;                // Timeout until sleep when cadence and speed sensor are active. In minutes.
+const byte tSleepNoCadSpd_min = 30;       // Timeout until sleep when cadence and speed sensor are NOT active. In minutes.
 const int tDelayBatteryCheck_s = 15;      // How long until the battery management starts. This is the time window after power on in which the battery management van be disabled even when the battery voltage is complety off.
-const long tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action. 
+const int tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action. 
 
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
@@ -88,7 +86,6 @@ const float gearOnCassette_scaling = ((float)rearWheelCircumference_mm/(float)wh
 
 const byte speakerVolume = 50;
 
-byte setOledIntensity = 0;
 
 const byte setTeethOnCainring = VP_CHAINRING;
 

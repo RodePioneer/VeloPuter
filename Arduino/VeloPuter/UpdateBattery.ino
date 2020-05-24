@@ -188,7 +188,7 @@ void updateBattery()
       leftLed.setLedIntensity (min(leftLed.getLedIntensity(), leftLedMediumIntensity));
 
 
-      rearLed.setPin(ledRearPin);
+      rearLed.setPinID(ledRearPin);
       rearLed.offIntensity =    rearLedOffIntensity;
       rearLed.lowIntensity =    rearLedLowIntensity;
       rearLed.mediumIntensity = rearLedLowIntensity;
@@ -204,7 +204,7 @@ void updateBattery()
          The battery is almost dead. We now power it down.
          No more fun. Only option: switch off and on again.
       */
-      statusPowerDown =  true;
+  //    statusPowerDown =  true;
 
       detachInterrupt(digitalPinToInterrupt(switchSpdPin)); // 0 = interupt on pin 2
       detachInterrupt(digitalPinToInterrupt(switchCadPin)); // 0 = interupt on pin 2

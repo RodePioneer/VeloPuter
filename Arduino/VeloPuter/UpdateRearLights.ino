@@ -25,7 +25,7 @@ void updateRear()
   long tNow_ms = millis();
   int setNotMoving = (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
 
-  brakeSwitch.ReadOut();
+  //brakeSwitch.ReadOut();
 
   //
   // only brakeswitch is on, and changed and we are moving -> turn on brake light to Max.

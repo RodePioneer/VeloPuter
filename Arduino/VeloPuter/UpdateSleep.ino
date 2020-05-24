@@ -1,13 +1,13 @@
 /*********************************************************************************************************
 
-    Determine if we need to go to sleep or not.
+   Determine if we need to go to sleep or not.
 
  *********************************************************************************************************/
 void updateSleep ()
 {
-  long tLastStateChange_ms = 0;
+  long tLastStateChange_ms = millis();
   long tNow_ms             = millis();
-  long tWait_s            = tSleepNoCadSpd_min * 60;
+  long tSleep_ms           = long(tSleepNoCadSpd_min) * 1000 * 60;
 
   tLastStateChange_ms = max(upSwitch.getTimeLastChange_ms(), downSwitch.getTimeLastChange_ms());
   tLastStateChange_ms = max(tLastStateChange_ms, leftSwitch.getTimeLastChange_ms());
@@ -16,23 +16,12 @@ void updateSleep ()
   tLastStateChange_ms = max(tLastStateChange_ms, cadenceSwitch.getTimeLastChange_ms());
   tLastStateChange_ms = max(tLastStateChange_ms, speedSwitch.getTimeLastChange_ms());
 
-
-  /*
-    TODO:
-    - do not go to sleep while in alarm
-    - Go to sleep after longer time when the cad and speed have not been set...
-  */
-
   // We detected a cadence or a speed sensor. Reduce the time until sleep.
-  if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()) tWait_s = tSleep_min * 60;
+  if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()) tSleep_ms = long(tSleepCadSpd_min) * 1000 * 60;
 
   // When the time has passed and the alarm blinkers are NOT on go to sleep.
-  if ((tNow_ms - tLastStateChange_ms > 1000 * tWait_s) && (stateAlarmBlinkersOn == false))
+  if ((tNow_ms - tLastStateChange_ms > tSleep_ms) && (stateAlarmBlinkersOn == false))
   {
-    // This semaphore disables interupts from updating the leds.
-    statusPowerDown = true;
-
-    // clear the screen
     u8g.sleepOn();
 
     // switch off all lichts.
@@ -43,7 +32,7 @@ void updateSleep ()
     auxLed.setLedIntensity(0);
 
     // turn off power
-     digitalWrite(powerOnOffPin, 0);
+    digitalWrite(powerOnOffPin, 0);
 
 
     //
@@ -54,15 +43,19 @@ void updateSleep ()
     //
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
     sleep_enable();
+
     sleep_mode(); //sleep until interupt
 
     // waking up again: reset all
     sleep_disable();
 
+    // Make sure we do not dive into sleep right away again
+    //tLastStateChange_ms = millis();
+
 
     // turn on power
     digitalWrite(powerOnOffPin, 1);
-       
+
     // Set the leds to the setting at power on.
     leftLed.setLedOff();
     rightLed.setLedOff();
@@ -70,18 +63,23 @@ void updateSleep ()
     headLed.setLedLow();
     auxLed.setLedOff();
 
-    brakeSwitch.ReadOut();
-    upSwitch.ReadOut();
-    downSwitch.ReadOut();
+    //brakeSwitch.ReadOut();
+    //upSwitch.ReadOut();
+    //downSwitch.ReadOut();
+    //speedSwitch.ReadOut();
+    //cadenceSwitch.ReadOut();
 
     // turn on the display. Note that because we cut power to the display it how needs some time to boot up. Show the spashscreen.
-    delay (100); 
-    drawSplash ();      
+    delay (100);
+    drawSplash ();
     //u8g.sleepOff();
     //u8g.begin();
     //u8g.setContrast(0);
 
 
-    statusPowerDown = false;
+    // wakup: just run the setup
+    //setup();
+
+    // statusPowerDown = false;
   }
 }

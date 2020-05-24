@@ -73,7 +73,17 @@ void drawSpeed()
   else
     u8g.setPrintPos (15 - 6, 0);
 
-  u8g.print (speed_kmh);
+  if (cadenceSwitch.getInteruptActive())
+  {
+    // Active: print a number
+    u8g.print (speed_kmh);
+  }
+  else
+  {
+    // Not active: print a dash
+    u8g.print ('-');
+  }
+
   u8g.undoScale();
 }
 
@@ -85,6 +95,8 @@ void drawCadence()
   u8g.setColorIndex(1);
   u8g.setFont(u8g_font_helvR14r);
   u8g.setFontPosBottom();
+
+
 
   // The starting potion depends on the number of characters to display.
   if (cadence_rpm < 10)
@@ -99,7 +111,17 @@ void drawCadence()
   {
     u8g.setPrintPos (99, 49); // cad >= 100
   }
-  u8g.print (cadence_rpm);
+
+  if (cadenceSwitch.getInteruptActive())
+  {
+    // Active: print a number
+    u8g.print (cadence_rpm);
+  }
+  else
+  {
+    // Not active: print a dash
+    u8g.print ('-');
+  }
 }
 
 void drawBatteryText()
@@ -245,22 +267,22 @@ void drawSensors()
   }
 }
 
-void drawDebug()
-{
-  //
-  // Display which config is loaded
-  //
-  u8g.setPrintPos (97, 17);
-
-#if defined(QUILTJE)
-  u8g.print (2);
-#elif defined(QUATRO) || defined(ICB_DF)
-  u8g.print (3);
-#elif defined(STRADA)
-  u8g.print (1);
-#endif
-
-}
+//void drawDebug()
+//{
+//  //
+//  // Display which config is loaded
+//  //
+//  u8g.setPrintPos (97, 17);
+//
+//#if defined(QUILTJE)
+//  u8g.print (2);
+//#elif defined(QUATRO) || defined(ICB_DF)
+//  u8g.print (3);
+//#elif defined(STRADA)
+//  u8g.print (1);
+//#endif
+//
+//}
 
 void drawGear()
 {
@@ -295,29 +317,29 @@ void drawGear()
     }
 
     /*
-    // Which gear are we in?
-    if (gearOnCassette_index < 10)
-    {
+      // Which gear are we in?
+      if (gearOnCassette_index < 10)
+      {
       u8g.setPrintPos (118, 33); // index <10
-    }
-    else if (gearOnCassette_index < 100)
-    {
+      }
+      else if (gearOnCassette_index < 100)
+      {
       u8g.setPrintPos (109, 33); // index >= 10, <100
-    }
-    else
-    {
+      }
+      else
+      {
       u8g.setPrintPos (99, 33); // index >= 100
-    }    
-    u8g.setPrintPos (109, 33); //94 when float
-    u8g.print (gearOnCassette_index);
+      }
+      u8g.setPrintPos (109, 33); //94 when float
+      u8g.print (gearOnCassette_index);
     */
   }
-  
+
   else
   {
     u8g.setPrintPos (118, 17);
     u8g.print ('-');
-//    u8g.setPrintPos (118, 33);
-//    u8g.print ('-');
+    //    u8g.setPrintPos (118, 33);
+    //    u8g.print ('-');
   }
 }

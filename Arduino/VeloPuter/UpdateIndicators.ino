@@ -21,9 +21,9 @@ void updateIndicators()
   long tNow_ms = millis();
   byte BlinkOn = 0;
 
-  leftSwitch.ReadOut();
-  rightSwitch.ReadOut();
-  alarmSwitch.ReadOut();
+  //leftSwitch.ReadOut();
+  //rightSwitch.ReadOut();
+  //alarmSwitch.ReadOut();
 
   //#if defined(QUATRO) || defined(STRADA)
   if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW )

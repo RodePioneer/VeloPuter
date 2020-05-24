@@ -16,25 +16,25 @@ void setup()   {
    **********************************************************************************************/
   // Inputs: switches and the voltage measurement
   pinMode(switchLeftPin, INPUT_PULLUP);
-  leftSwitch.setPin(switchLeftPin);
+  leftSwitch.setPinID(switchLeftPin);
 
   pinMode(switchRightPin, INPUT_PULLUP);
-  rightSwitch.setPin(switchRightPin);
+  rightSwitch.setPinID(switchRightPin);
 
   pinMode(switchHeadUpPin, INPUT_PULLUP);
-  upSwitch.setPin(switchHeadUpPin);
+  upSwitch.setPinID(switchHeadUpPin);
 
   pinMode(switchHeadDownPin, INPUT_PULLUP);
-  downSwitch.setPin(switchHeadDownPin);
+  downSwitch.setPinID(switchHeadDownPin);
 
   pinMode(switchBrakePin, INPUT_PULLUP);
-  brakeSwitch.setPin(switchBrakePin);
+  brakeSwitch.setPinID(switchBrakePin);
 
   pinMode(switchAlarmPin, INPUT_PULLUP);
-  alarmSwitch.setPin(switchAlarmPin);
+  alarmSwitch.setPinID(switchAlarmPin);
 
   pinMode(switchConfigPin, INPUT_PULLUP);
-  configSwitch.setPin(switchConfigPin);
+  configSwitch.setPinID(switchConfigPin);
 
 
   pinMode(switchSpdPin, INPUT_PULLUP);
@@ -48,7 +48,7 @@ void setup()   {
 
   // Setup all the outputs (5 LED in total and a speaker)
   pinMode(ledLeftPin, OUTPUT);
-  leftLed.setPin(ledLeftPin);
+  leftLed.setPinID(ledLeftPin);
   leftLed.offIntensity = leftLedOffIntensity;
   leftLed.lowIntensity = leftLedLowIntensity;
   leftLed.mediumIntensity = leftLedMediumIntensity;
@@ -57,7 +57,7 @@ void setup()   {
   leftLed.setLedOff();
 
   pinMode(ledRightPin, OUTPUT);
-  rightLed.setPin(ledRightPin);
+  rightLed.setPinID(ledRightPin);
   rightLed.offIntensity = rightLedOffIntensity;
   rightLed.lowIntensity = rightLedLowIntensity;
   rightLed.mediumIntensity = rightLedMediumIntensity;
@@ -66,7 +66,7 @@ void setup()   {
   rightLed.setLedOff();
 
   pinMode(ledRearPin, OUTPUT);
-  rearLed.setPin(ledRearPin);
+  rearLed.setPinID(ledRearPin);
   rearLed.offIntensity = rearLedOffIntensity;
   rearLed.lowIntensity = rearLedLowIntensity;
   rearLed.mediumIntensity = rearLedMediumIntensity;
@@ -75,7 +75,7 @@ void setup()   {
   rearLed.setLedLow();
 
   pinMode(ledHeadPin, OUTPUT);
-  headLed.setPin(ledHeadPin);
+  headLed.setPinID(ledHeadPin);
   headLed.offIntensity = headLedOffIntensity;
   headLed.lowIntensity = headLedLowIntensity;
   headLed.mediumIntensity = headLedMediumIntensity;
@@ -84,26 +84,22 @@ void setup()   {
   headLed.setLedLow();
 
   pinMode(ledAuxPin, OUTPUT);
-  auxLed.setPin(ledAuxPin);
+  auxLed.setPinID(ledAuxPin);
   auxLed.offIntensity = auxLedOffIntensity;
   auxLed.lowIntensity = auxLedLowIntensity;
   auxLed.mediumIntensity = auxLedMediumIntensity;
   auxLed.highIntensity = auxLedHighIntensity;
   auxLed.maxIntensity = auxLedMaxIntensity;
-#if defined(QUILTJE)  || defined(STRADA)
-  auxLed.setLedLow();
-#elif defined(QUATRO) || defined(ICB_DF)
   auxLed.setLedOff();
-#endif
 
-pinMode(ledAux2Pin, OUTPUT);
-  aux2Led.setPin(ledAux2Pin);
+  pinMode(ledAux2Pin, OUTPUT);
+  aux2Led.setPinID(ledAux2Pin);
   aux2Led.offIntensity = aux2LedOffIntensity;
   aux2Led.lowIntensity = aux2LedLowIntensity;
   aux2Led.mediumIntensity = aux2LedMediumIntensity;
   aux2Led.highIntensity = aux2LedHighIntensity;
   aux2Led.maxIntensity = aux2LedMaxIntensity;
-  aux2Led.setLedLow();
+  aux2Led.setLedOff();
 
 
   pinMode(speakerPin, OUTPUT);

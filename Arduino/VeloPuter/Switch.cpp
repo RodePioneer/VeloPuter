@@ -19,34 +19,85 @@ class Switch
     byte iEnd = sizeof (tInterupts_ms) / sizeof (tInterupts_ms[0]) - 1;
     byte State = HIGH; // Note that due to the internal pull-up resistor HIGH means an open connection and LOW is a closed switch.
     byte StateChanged = LOW;
-    byte Pin = 255; // 255 is a default which denotes that the handleling is done via interupts
+    byte Pin = 255; // 255 is a default
 
   public:
-    void setPin (byte pin)
+    /*
+
+      Regarding the configuration of the switch
+
+    */
+    // Set the pin for this switch
+    void setPinID (byte pin)
     {
       Pin = pin;
     }
 
-    long getTimeLastChange_ms (void)
-    {
-      return tLastStateChange_ms;
-    }
-
+    // retrieve the rin for this switch
     byte getPin (void)
     {
       return Pin;
     }
 
+    /*
+
+      Regarding the state / value of the switch
+
+    */
+    // Update the switch status by reading the pin
+    // Currently we use a seperate Readout modulde. Once this is done the new states can be used.
+    // This is to avoid changes between different readouts (the state could change)
+    void ReadOut (void)
+    {
+      tNow_ms = millis();
+      LastState = State;
+      StateChanged = false;
+
+      // Ignore everything if not enough time has passed.
+      // This is to prevent multiple triggers. This would result in
+      if ((tNow_ms - tLastStateChange_ms) >= tDebounce_ms)
+      {
+        if (Pin != 255) // difference between checked pins and interupt pins. Interupt pins only act on change.
+        {
+          State = digitalRead(Pin);
+          StateChanged = (State != LastState);
+        }
+        else // interupt based
+        {
+          // When the last Interupt is after the last change we consider it a change!
+          StateChanged = tInterupts_ms[iEnd] > tLastStateChange_ms;
+        }
+
+        if (StateChanged)
+        {
+          tLastStateChange_ms = tNow_ms;
+        }
+      }
+    }
+
+    // What is the state of the switch
     byte getState (void)
     {
       return State;
     }
 
+    // Has this switch changed state since the last read out.
     byte hasStateChanged (void)
     {
       return StateChanged;
     }
 
+    // How much time has passed since this switch changed state.
+    long getTimeLastChange_ms (void)
+    {
+      return tLastStateChange_ms;
+    }
+
+    /*
+
+         Handeling interupts
+
+    */
     byte getInteruptActive (void)
     {
       /*
@@ -103,52 +154,24 @@ class Switch
       return frequency;
     }
 
-    // Currently we use a seperate Readout modulde. Once this is done the new states can be used.
-    // This is to avoid changes between different readouts (the state could change)
-    void ReadOut (void)
-    {
-      tNow_ms = millis();
-      LastState = State;
-      StateChanged = false;
-
-      // Ignore everything is not enough time has passed.
-      if ((tNow_ms - tLastStateChange_ms) >= tDebounce_ms)
-      {
-        if (Pin != 255) // difference between checked pins and interupt pins. Interupt pins only act on change.
-        {
-          State = digitalRead(Pin);
-          StateChanged = (State != LastState);
-        }
-        else // interupt based
-        {
-          // When the last Interupt is after the last change we consider it a change!
-          StateChanged = tInterupts_ms[iEnd] > tLastStateChange_ms;
-        }
-
-        if (StateChanged)
-        {
-          tLastStateChange_ms = tNow_ms;
-        }
-      }
-    }
 
     void Interupt(void)
     {
-      //
-      // Since it is rather difficult to properly keep track of when the interupts happend and
-      // because that is precicely what we need to know we start using an array to keep track of the
-      // last number of interupt timestamps. Currently we assume that 10 stamps should be enough since that
-      // would cover a whole second at the current debounce pace.
-      //
+      /*
+        // Since it is rather difficult to properly keep track of when the interupts happend and
+        // because that is precicely what we need to know we start using an array to keep track of the
+        // last number of interupt timestamps. Currently we assume that 10 stamps should be enough since that
+        // would cover a whole second at the current debounce pace.
+        //
 
-      //
-      // When moving at low speeds the sensor can make multiple contacts when the magnet passes the
-      // reed-sensor. A solid way to prevent double counts would be to make sure that the
-      // bebounce time is 1/8th of a revolution (of both the cadence and the wheel).
-      //
-      //  Note that we now calculate over the whole array of timestamps but that we could also
-      // calculate it over a smaller window. 2016-02-13 /Gert
-      //
+        //
+        // When moving at low speeds the sensor can make multiple contacts when the magnet passes the
+        // reed-sensor. A solid way to prevent double counts would be to make sure that the
+        // bebounce time is 1/8th of a revolution (of both the cadence and the wheel).
+        //
+        //  Note that we now calculate over the whole array of timestamps but that we could also
+        // calculate it over a smaller window. 2016-02-13 /Gert
+      */
       long tDebounceVariable_ms = (tInterupts_ms[iEnd] - tInterupts_ms[0]) / (8 * iEnd);
 
       // define upper als lower limits to the debounce time.

@@ -4,7 +4,6 @@
 
 */
 #include <Arduino.h>
-//#include <TimerOne.h>
 
 class Led
 {
@@ -61,7 +60,7 @@ class Led
       return tLastStateChange_ms;
     }
 
-    void setPin (byte Pin)
+    void setPinID (byte Pin)
     {
       pin = Pin;
     }

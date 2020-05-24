@@ -8,30 +8,6 @@
 
 /*********************************************************************************************************
 
-    Update the headlights
-
- *********************************************************************************************************/
-void updateHead()
-{
-  //static int currentState = rearState.getState();
-  upSwitch.ReadOut();
-  downSwitch.ReadOut();
-
-  if (upSwitch.getState() == LOW && upSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH && configSwitch.getState() == HIGH)
-  {
-    headLed.upLed();
-    aux2Led.upLed();
-  }
-
-  if (downSwitch.getState() == LOW && downSwitch.hasStateChanged() && brakeSwitch.getState() == HIGH && configSwitch.getState() == HIGH)
-  {
-    headLed.downLed();
-    aux2Led.downLed();
-  }
-}
-
-/*********************************************************************************************************
-
     The configuration interface
 
  *********************************************************************************************************
@@ -41,7 +17,7 @@ void updateHead()
  */
 void updateConfig()
 {
-  configSwitch.ReadOut();
+  //configSwitch.ReadOut();
 
   // See of there is also a up or down switch active: disable or enable the battery check.
   if ( configSwitch.getState() == LOW && downSwitch.getState() == LOW)
@@ -54,7 +30,7 @@ void updateConfig()
   }
   else if (configSwitch.hasStateChanged() && configSwitch.getState() == LOW )
   {
-    if (setOledIntensity == 255)
+    if (setOledIntensity >= 128)
     {
       setOledIntensity = 0;
     }
@@ -62,6 +38,7 @@ void updateConfig()
     {
       setOledIntensity = 255;
     }
+    // TODO: why the begin? Find out and / or explain
     u8g.begin();
     u8g.setContrast(setOledIntensity);
   }
@@ -100,8 +77,9 @@ void updateCadence()
 
 /*********************************************************************************************************
 
-    Calculate the cadence
+    Calculate the gear
 
+We use the ratio between the speed and cadence to work out the gear on the cassete, given a vertain chainring. 
  *********************************************************************************************************/
 void updateGear()
 {
