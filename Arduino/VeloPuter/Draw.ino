@@ -267,23 +267,6 @@ void drawSensors()
   }
 }
 
-//void drawDebug()
-//{
-//  //
-//  // Display which config is loaded
-//  //
-//  u8g.setPrintPos (97, 17);
-//
-//#if defined(QUILTJE)
-//  u8g.print (2);
-//#elif defined(QUATRO) || defined(ICB_DF)
-//  u8g.print (3);
-//#elif defined(STRADA)
-//  u8g.print (1);
-//#endif
-//
-//}
-
 void drawGear()
 {
   //
@@ -315,31 +298,11 @@ void drawGear()
     {
       u8g.print (round(gearOnCassette_teeth / 2.5));
     }
-
-    /*
-      // Which gear are we in?
-      if (gearOnCassette_index < 10)
-      {
-      u8g.setPrintPos (118, 33); // index <10
-      }
-      else if (gearOnCassette_index < 100)
-      {
-      u8g.setPrintPos (109, 33); // index >= 10, <100
-      }
-      else
-      {
-      u8g.setPrintPos (99, 33); // index >= 100
-      }
-      u8g.setPrintPos (109, 33); //94 when float
-      u8g.print (gearOnCassette_index);
-    */
   }
 
   else
   {
     u8g.setPrintPos (118, 17);
     u8g.print ('-');
-    //    u8g.setPrintPos (118, 33);
-    //    u8g.print ('-');
   }
 }
