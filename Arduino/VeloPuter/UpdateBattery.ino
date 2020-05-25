@@ -25,21 +25,20 @@ void updateBattery()
     - restructure for better readability of the code
   */
   long tNow_ms = millis();
-  float PinValue = analogRead(voltagePin);
-  static float PinMean = PinValue; // it is inutialised at the fist value and then kept in memory.
+  //float PinValue = analogRead(voltagePin);
+  //static float PinMean = PinValue; // it is inutialised at the fist value and then kept in memory.
 
-  const byte numSamples = 10 ; // was 20;
+  //const byte numSamples = 10 ; // was 20;
 
-  float batteryVoltage_mv;
-  byte numOfCells = 1;
+  //float batteryVoltage_mv;
+  //byte numOfCells = 1;
 
-  PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
+  //PinMean = (PinMean * (numSamples - 1) + PinValue) / numSamples; // the mean voltage on the pin.
 
 
-  batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calculated in octave 2020-05-03 @ Boekelo
+  //batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calculated in octave 2020-05-03 @ Boekelo
 
-#if defined(BATTERY_LIPO)
-#define NUM_REFDATA 6
+  //batteryVoltage_mv = myBattery.getVoltage_mv();
 
 
   /*
@@ -59,10 +58,19 @@ void updateBattery()
     For most practical purposes the minimun is 3 cells.
   */
 
-  if (batteryVoltage_mv >= 17000) numOfCells = 1;       // 5 or more: dislay voltage 4.2*4 = 16.8
-  else if (batteryVoltage_mv >= 12800) numOfCells = 4;  // 4 cells
-  else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
-  else if (batteryVoltage_mv >= 6000) numOfCells  = 2;  // 5 cells
+//  if (batteryVoltage_mv >= 17000) numOfCells = 1;       // 5 or more: dislay voltage 4.2*4 = 16.8
+//  else if (batteryVoltage_mv >= 12800) numOfCells = 4;  // 4 cells
+//  else if (batteryVoltage_mv >= 9000) numOfCells  = 3;  // 3 cells
+//  else if (batteryVoltage_mv >= 6000) numOfCells  = 2;  // 5 cells
+
+//  cellVoltage_mv = batteryVoltage_mv / numOfCells;
+
+
+#if defined(BATTERY_LIPO)
+#define NUM_REFDATA 6
+
+
+
 
   /*
      Determine the battery percentage. This is a measured dischage curve for LiPo.
@@ -93,16 +101,18 @@ void updateBattery()
   numOfCells = 1;
 #endif
 
-  cellVoltage_mv = batteryVoltage_mv / numOfCells;
 
   batteryPercentage_pct = 0;
   for (int i = NUM_REFDATA - 1; i > 0; i--)
   {
-    if (cellVoltage_mv >= V[i])
-      batteryPercentage_pct = int((C[i - 1] - C[i]) * (cellVoltage_mv - V[i]) / (V[i - 1] - V[i]) + C[i]);
+    if (myBattery.getVoltageCell_mv() >= V[i])
+      batteryPercentage_pct = int((C[i - 1] - C[i]) * (myBattery.getVoltageCell_mv() - V[i]) / (V[i - 1] - V[i]) + C[i]);
   }
 
   batteryPercentage_pct = constrain(batteryPercentage_pct, 0, 99);
+
+  //statusBattery = batteryPercentageToStatus (int batteryPercentage_pct);
+
   /*
      Determnine battery regime
 
@@ -115,8 +125,8 @@ void updateBattery()
   if (doBatteryCheck && tNow_ms > 1000 * tDelayBatteryCheck_s) {
     const int Batt_pct_limits[3] = {25, 15, 5};
     if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN )
-    { 
-      setBatteryToOrange ();
+    {
+      setBatteryToRed ();
     }
     if (batteryPercentage_pct < Batt_pct_limits[1]  && statusBattery == BATTERY_ORANGE)
     {
@@ -129,6 +139,35 @@ void updateBattery()
   }
 }
 
+//byte batteryPercentageToStatus (int batteryPercentage_pct)
+//{
+//  /*
+//    Determnine battery regime
+//
+//    Green: normal operation
+//    Orange: we need to preserve power.
+//    Red: okay now we are almost fucked.
+//    Black: down. We are now dead.
+//
+//  */
+//  if (doBatteryCheck && tNow_ms > 1000 * tDelayBatteryCheck_s) {
+//    const int Batt_pct_limits[3] = {25, 15, 5};
+//    if (batteryPercentage_pct < Batt_pct_limits[0] && statusBattery == BATTERY_GREEN )
+//    {
+//      //setBatteryToRed ();
+//      statusBattery == BATTERY_RED
+//    }
+//    if (batteryPercentage_pct < Batt_pct_limits[1]  && statusBattery == BATTERY_ORANGE)
+//    {
+//      setBatteryToRed ();
+//    }
+//    if (batteryPercentage_pct < Batt_pct_limits[2]  && statusBattery == BATTERY_RED)
+//    {
+//      setBatteryToBlack ();
+//    }
+//  }
+//  return statusBattery;
+//}
 
 void setBatteryToOrange ()
 {

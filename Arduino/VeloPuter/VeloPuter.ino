@@ -14,6 +14,7 @@
 #include "Switch.cpp"
 #include "Led.cpp"
 #include "Draw_Icons.cpp"
+#include "Battery.cpp"
 #include "Constants.h"
 // Note that the avr tools are only installed for the micro...
 #include <avr/interrupt.h>
@@ -25,19 +26,19 @@ U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // The proper contructor for the d
 
 Led leftLed, rightLed, rearLed, headLed, auxLed, aux2Led;
 Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch, alarmSwitch, configSwitch;
-
+Battery myBattery;
 //
 // Initialise some of the variables
 //
 int batteryPercentage_pct = 99; 
-int cellVoltage_mv = 4200;
+//int cellVoltage_mv = 4200;
 byte speed_kmh = 0;
 byte cadence_rpm = 0;
 
 float gearOnCassette_teeth = 0.00;
-//byte gearSlumpfOn = 0;
 
 enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED};
+
 byte doBatteryCheck = true;
 byte setOledIntensity = 0;
 byte statusBattery = BATTERY_GREEN;

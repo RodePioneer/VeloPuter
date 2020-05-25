@@ -46,6 +46,7 @@
 
   pinMode(voltagePin, INPUT);
   analogReference(DEFAULT);  // use the 5V pin as ref
+  myBattery.setPinID(voltagePin);
 
   // Setup all the outputs (5 LED in total and a speaker)
   pinMode(ledLeftPin, OUTPUT);
@@ -104,6 +105,10 @@
 
 
   pinMode(speakerPin, OUTPUT);
+
+  // Set the battery type
+  myBattery.setType(setBatteryType);
+
 
   // Start display
   delay (100); 

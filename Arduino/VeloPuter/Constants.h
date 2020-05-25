@@ -6,6 +6,9 @@
 // now via VeloPuter_Config.h
 //#define ICB_DF   // Configuration management: STRADA QUILTJE QUATRO and ICB_DF
 //#define BATTERY_LIFEPO4 // Battry type BATTERY_LIPO BATTERY_LIFEPO4
+enum {LIPO, LIFEPO4};
+const byte setBatteryType = LIPO;
+
 
 #define Ug82
 
