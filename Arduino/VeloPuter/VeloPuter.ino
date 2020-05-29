@@ -30,18 +30,18 @@ Battery myBattery;
 //
 // Initialise some of the variables
 //
-int batteryPercentage_pct = 99; 
+// int batteryPercentage_pct = 99; 
 //int cellVoltage_mv = 4200;
 byte speed_kmh = 0;
 byte cadence_rpm = 0;
 
 float gearOnCassette_teeth = 0.00;
 
-enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED};
+enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};
 
 byte doBatteryCheck = true;
 byte setOledIntensity = 0;
-byte statusBattery = BATTERY_GREEN;
+//byte statusBattery = BATTERY_GREEN;
 byte stateAlarmBlinkersOn = false;
 
 /**********************************************************************************************
@@ -84,7 +84,7 @@ void loop ()
   } while ( u8g.nextPage() );
 
   // Update the stuff which is also fine to do at a slow pace.
-  updateBattery(); // Read out and calculate the acutual battery status
+  updatePowerManagement(); // Read out and calculate the acutual battery status
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
   updateGear();    // Figure out which gear we are using at the moment.

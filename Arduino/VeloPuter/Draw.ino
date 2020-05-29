@@ -30,12 +30,47 @@ void drawScreen ()
   /*
     // This is the main function which makes sure all information is plotted in the OLED display.
   */
+  drawInit();
   drawBatteryText();
   drawLightIcons();
   drawSpeed();
   drawCadence();
   drawGear();
   drawBatteryIcon();
+  //drawSensors();
+
+
+  //
+  // TEMP : uncomment this code when debugging the battery management.
+  //
+
+  //  u8g.setFont(u8g_font_helvR14r);
+  //
+  //  u8g.setPrintPos (70, 17);
+  //  u8g.print(myBattery.getVoltage_mv());
+  //  u8g.setPrintPos (70, 33);
+  //  u8g.print(myBattery.getVoltageCell_mv());
+  //  u8g.setPrintPos (40, 33);
+  //  u8g.print (myBattery.getNumberOfCells());
+  //  u8g.setPrintPos (40, 49);
+  //  u8g.print (myBattery.getPercentage_pct());
+  //  u8g.setPrintPos (70, 49);
+  //  u8g.print (myBattery.getColorCode());
+
+  //
+  // TEMP
+  //
+}
+
+void drawInit()
+{
+  //u8g.setFont(u8g_font_helvR18r); //12,14,18
+  //  u8g.setFont(u8g_font_helvB18n); //12,14,18 BROKEN
+  u8g.setFont(u8g_font_fur17n);
+  //u8g.setFont(u8g_font_fub17n);
+
+
+  u8g.setColorIndex(1);
 }
 
 void blinkScreen (byte doBlink)
@@ -59,21 +94,21 @@ void drawSpeed()
     // Display the speed. Note that we double the display scale in order to
     // get larger characters without the need for an other font to be loaded.
   */
-  u8g.setColorIndex(1);
-  u8g.setFont(u8g_font_helvR18r); //12,14,18
-
+  const byte row =  2; // was: 0
+  const byte col =  30; // was: 39
+  const byte dcol = 13; // was 9 or 10
   u8g.setFontPosTop();
   u8g.setScale2x2();
 
   // The starting potion depends on the number of characters to display.
   if (speed_kmh < 10)
-    u8g.setPrintPos (39 - 6, 0);
+    u8g.setPrintPos (col, row);
   else if (speed_kmh < 100)
-    u8g.setPrintPos (27 - 6, 0);
+    u8g.setPrintPos (col - dcol, row);
   else
-    u8g.setPrintPos (15 - 6, 0);
+    u8g.setPrintPos (col - dcol * 2, row);
 
-  if (cadenceSwitch.getInteruptActive())
+  if (speedSwitch.getInteruptActive())
   {
     // Active: print a number
     u8g.print (speed_kmh);
@@ -92,24 +127,23 @@ void drawCadence()
   /*
     // This draws the cadence
   */
-  u8g.setColorIndex(1);
-  u8g.setFont(u8g_font_helvR14r);
-  u8g.setFontPosBottom();
-
-
+  const byte row =  22; // was: 49
+  const byte col =  115; // was: 118
+  const byte dcol = 13; // was 9 or 10
+  u8g.setFontPosTop();
 
   // The starting potion depends on the number of characters to display.
   if (cadence_rpm < 10)
   {
-    u8g.setPrintPos (118, 49); // cad <10
+    u8g.setPrintPos (col, row); // cad <10
   }
   else if (cadence_rpm < 100)
   {
-    u8g.setPrintPos (109, 49); // cad >= 10, <100
+    u8g.setPrintPos (col - dcol, row); // cad >= 10, <100
   }
   else
   {
-    u8g.setPrintPos (99, 49); // cad >= 100
+    u8g.setPrintPos (col - dcol * 2, row); // cad >= 100
   }
 
   if (cadenceSwitch.getInteruptActive())
@@ -124,18 +158,62 @@ void drawCadence()
   }
 }
 
+void drawGear()
+{
+  //
+  // Display which gear we are riding in
+  //
+  //  const byte row =  17 + 8; // was: 17
+  //  const byte col =  115; // was: 118
+  //  const byte dcol = 13; // was 9 or 10
+  //  u8g.setFontPosBottom();
+  const byte row =  0; // was: 17
+  const byte col =  115; // was: 118
+  const byte dcol = 13; // was 9 or 10
+  u8g.setFontPosTop();
+
+
+  if (gearOnCassette_teeth > 8 and gearOnCassette_teeth < 100) // no NAN and inf on display.
+  {
+    // The starting potion depends on the number of characters to display.
+
+    // number of teeth on current gear
+    if (gearOnCassette_teeth < 10)
+    {
+      u8g.setPrintPos (col, row); // teeth <10
+    }
+    else if (gearOnCassette_teeth < 100)
+    {
+      u8g.setPrintPos (col - dcol, row); // teeth >= 10, <100
+    }
+    else
+    {
+      u8g.setPrintPos (col - dcol * 2, row); // teeth >= 100
+    }
+    if (gearOnCassette_teeth < 37.4)
+    {
+      u8g.print (round(gearOnCassette_teeth));
+    }
+    else
+    {
+      // Slumpf is in effect
+      u8g.print (round(gearOnCassette_teeth / 2.5));
+    }
+  }
+}
+
 void drawBatteryText()
 {
   /*
     // The text underneath the battery
   */
-  u8g.setColorIndex(1);
-  u8g.setFont(u8g_font_helvR14r);
+  const byte row =  64;
+  const byte col =  0;
   u8g.setFontPosBottom();
 
   // the if statement makes that the end of the number is at a fixed position.
-  u8g.setPrintPos (0, 68);
-  u8g.print (myBattery.getVoltageCell_mv()/1000);
+  u8g.setPrintPos (0, row);
+  u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
 }
 
 void drawBatteryIcon()
@@ -143,17 +221,15 @@ void drawBatteryIcon()
   /*
     // Defining how big the battery icon is displayed
   */
-  const byte hBattery_px = 46;
+  const byte hBattery_px = 44; // was 46
   const byte wBattery_px = 17;
   const byte rBattery_px = 0;
-  const byte cBattery_px = 5;
+  const byte cBattery_px = 0;
   const byte hKnob_px = 8;
   const byte lineWidth_px = 2;
 
   // the body of the battery
   byte hBody_px = hBattery_px - hKnob_px + lineWidth_px * 2;
-  //byte cKnob_px = wBattery_px / 3 - 1+ cBattery_px;
-  //byte wKnob_px = wBattery_px - cKnob_px*2 - 1 - cBattery_px;
   byte wKnob_px = 2 * (wBattery_px / 6 ) + 3 ;
   byte cKnob_px = (wBattery_px - wKnob_px) / 2 + cBattery_px;
 
@@ -164,7 +240,7 @@ void drawBatteryIcon()
   if (doBatteryCheck)
   {
     // The bar in the battery
-    byte hBar_px = (batteryPercentage_pct * (hBody_px - 4 * lineWidth_px)) / 100 ;
+    byte hBar_px = (myBattery.getPercentage_pct() * (hBody_px - 4 * lineWidth_px)) / 100 ;
     byte rBar_px = rBody_px + hBattery_px - hBar_px - 4 * lineWidth_px;
     byte cBar_px = cBattery_px + 2 * lineWidth_px;
     byte wBar_px = wBattery_px - 4 * lineWidth_px;
@@ -188,15 +264,14 @@ void drawBatteryIcon()
 
     // Battery level indication
 
-    if (statusBattery == BATTERY_ORANGE)
+    if (myBattery.getColorCode() == BATTERY_ORANGE)
     {
       //Serial.println ("Draw Orange");
       u8g.setColorIndex(1);
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + 4, 3, hBody_px / 2 - 2);
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + hBody_px / 2 + 5, 3, 3);
-
     }
-    else if (statusBattery == BATTERY_RED)
+    else if (myBattery.getColorCode() == BATTERY_RED)
     {
       //Serial.println ("Draw Red");
       u8g.setColorIndex(1);
@@ -250,59 +325,4 @@ void drawLightIcons ()
   else if (rearLed.getLedIntensity() == rearLed.lowIntensity)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
   else if (rearLed.getLedIntensity() == rearLed.mediumIntensity) u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);
   else if (rearLed.getLedIntensity() == rearLed.maxIntensity)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
-}
-
-void drawSensors()
-{
-  /*
-     Draw indicators for the interust sensitive sensors.
-  */
-  if (speedSwitch.getInteruptActive())
-  {
-    u8g.drawDisc (120, 4, 3);
-  }
-  if (cadenceSwitch.getInteruptActive())
-  {
-    u8g.drawDisc (110, 4, 3);
-  }
-}
-
-void drawGear()
-{
-  //
-  // Display which gear we are riding in
-  //
-
-  if (gearOnCassette_teeth > 8 and gearOnCassette_teeth < 100) // no NAN and inf on display.
-  {
-    // The starting potion depends on the number of characters to display.
-
-    // number of teeth on current gear
-    if (gearOnCassette_teeth < 10)
-    {
-      u8g.setPrintPos (118, 17); // teeth <10
-    }
-    else if (gearOnCassette_teeth < 100)
-    {
-      u8g.setPrintPos (109, 17); // teeth >= 10, <100
-    }
-    else
-    {
-      u8g.setPrintPos (99, 17); // teeth >= 100
-    }
-    if (gearOnCassette_teeth < 37.4)
-    {
-      u8g.print (round(gearOnCassette_teeth));
-    }
-    else
-    {
-      u8g.print (round(gearOnCassette_teeth / 2.5));
-    }
-  }
-
-  else
-  {
-    u8g.setPrintPos (118, 17);
-    u8g.print ('-');
-  }
 }
