@@ -12,6 +12,8 @@ class Battery
     byte Pin = 255; // 255 is a default
     long tNow_ms             = 0;
     float PinMean = analogRead(Pin);
+    const int  tDelayBatteryStatusChange_s = 15;
+
 
   public:
 
@@ -96,9 +98,8 @@ class Battery
     byte getColorCode()
     {
       //
-      // TODO: add delay timer before we change status of the color code.
       // TODO: add hysterisis before we change the status of the color code to a fuller level (ie. orange to green)
-      // TODO: Battery discharge measurement. 25% seems in practice badly defined. 
+      // TODO: Battery discharge measurement. 25% seems in practice badly defined.
 
 
       // Code orange is below 25%
@@ -106,22 +107,36 @@ class Battery
       // Code Black is below 5%
       byte statusBattery = BATTERY_GREEN;
       const byte Batt_pct_limits[3] = {25, 15, 5};
-      if (getPercentage_pct() >= Batt_pct_limits[0])
-      {
-        statusBattery = BATTERY_GREEN;
-      }
-      else if (getPercentage_pct() < Batt_pct_limits[0] &&  getPercentage_pct() >= Batt_pct_limits[1])
-      {
-        statusBattery = BATTERY_ORANGE;
-      }
+      long tLastStateChange_ms = 0;
+      long tNow_ms = 0;
 
-      else if (getPercentage_pct() < Batt_pct_limits[1] &&  getPercentage_pct() >= Batt_pct_limits[2])
+      // Add a 15 sec delay on battery state changes
+      tNow_ms = millis();
+      if (tLastStateChange_ms + tDelayBatteryStatusChange_s * 1000 < tNow_ms)
       {
-        statusBattery = BATTERY_RED;
-      }
-      else if (getPercentage_pct() < Batt_pct_limits[0] )
-      {
-        statusBattery = BATTERY_BLACK;
+        //
+        // Only do something and update the timer when we enter a different state
+        //
+        if (getPercentage_pct() >= Batt_pct_limits[0] && statusBattery != BATTERY_GREEN)
+        {
+          statusBattery = BATTERY_GREEN;
+          tLastStateChange_ms = tNow_ms;
+        }
+        else if (getPercentage_pct() < Batt_pct_limits[0] &&  getPercentage_pct() >= Batt_pct_limits[1] && statusBattery != BATTERY_ORANGE)
+        {
+          statusBattery = BATTERY_ORANGE;
+          tLastStateChange_ms = tNow_ms;
+        }
+        else if (getPercentage_pct() < Batt_pct_limits[1] &&  getPercentage_pct() >= Batt_pct_limits[2] && statusBattery != BATTERY_RED)
+        {
+          statusBattery = BATTERY_RED;
+          tLastStateChange_ms = tNow_ms;
+        }
+        else if (getPercentage_pct() < Batt_pct_limits[0] && statusBattery != BATTERY_BLACK)
+        {
+          statusBattery = BATTERY_BLACK;
+          tLastStateChange_ms = tNow_ms;
+        }
       }
       return statusBattery;
     }
