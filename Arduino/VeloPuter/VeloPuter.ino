@@ -24,7 +24,7 @@
 
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // The proper contructor for the display currently used.
 
-Led leftLed, rightLed, rearLed, headLed, auxLed, aux2Led;
+Led leftLed, rightLed, rearLed, headLed, brakeLed, aux2Led;
 Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch, alarmSwitch, configSwitch;
 Battery myBattery;
 //
@@ -84,7 +84,7 @@ void loop ()
   } while ( u8g.nextPage() );
 
   // Update the stuff which is also fine to do at a slow pace.
-  updatePowerManagement(); // Read out and calculate the acutual battery status
+  // updatePowerManagement(); // Read out and calculate the acutual battery status
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
   updateGear();    // Figure out which gear we are using at the moment.

@@ -97,7 +97,7 @@ void updateIndicators()
     {
       numTimesToBlinkLeft--;
 
-      if (leftLed.getLedIntensity() == leftLed.offIntensity) leftLed.setLedMax();
+      if (leftLed.getLedIntensity() == 1) leftLed.setLedMax();
       else leftLed.setLedOff();
 
       rightLed.setLedOff();
@@ -109,7 +109,7 @@ void updateIndicators()
     {
       numTimesToBlinkRight--;
 
-      if (rightLed.getLedIntensity() == rightLed.offIntensity) rightLed.setLedMax();
+      if (rightLed.getICurrentIntensity() == 1) rightLed.setLedMax();
       else rightLed.setLedOff();
 
       leftLed.setLedOff();
@@ -117,7 +117,7 @@ void updateIndicators()
     // blink alarm
     else if (numTimesToBlinkRight > 0 && numTimesToBlinkLeft > 0)
     { // alarm, make sure they are in sync
-      if (rightLed.getLedIntensity() == rightLed.offIntensity)
+      if (rightLed.getICurrentIntensity() == 1)
       {
         rightLed.setLedMax();
         leftLed.setLedMax();

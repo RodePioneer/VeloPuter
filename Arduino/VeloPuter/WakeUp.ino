@@ -51,56 +51,61 @@
   // Setup all the outputs (5 LED in total and a speaker)
   pinMode(ledLeftPin, OUTPUT);
   leftLed.setPinID(ledLeftPin);
-  leftLed.offIntensity = leftLedOffIntensity;
-  leftLed.lowIntensity = leftLedLowIntensity;
-  leftLed.mediumIntensity = leftLedMediumIntensity;
-  leftLed.highIntensity = leftLedHighIntensity;
-  leftLed.maxIntensity = leftLedMaxIntensity;
+//  leftLed.offIntensity = leftLedOffIntensity;
+//  leftLed.lowIntensity = leftLedLowIntensity;
+//  leftLed.mediumIntensity = leftLedMediumIntensity;
+//  leftLed.highIntensity = leftLedHighIntensity;
+//  leftLed.maxIntensity = leftLedMaxIntensity;
+  memcpy (leftLed.setIntensities, leftLedIntensities, sizeof(leftLedIntensities));
   leftLed.setLedOff();
 
   pinMode(ledRightPin, OUTPUT);
   rightLed.setPinID(ledRightPin);
-  rightLed.offIntensity = rightLedOffIntensity;
-  rightLed.lowIntensity = rightLedLowIntensity;
-  rightLed.mediumIntensity = rightLedMediumIntensity;
-  rightLed.highIntensity = rightLedHighIntensity;
-  rightLed.maxIntensity = rightLedMaxIntensity;
+//  rightLed.offIntensity = rightLedOffIntensity;
+//  rightLed.lowIntensity = rightLedLowIntensity;
+//  rightLed.mediumIntensity = rightLedMediumIntensity;
+//  rightLed.highIntensity = rightLedHighIntensity;
+//  rightLed.maxIntensity = rightLedMaxIntensity;
+  memcpy (rightLed.setIntensities, rightLedIntensities,sizeof(rightLedIntensities));
   rightLed.setLedOff();
 
   pinMode(ledRearPin, OUTPUT);
   rearLed.setPinID(ledRearPin);
-  rearLed.offIntensity = rearLedOffIntensity;
-  rearLed.lowIntensity = rearLedLowIntensity;
-  rearLed.mediumIntensity = rearLedMediumIntensity;
-  rearLed.highIntensity = rearLedHighIntensity;
-  rearLed.maxIntensity = rearLedMaxIntensity;
+//  rearLed.offIntensity = rearLedOffIntensity;
+//  rearLed.lowIntensity = rearLedLowIntensity;
+//  rearLed.mediumIntensity = rearLedMediumIntensity;
+//  rearLed.highIntensity = rearLedHighIntensity;
+//  rearLed.maxIntensity = rearLedMaxIntensity;
+  memcpy (rearLed.setIntensities, rearLedIntensities,sizeof(rearLedIntensities));
   rearLed.setLedLow();
 
   pinMode(ledHeadPin, OUTPUT);
   headLed.setPinID(ledHeadPin);
-  headLed.offIntensity = headLedOffIntensity;
-  headLed.lowIntensity = headLedLowIntensity;
-  headLed.mediumIntensity = headLedMediumIntensity;
-  headLed.highIntensity = headLedHighIntensity;
-  headLed.maxIntensity = headLedMaxIntensity ;
+//  headLed.offIntensity = headLedOffIntensity;
+//  headLed.lowIntensity = headLedLowIntensity;
+//  headLed.mediumIntensity = headLedMediumIntensity;
+//  headLed.highIntensity = headLedHighIntensity;
+//  headLed.maxIntensity = headLedMaxIntensity ;
+  memcpy (headLed.setIntensities, headLedIntensities,sizeof(headLedIntensities));
   headLed.setLedLow();
 
-  pinMode(ledAuxPin, OUTPUT);
-  auxLed.setPinID(ledAuxPin);
-  auxLed.offIntensity = auxLedOffIntensity;
-  auxLed.lowIntensity = auxLedLowIntensity;
-  auxLed.mediumIntensity = auxLedMediumIntensity;
-  auxLed.highIntensity = auxLedHighIntensity;
-  auxLed.maxIntensity = auxLedMaxIntensity;
-  auxLed.setLedOff();
+  pinMode(ledBrakePin, OUTPUT);
+  brakeLed.setPinID(ledBrakePin);
+//  brakeLed.offIntensity = brakeLedOffIntensity;
+//  brakeLed.lowIntensity = brakeLedLowIntensity;
+//  brakeLed.mediumIntensity = brakeLedMediumIntensity;
+//  brakeLed.highIntensity = brakeLedHighIntensity;
+//  brakeLed.maxIntensity = brakeLedMaxIntensity;
+  memcpy (brakeLed.setIntensities, brakeLedIntensities,sizeof(brakeLedIntensities));
+  brakeLed.setLedOff();
 
   pinMode(ledAux2Pin, OUTPUT);
   aux2Led.setPinID(ledAux2Pin);
-  aux2Led.offIntensity = aux2LedOffIntensity;
-  aux2Led.lowIntensity = aux2LedLowIntensity;
-  aux2Led.mediumIntensity = aux2LedMediumIntensity;
-  aux2Led.highIntensity = aux2LedHighIntensity;
-  aux2Led.maxIntensity = aux2LedMaxIntensity;
+//  aux2Led.offIntensity = aux2LedOffIntensity;
+//  aux2Led.lowIntensity = aux2LedLowIntensity;
+//  aux2Led.mediumIntensity = aux2LedMediumIntensity;
+//  aux2Led.highIntensity = aux2LedHighIntensity;
+//  aux2Led.maxIntensity = aux2LedMaxIntensity;
   aux2Led.setLedOff();
 
 

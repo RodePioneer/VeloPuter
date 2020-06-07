@@ -37,7 +37,7 @@ void updateRear()
     {
       ledPreviousIntensity = rearLed.getLedIntensity();
       rearLed.setLedMax();
-      auxLed.setLedMax();
+      brakeLed.setLedMax();
     }
   }
   //
@@ -46,20 +46,20 @@ void updateRear()
   else if (brakeSwitch.getState() == LOW 
            && !brakeSwitch.hasStateChanged() 
            && tNow_ms - brakeSwitch.getTimeLastChange_ms() > 1000*tDurationBrakeLight_s 
-           && rearLed.getLedIntensity() == rearLed.maxIntensity)
+           && rearLed.getICurrentIntensity() == rearLed.IMax())
   {
       rearLed.setLedIntensity(ledPreviousIntensity);
-      auxLed.setLedOff();
+      brakeLed.setLedOff();
   }
   //
   // brakeswitch is off -> return to previous state. Only when the brakeled is max.
   //
   else if (brakeSwitch.getState() == HIGH 
            && brakeSwitch.hasStateChanged() 
-           && rearLed.getLedIntensity() == rearLed.maxIntensity)
+           && rearLed.getLedIntensity() == rearLed.IMax())
   {
     rearLed.setLedIntensity(ledPreviousIntensity);
-    auxLed.setLedOff();
+    brakeLed.setLedOff();
   }
 
   //
@@ -72,7 +72,7 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.upLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-    auxLed.setLedOff();
+    brakeLed.setLedOff();
   }
 
   //
@@ -85,7 +85,7 @@ void updateRear()
     rearLed.setLedIntensity(ledPreviousIntensity);
     rearLed.downLed();
     ledPreviousIntensity = rearLed.getLedIntensity();
-    auxLed.setLedOff();
+    brakeLed.setLedOff();
   }
 
 
@@ -96,7 +96,7 @@ void updateRear()
       && brakeSwitch.getState() == LOW)
     {
       rearLed.setLedIntensity(ledPreviousIntensity);
-      auxLed.setLedOff();
+      brakeLed.setLedOff();
     }
 
   //
@@ -108,18 +108,18 @@ void updateRear()
       && brakeSwitch.getState() == HIGH)
   {
       // When high, set to off
-      if (auxLed.getLedIntensity() == auxLedMaxIntensity 
+      if (brakeLed.getLedIntensity() == brakeLedMaxIntensity 
           // Go high for 1/4th of the blink frequency duration
-          && (tNow_ms - auxLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms)
+          && (tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms)
           {
-              auxLed.setLedOff();
+              brakeLed.setLedOff();
           }
       // when off set to high
-      else if (auxLed.getLedIntensity() == auxLedOffIntensity 
+      else if (brakeLed.getLedIntensity() == brakeLedOffIntensity 
           // Go low for 10 times the blink duration
-          && (tNow_ms - auxLed.getTimeLastChange_ms()) >= tFogFlashLow_ms)
+          && (tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms)
           {
-              auxLed.setLedMax();
+              brakeLed.setLedMax();
           }
 
   }

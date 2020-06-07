@@ -51,7 +51,7 @@ const byte OLED_SCL =           3;      // used for the oled display through u8g
 const byte switchConfigPin =    4;
 const byte ledHeadPin =         5;
 //const byte ledAuxPin =          6;   // brake light in the hood
-const byte ledAuxPin =          12;   // brake light in the hood
+const byte ledBrakePin =          12;   // brake light in the hood
 const byte switchBrakePin =     7;
 const byte switchAlarmPin =     8;
 const byte ledRightPin =        9;
@@ -77,6 +77,7 @@ const byte tSleepNoCadSpd_min = 30;       // Timeout until sleep when cadence an
 const int tDelayBatteryCheck_s = 15;      // How long until the battery management starts. This is the time window after power on in which the battery management van be disabled even when the battery voltage is complety off.
 const int tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action. 
 
+//const int  tDelayBatteryStatusChange_s = 15;
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
 const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // 1.5 Hz Note that it actually is have a period.
@@ -99,12 +100,21 @@ const byte setTeethOnCainring = VP_CHAINRING;
 /* This makes the setting accessible through the python configuration script */
 #define VP_DIMMED_INTENSITY 96
 #endif
+// NOTE: -1 indicated end of setting
+// Note these are the normal intensities. 
+const int leftLedIntensities[6]  = {0, 0, 63, 127, 255, -1}; // Indicators left
+const int rightLedIntensities[6] = {0, 0, 63, 127, 255, -1}; // Indicators right
+const int brakeLedIntensities[6] = {0, 0, 63, 127, 255, -1}; // Brake light in the hood
+const int headLedIntensities[6]  = {11, 0, 32, 96, 255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
+const int rearLedIntensities[5]  = {0, 8, 32, 64, -1}; // Read light
+const int aux2LedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
 
-const int leftLedOffIntensity = 0; // Note that currently pwm is disabled for the blinker pins. See of this has anything to do with the failing display/.
-const int leftLedLowIntensity = 255;
-const int leftLedMediumIntensity = 255;
-const int leftLedHighIntensity = 64;
-const int leftLedMaxIntensity = 255;
+
+//const int leftLedOffIntensity = 0; // Note that currently pwm is disabled for the blinker pins. See of this has anything to do with the failing display/.
+//const int leftLedLowIntensity = 255;
+//const int leftLedMediumIntensity = 255;
+//const int leftLedHighIntensity = 64;
+//const int leftLedMaxIntensity = 255;
 
 const int rightLedOffIntensity = 0;
 const int rightLedLowIntensity = 255;
@@ -132,11 +142,11 @@ const int aux2LedMediumIntensity = 48; // be carefull making this number higher
 const int aux2LedHighIntensity = 128;
 const int aux2LedMaxIntensity = 128;
 
-const int auxLedOffIntensity = 0; // aux2 is the brakelight
-const int auxLedLowIntensity = 0; // remember that the brakelight comes back into low.
-const int auxLedMediumIntensity = 255;
-const int auxLedHighIntensity = 255;
-const int auxLedMaxIntensity = 255;
+const int brakeLedOffIntensity = 0; // aux2 is the brakelight
+const int brakeLedLowIntensity = 0; // remember that the brakelight comes back into low.
+const int brakeLedMediumIntensity = 255;
+const int brakeLedHighIntensity = 255;
+const int brakeLedMaxIntensity = 255;
 
 #elif defined(ICB_DF)
 const int headLedOffIntensity = 0;
@@ -145,10 +155,10 @@ const int headLedMediumIntensity = VP_DIMMED_INTENSITY;
 const int headLedHighIntensity = 255;
 const int headLedMaxIntensity = 255;
 
-const int auxLedOffIntensity = 0; // aux is not connected in the ICB_DF
-const int auxLedLowIntensity = 0;
-const int auxLedMediumIntensity = 0;
-const int auxLedHighIntensity = 0;
-const int auxLedMaxIntensity = 0;
+const int brakeLedOffIntensity = 0; // aux is not connected in the ICB_DF
+const int brakeLedLowIntensity = 0;
+const int brakeMediumIntensity = 0;
+const int brakeLedHighIntensity = 0;
+const int brakeLedMaxIntensity = 0;
 
 #endif

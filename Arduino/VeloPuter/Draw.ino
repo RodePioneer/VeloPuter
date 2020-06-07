@@ -212,8 +212,14 @@ void drawBatteryText()
   u8g.setFontPosBottom();
 
   // the if statement makes that the end of the number is at a fixed position.
-  u8g.setPrintPos (0, row);
-  u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
+  u8g.setPrintPos (col, row);
+  //u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
+
+  // TEMP
+  u8g.print (leftLed.getICurrentIntensity());
+  u8g.setPrintPos (col + 20, row);
+  u8g.print (leftLed.getICurrentIntensity());
+
 }
 
 void drawBatteryIcon()
@@ -310,19 +316,17 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the headlight.
   */
-
-  if (headLed.getLedIntensity() == headLed.offIntensity)         u8g.drawBitmapP (c1, r, 3, 14, icoNone);
-  else if (headLed.getLedIntensity() == headLed.lowIntensity)    u8g.drawBitmapP (c1, r, 3, 14, icoLowBeam);
-  else if (headLed.getLedIntensity() == headLed.mediumIntensity) u8g.drawBitmapP (c1, r, 3, 14, icoDefaultBeam);
-  else if (headLed.getLedIntensity() == headLed.highIntensity)   u8g.drawBitmapP (c1, r, 3, 14, icoHighBeam);
-  else if (headLed.getLedIntensity() == headLed.maxIntensity)    u8g.drawBitmapP (c1, r, 3, 14, icoHighBeam);
+  if (headLed.getICurrentIntensity() == 1)         u8g.drawBitmapP (c1, r, 3, 14, icoNone);
+  else if (headLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c1, r, 3, 14, icoLowBeam);
+  else if (headLed.getICurrentIntensity() == 3)    u8g.drawBitmapP (c1, r, 3, 14, icoDefaultBeam);
+  else if (headLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c1, r, 3, 14, icoHighBeam);
 
   /*
     // The icon which indicated the status of the rearlight.
   */
   if (rearLed.getLedIntensity() == 0)                            u8g.drawBitmapP (c2, r, 3, 14, icoNone);
-  else if (rearLed.getLedIntensity() == rearLed.offIntensity)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
-  else if (rearLed.getLedIntensity() == rearLed.lowIntensity)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
-  else if (rearLed.getLedIntensity() == rearLed.mediumIntensity) u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);
-  else if (rearLed.getLedIntensity() == rearLed.maxIntensity)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
+  else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
+  else if (rearLed.getICurrentIntensity() == 3)    u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);
+  else if (rearLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
 }

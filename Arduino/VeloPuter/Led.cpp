@@ -9,17 +9,35 @@ class Led
 {
     //private:
   private:
-    volatile byte ledIntensity = lowIntensity;
+    volatile byte ledIntensity = 0;
     volatile byte flashOn = false;
     volatile long tLastStateChange_ms = 0;
     byte pin;
+    byte iIntensityCurrent = 1;
+    byte iIntensityMax = 0;
+
 
   public:
-    byte offIntensity = 0; // "group" intensity
-    byte lowIntensity = 0; // "group" intensity
-    byte mediumIntensity = 0; // "normal day ride"
-    byte highIntensity = 0; // "normal night ride"
-    byte maxIntensity = 0; // "max"
+//    byte offIntensity = 0; // "group" intensity
+//    byte lowIntensity = 0; // "group" intensity
+//    byte mediumIntensity = 0; // "normal day ride"
+//    byte highIntensity = 0; // "normal night ride"
+//    byte maxIntensity = 0; // "max"
+    int setIntensities[8] = { -1, -1, -1, -1, -1, -1, -1, -1} ; // -1 indicates the end of the array /  setting
+
+    byte IMax (void)
+    // Run only once to find the max. 
+    {
+      
+      if (iIntensityMax == 0)
+      {
+        for (byte i = 0; i <= 7; i++)
+        {
+          if (setIntensities[i] == -1) iIntensityMax = i - 1;
+        }
+      }
+      return iIntensityMax;
+    }
 
     void setLedIntensity (byte newIntensity) // directly set the new LED value, either digital or analog.
     {
@@ -33,12 +51,12 @@ class Led
     {
       return ledIntensity;
     }
-    
+
     byte getFlashOnStatus()
     {
       return flashOn;
     }
-    
+
     void toggleFlashLed() // set led intensity to max intensity, without changing internal led intensity (for easy reset)
     {
       if (flashOn)
@@ -49,15 +67,26 @@ class Led
       }
       else
       {
-        analogWrite(pin, maxIntensity);
+        setLedMax();
+        //analogWrite(pin, maxIntensity);
         flashOn = true;
         tLastStateChange_ms = millis();
-      }  
+      }
     }
-        
+
     long getTimeLastChange_ms (void)
     {
       return tLastStateChange_ms;
+    }
+
+    void setICurrentIntensity (byte iIntensityNew)
+    {
+      iIntensityCurrent = iIntensityNew;
+    }
+
+    byte getICurrentIntensity ()
+    {
+      return iIntensityCurrent;
     }
 
     void setPinID (byte Pin)
@@ -72,47 +101,47 @@ class Led
 
     void setLedOff (void)
     {
-      ledIntensity = offIntensity;
-      setLedIntensity(ledIntensity);
+      setLedIntensity(setIntensities[1]);
     }
 
     void setLedLow (void) // switch to high / max
     {
-      ledIntensity = lowIntensity;
-      setLedIntensity(ledIntensity);
-    }
-
-    void setLedMedium (void) // switch to low / min
-    {
-      ledIntensity = mediumIntensity;
-      setLedIntensity(ledIntensity);
-    }
-
-    void setLedHigh (void) // switch to high / max
-    {
-      ledIntensity = highIntensity;
-      setLedIntensity(ledIntensity);
+      setLedIntensity(setIntensities[2]);
     }
 
     void setLedMax (void) // switch to high / max
     {
-      ledIntensity = maxIntensity;
-      setLedIntensity(ledIntensity);
+        setLedIntensity(setIntensities[IMax()]);
     }
 
-    void upLed (void) // increase the intensity
+    // Increase intensity until at the max setting (array index 1)
+    void upLed (void)
     {
-      if      (ledIntensity == offIntensity) setLedLow();
-      else if (ledIntensity == lowIntensity) setLedMedium();
-      else if (ledIntensity == mediumIntensity) setLedHigh();
-      else if (ledIntensity == highIntensity) setLedMax();
+      if (iIntensityCurrent < IMax())
+      {
+        iIntensityCurrent++;
+        setLedIntensity(setIntensities[iIntensityCurrent]);
+      }
     }
 
-    void downLed (void) // lower the intensity
+    // Reduce intensity until at the lowest setting (array index 1)
+    void downLed (void)
     {
-      if      (ledIntensity == lowIntensity) setLedOff();
-      else if (ledIntensity == mediumIntensity) setLedLow();
-      else if (ledIntensity == highIntensity) setLedMedium();
-      else if (ledIntensity == maxIntensity) setLedHigh();
+      if (iIntensityCurrent > 1)
+      {
+        iIntensityCurrent--;
+        setLedIntensity(setIntensities[iIntensityCurrent]);
+      }
     }
+
+    void upLed4X (void) // Brake light on
+    {
+
+    }
+
+    void downLed4X (void) // Brake light off
+    {
+
+    }
+
 };
