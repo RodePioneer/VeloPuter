@@ -213,7 +213,7 @@ void drawBatteryText()
 
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (col, row);
-  //u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
+  u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
 
   // TEMP
   u8g.print (leftLed.getICurrentIntensity());

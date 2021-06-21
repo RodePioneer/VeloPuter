@@ -21,11 +21,6 @@ void updateIndicators()
   long tNow_ms = millis();
   byte BlinkOn = 0;
 
-  //leftSwitch.ReadOut();
-  //rightSwitch.ReadOut();
-  //alarmSwitch.ReadOut();
-
-  //#if defined(QUATRO) || defined(STRADA)
   if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW )
   {
     stateAlarmBlinkersOn = !stateAlarmBlinkersOn;
@@ -39,7 +34,6 @@ void updateIndicators()
       leftLed.setLedOff();
     }
   }
-  //#endif
 
   if (stateAlarmBlinkersOn)
   { // We are blinking alarm lights.
@@ -97,7 +91,7 @@ void updateIndicators()
     {
       numTimesToBlinkLeft--;
 
-      if (leftLed.getLedIntensity() == 1) leftLed.setLedMax();
+      if (leftLed.getICurrentIntensity() == 1) leftLed.setLedMax();
       else leftLed.setLedOff();
 
       rightLed.setLedOff();
