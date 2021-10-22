@@ -4,6 +4,7 @@
     Update the battery
 
  *********************************************************************************************************/
+// ** TODO: only update when there is a chagne..... not every bloody run.
 void updatePowerManagement()
 { /*
     Determnine battery regime
@@ -13,30 +14,38 @@ void updatePowerManagement()
      Red: okay now we are almost fucked.
      Black: down. We are now dead.
 
-     */
+  */
+
   if (doBatteryCheck) {
-    if (myBattery.getColorCode() == BATTERY_GREEN)       setBatteryToGreen ();
-    else if (myBattery.getColorCode() == BATTERY_RED)    setBatteryToRed ();
-    else if (myBattery.getColorCode() == BATTERY_ORANGE) setBatteryToOrange ();
-    else if (myBattery.getColorCode() == BATTERY_BLACK)  setBatteryToBlack ();
+
+    int setCurrentBatteryColorCode = myBattery.getColorCode();
+    byte setBatteryStatusHasChanged = myBattery.getBatteryStatusHasChanged();
+
+    if (setBatteryStatusHasChanged)
+    {
+      if (setCurrentBatteryColorCode == BATTERY_GREEN)       setBatteryToGreen ();
+      else if (setCurrentBatteryColorCode == BATTERY_RED)    setBatteryToRed ();
+      else if (setCurrentBatteryColorCode == BATTERY_ORANGE) setBatteryToOrange ();
+      else if (setCurrentBatteryColorCode == BATTERY_BLACK)  setBatteryToBlack ();
+    }
   }
+
 }
 
 void setBatteryToGreen ()
-{/*
-  GREEN
+{ /*
+    GREEN
 
-  No limitations
-
+    No limitations
   */
-  
+
   headLed.SetBatteryLimit(0);
   rearLed.SetBatteryLimit(0);
   brakeLed.SetBatteryLimit(0);
   rightLed.SetBatteryLimit(0);
   leftLed.SetBatteryLimit(0);
   auxLed.SetBatteryLimit(0);
-  }
+}
 
 void setBatteryToOrange ()
 {
@@ -77,7 +86,7 @@ void setBatteryToBlack ()
   /*
     The battery is almost dead. We now power it down.
     No more fun. Only option: switch off and on again.
-    Optionally disable the battery check to prevent unwanted shutdowns. 
+    Optionally disable the battery check to prevent unwanted shutdowns.
   */
   detachInterrupt(digitalPinToInterrupt(switchSpdPin));
   detachInterrupt(digitalPinToInterrupt(switchCadPin));

@@ -12,10 +12,13 @@ class Battery
     byte Pin = 255; // 255 is a default
     long tNow_ms             = 0;
     float PinMean = analogRead(Pin);
-    const int  tDelayBatteryStatusChange_s = 15;
-
-
+    const int  tDelayBatteryStatusChange_s = 5;
+    byte statusBattery = BATTERY_GREEN;
+    byte setBatteryStatusHasChanged;
+    
   public:
+
+    long tLastStateChange_ms = 0;
 
 
     byte getNumberOfCells ()
@@ -87,13 +90,13 @@ class Battery
       for (int i = NUM_REFDATA - 1; i > 0; i--)
       {
         if (getVoltageCell_mv() >= V_mV[i])
-          // Vcell        = measured cell voltage = getVoltageCell_mv() 
+          // Vcell        = measured cell voltage = getVoltageCell_mv()
           // V_mV[i]      = lower voltage for this intervall
           // V_mV[i - 1]  = upper voltage for this interval
           // C_pct[i]     = lower cappacity for this interval
           // C_pct[i - 1] = upper cappacity for this interval
           //
-          //                                        Vcell - V_mV[i] 
+          //                                        Vcell - V_mV[i]
           // pct =  ( C_pct[i-1] - C_pct[i] ) * -------------------- + C_pct[i]
           //                                     V_mV[i-1]- V_mV[i]
           //
@@ -108,16 +111,12 @@ class Battery
     byte getColorCode()
     {
       //
-      // TODO: add hysterisis before we change the status of the color code to a fuller level (ie. orange to green)
-      // TODO: Battery discharge measurement. 25% seems in practice badly defined.
-
-
+      
       // Code orange is below 25%
       // Code Red is below 15%
       // Code Black is below 5%
-      byte statusBattery = BATTERY_GREEN;
-      const byte Batt_pct_limits[3] = {25, 15, 5};
-      long tLastStateChange_ms = 0;
+      //const byte Batt_pct_limits[3] = {25, 15, 5};
+      const byte Batt_pct_limits[3] = {75, 65, 55}; // For testing purposes
       long tNow_ms = 0;
 
       // Add a 15 sec delay on battery state changes
@@ -128,28 +127,44 @@ class Battery
         // Only do something and update the timer when we enter a different state
         //
 
+        /*
+           The colors go down, only on a switch to a full battery (green) the colorcode can go up.
+
+           GREEN -> ORANGE -> RED -> BLACK
+             ^        |        |       |
+             |        |        |       |
+             +--------+--------+-------+
+        */
+
+
         // We can only enter green when the battery status is high enough
-        if (getPercentage_pct() >= Batt_pct_limits[0] && statusBattery != BATTERY_GREEN)
+        if ((getPercentage_pct() >= Batt_pct_limits[0]) && (statusBattery != BATTERY_GREEN))
         {
           statusBattery = BATTERY_GREEN;
           tLastStateChange_ms = tNow_ms;
+          setBatteryStatusHasChanged = 1;
         }
-
-        // Drop from green to orange when batt percentage is in a certain range and the battery status was green
-        else if (getPercentage_pct() < Batt_pct_limits[0] &&  getPercentage_pct() >= Batt_pct_limits[1] && statusBattery != BATTERY_ORANGE)
+        else if ((getPercentage_pct() < Batt_pct_limits[0]) && (statusBattery == BATTERY_GREEN))
         {
           statusBattery = BATTERY_ORANGE;
           tLastStateChange_ms = tNow_ms;
+          setBatteryStatusHasChanged = 1;
         }
-        else if (getPercentage_pct() < Batt_pct_limits[1] &&  getPercentage_pct() >= Batt_pct_limits[2] && statusBattery != BATTERY_RED)
+        else if ((getPercentage_pct() < Batt_pct_limits[1]) && (statusBattery == BATTERY_ORANGE))
         {
           statusBattery = BATTERY_RED;
           tLastStateChange_ms = tNow_ms;
+          setBatteryStatusHasChanged = 1;
         }
-        else if (getPercentage_pct() < Batt_pct_limits[0] && statusBattery != BATTERY_BLACK)
+        else if ((getPercentage_pct() < Batt_pct_limits[2]) && (statusBattery == BATTERY_RED))
         {
           statusBattery = BATTERY_BLACK;
           tLastStateChange_ms = tNow_ms;
+          setBatteryStatusHasChanged = 1;
+        }
+        else
+        {
+          setBatteryStatusHasChanged = 0;
         }
       }
       return statusBattery;
@@ -173,11 +188,10 @@ class Battery
       SetBatteryType = setBatteryType;
     }
 
-    // return the battery type (unused for for)
-    byte getType ()
-    {
-      return SetBatteryType;
-    }
+        long getBatteryStatusHasChanged ()
+        {
+          return  setBatteryStatusHasChanged;
+        }
 
 
 };
