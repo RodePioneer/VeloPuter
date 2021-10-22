@@ -11,10 +11,10 @@
     The configuration interface
 
  *********************************************************************************************************
- * The configuration manages 
- * - Intensity of the oled display. (push = toggle
- * - Performing the battery check. THis DISABLES the battery management and watchdog.
- */
+   The configuration manages
+   - Intensity of the oled display. (push = toggle
+   - Performing the battery check. THis DISABLES the battery management and watchdog.
+*/
 void updateConfig()
 {
   //configSwitch.ReadOut();
@@ -79,7 +79,7 @@ void updateCadence()
 
     Calculate the gear
 
-We use the ratio between the speed and cadence to work out the gear on the cassete, given a vertain chainring. 
+  We use the ratio between the speed and cadence to work out the gear on the cassete, given a vertain chainring.
  *********************************************************************************************************/
 void updateGear()
 {

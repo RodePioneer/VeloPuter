@@ -109,12 +109,15 @@ class Led
       setLedIntensity(setIntensities[2]);
     }
 
+    // Add the battery state check here. Limit the up based on the battery level.
+    // This is mainly relevant for the brakes and the indicators.
     void setLedMax (void) // switch to high / max
     {
         setLedIntensity(setIntensities[IMax()]);
     }
 
     // Increase intensity until at the max setting (array index 1)
+    // Add the battery state check here. Limit the up based on the battery level.
     void upLed (void)
     {
       if (iIntensityCurrent < IMax())

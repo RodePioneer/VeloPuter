@@ -69,16 +69,16 @@ class Battery
 
         LiPo
       */
-      const int V[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
-      const int C[NUM_REFDATA] = {100,    90,   75,   50,    7,    0};      // % capacity
+      const int V_mV[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+      const int C_pct[NUM_REFDATA] = {100,    90,   75,   50,    7,    0};      // % capacity
 #elif defined(BATTERY_LIFEPO4)
 #define NUM_REFDATA 7
       /*
         LiFePO4
         Constants from manual, better data is gathered.
       */
-      const int V[NUM_REFDATA] = {13952, 12847, 12733, 12455, 12169, 11755, 10424}; // mV
-      const int C[NUM_REFDATA] = {  100,    75,    50,    20,    10,     5,     0}; // %capacity
+      const int V_mV[NUM_REFDATA] = {13952, 12847, 12733, 12455, 12169, 11755, 10424}; // mV
+      const int C_pct[NUM_REFDATA] = {  100,    75,    50,    20,    10,     5,     0}; // %capacity
       numOfCells = 1;
 #endif
 
@@ -86,8 +86,18 @@ class Battery
       int batteryPercentage_pct = 0;
       for (int i = NUM_REFDATA - 1; i > 0; i--)
       {
-        if (getVoltageCell_mv() >= V[i])
-          batteryPercentage_pct = int((C[i - 1] - C[i]) * (getVoltageCell_mv() - V[i]) / (V[i - 1] - V[i]) + C[i]);
+        if (getVoltageCell_mv() >= V_mV[i])
+          // Vcell        = measured cell voltage = getVoltageCell_mv() 
+          // V_mV[i]      = lower voltage for this intervall
+          // V_mV[i - 1]  = upper voltage for this interval
+          // C_pct[i]     = lower cappacity for this interval
+          // C_pct[i - 1] = upper cappacity for this interval
+          //
+          //                                        Vcell - V_mV[i] 
+          // pct =  ( C_pct[i-1] - C_pct[i] ) * -------------------- + C_pct[i]
+          //                                     V_mV[i-1]- V_mV[i]
+          //
+          batteryPercentage_pct = int( (C_pct[i - 1] - C_pct[i]) * (getVoltageCell_mv() - V_mV[i]) / (V_mV[i - 1] - V_mV[i]) + C_pct[i] );
       }
 
       batteryPercentage_pct = constrain(batteryPercentage_pct, 0, 99);
@@ -117,11 +127,15 @@ class Battery
         //
         // Only do something and update the timer when we enter a different state
         //
+
+        // We can only enter green when the battery status is high enough
         if (getPercentage_pct() >= Batt_pct_limits[0] && statusBattery != BATTERY_GREEN)
         {
           statusBattery = BATTERY_GREEN;
           tLastStateChange_ms = tNow_ms;
         }
+
+        // Drop from green to orange when batt percentage is in a certain range and the battery status was green
         else if (getPercentage_pct() < Batt_pct_limits[0] &&  getPercentage_pct() >= Batt_pct_limits[1] && statusBattery != BATTERY_ORANGE)
         {
           statusBattery = BATTERY_ORANGE;

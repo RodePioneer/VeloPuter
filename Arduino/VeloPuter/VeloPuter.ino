@@ -30,7 +30,7 @@ Battery myBattery;
 //
 // Initialise some of the variables
 //
-// int batteryPercentage_pct = 99; 
+// int batteryPercentage_pct = 99;
 //int cellVoltage_mv = 4200;
 byte speed_kmh = 0;
 byte cadence_rpm = 0;
@@ -80,11 +80,14 @@ void loop ()
     updateRear();    // update rear lights. This includes the brakelight when applicable.
     updateIndicators();// Update the blinkers
     updateConfig();  // Updte the config. For now: only the
+
+    // Update the screen. Note that this is done is set of rows. All lines int he do loop are processd multiple times for each screen update.
     drawScreen();    // Write all the information to the display.
   } while ( u8g.nextPage() );
 
   // Update the stuff which is also fine to do at a slow pace.
-  // updatePowerManagement(); // Read out and calculate the acutual battery status
+  // THe lines are execured only once every time the screen has made a full cycle. 
+  updatePowerManagement(); // Read out and calculate the acutual battery status
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
   updateGear();    // Figure out which gear we are using at the moment.

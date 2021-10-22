@@ -7,11 +7,11 @@
 **
 ** On up-switch: more light
 ** On down0switch: less light
-** Conditions: 
+** Conditions:
 ** Only act when the switch has changed. Not on static
 ** the brake switch is off
 ** the config switch is off
- */
+*/
 void updateHead()
 {
 

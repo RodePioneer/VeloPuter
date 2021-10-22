@@ -143,7 +143,7 @@ void updateIndicators()
     }
     else u8g.sleepOff();
 
-    // 
+    //
     // zoomer
     //
     if (stateAlarmBlinkersOn == false)

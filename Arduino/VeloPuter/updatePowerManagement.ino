@@ -13,22 +13,12 @@ void updatePowerManagement()
      Red: okay now we are almost fucked.
      Black: down. We are now dead.
 
-    //  */
+     */
   if (doBatteryCheck) {
-    if (myBattery.getColorCode() == BATTERY_GREEN )
-      setBatteryToGreen ();
-    else if (myBattery.getColorCode() == BATTERY_RED )
-    {
-      setBatteryToRed ();
-    }
-    else if (myBattery.getColorCode() == BATTERY_ORANGE )
-    {
-      setBatteryToOrange ();
-    }
-    else if (myBattery.getColorCode() == BATTERY_BLACK)
-    {
-      setBatteryToBlack ();
-    }
+    if (myBattery.getColorCode() == BATTERY_GREEN)       setBatteryToGreen ();
+    else if (myBattery.getColorCode() == BATTERY_RED)    setBatteryToRed ();
+    else if (myBattery.getColorCode() == BATTERY_ORANGE) setBatteryToOrange ();
+    else if (myBattery.getColorCode() == BATTERY_BLACK)  setBatteryToBlack ();
   }
 }
 
@@ -117,6 +107,7 @@ void setBatteryToBlack ()
   /*
     The battery is almost dead. We now power it down.
     No more fun. Only option: switch off and on again.
+    Optionally disable the battery check to prevent unwanted shutdowns. 
   */
   detachInterrupt(digitalPinToInterrupt(switchSpdPin));
   detachInterrupt(digitalPinToInterrupt(switchCadPin));

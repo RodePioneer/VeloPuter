@@ -75,7 +75,7 @@ const byte powerOnOffPin =      A5;
 const byte tSleepCadSpd_min = 1;                // Timeout until sleep when cadence and speed sensor are active. In minutes.
 const byte tSleepNoCadSpd_min = 30;       // Timeout until sleep when cadence and speed sensor are NOT active. In minutes.
 const int tDelayBatteryCheck_s = 15;      // How long until the battery management starts. This is the time window after power on in which the battery management van be disabled even when the battery voltage is complety off.
-const int tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action. 
+const int tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action.
 
 //const int  tDelayBatteryStatusChange_s = 15;
 const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
@@ -86,7 +86,7 @@ const byte numTimesToBlink = VP_BLINK_COUNT;             // 7 times high, 6 time
 const int  wheelCircumference_mm = VP_FRONTWHEEL;
 const int  rearWheelCircumference_mm = VP_REARWHEEL;
 
-const float gearOnCassette_scaling = ((float)rearWheelCircumference_mm/(float)wheelCircumference_mm);
+const float gearOnCassette_scaling = ((float)rearWheelCircumference_mm / (float)wheelCircumference_mm);
 
 const byte speakerVolume = 50;
 
@@ -101,27 +101,32 @@ const byte setTeethOnCainring = VP_CHAINRING;
 #define VP_DIMMED_INTENSITY 96
 #endif
 // NOTE: -1 indicated end of setting
-// Note these are the normal intensities. 
-const int leftLedIntensities[6]  = {0, 0, 63, 127, 255, -1}; // Indicators left
-const int rightLedIntensities[6] = {0, 0, 63, 127, 255, -1}; // Indicators right
-const int brakeLedIntensities[6] = {0, 0, 63, 127, 255, -1}; // Brake light in the hood
-const int headLedIntensities[6]  = {11, 0, 32, 96, 255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
-const int rearLedIntensities[5]  = {0, 8, 32, 64, -1}; // Read light
+// Note these are the normal intensities.
+
+// 1ste position is reserved for the black level and sleep (ie: turn it all the way off)
+// 2nd number is the lowest setting. 0 for more. A bit for the rear lights
+// last number is -1 to indicate the end of the array.  
+// An array cannot be longer than 8 because of the definition in Led.cpp 
+//
+
+#if defined(QUATRO)
+const int leftLedIntensities[6]  = {0, 0, 64, 128, 255, -1}; // Indicators left
+const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
+const int brakeLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Brake light in the hood
+const int headLedIntensities[6]  = {0, 0, 32, 96,  255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
+const int rearLedIntensities[6]  = {0, 8, 32, 64,  255, -1}; // Rear light
 const int aux2LedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
 
+#elif defined(ICB_DF)
+const int leftLedIntensities[6]  = {0, 0, 64, 128, 255, -1}; // Indicators left
+const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
+const int brakeLedIntensities[6] = {0, 0, -1}; // Brake light 
+const int headLedIntensities[6]  = {0, 0, 32, 96,  255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
+const int rearLedIntensities[6]  = {0, 8, 32, 64,  255, -1}; // Rear light
+const int aux2LedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
+#endif
 
-//const int leftLedOffIntensity = 0; // Note that currently pwm is disabled for the blinker pins. See of this has anything to do with the failing display/.
-//const int leftLedLowIntensity = 255;
-//const int leftLedMediumIntensity = 255;
-//const int leftLedHighIntensity = 64;
-//const int leftLedMaxIntensity = 255;
-
-const int rightLedOffIntensity = 0;
-const int rightLedLowIntensity = 255;
-const int rightLedMediumIntensity = 255;
-const int rightLedHighIntensity = 64;
-const int rightLedMaxIntensity = 255;
-
+// Needed for a while. Needs to be removed
 const int rearLedOffIntensity = 8;
 const int rearLedLowIntensity = 32;
 const int rearLedMediumIntensity = 64;
@@ -130,17 +135,17 @@ const int rearLedMaxIntensity = 255;
 
 
 #if defined(QUATRO)
-const int headLedOffIntensity = 255;
-const int headLedLowIntensity = 255-32;
-const int headLedMediumIntensity = 255-VP_DIMMED_INTENSITY;
-const int headLedHighIntensity = 255-255;
-const int headLedMaxIntensity = 255-  255;
-
-const int aux2LedOffIntensity = 0; // aux is the 2nd headlight
-const int aux2LedLowIntensity = 16; // remember that the brakelight comes back into low.Note: the lamp normally has 150 mA current. We up this to 175 (128 of 255 and over two lights)
-const int aux2LedMediumIntensity = 48; // be carefull making this number higher
-const int aux2LedHighIntensity = 128;
-const int aux2LedMaxIntensity = 128;
+//const int headLedOffIntensity = 255;
+//const int headLedLowIntensity = 255 - 32;
+//const int headLedMediumIntensity = 255 - VP_DIMMED_INTENSITY;
+//const int headLedHighIntensity = 255 - 255;
+//const int headLedMaxIntensity = 255 -  255;
+//
+//const int aux2LedOffIntensity = 0; // aux is the 2nd headlight
+//const int aux2LedLowIntensity = 16; // remember that the brakelight comes back into low.Note: the lamp normally has 150 mA current. We up this to 175 (128 of 255 and over two lights)
+//const int aux2LedMediumIntensity = 48; // be carefull making this number higher
+//const int aux2LedHighIntensity = 128;
+//const int aux2LedMaxIntensity = 128;
 
 const int brakeLedOffIntensity = 0; // aux2 is the brakelight
 const int brakeLedLowIntensity = 0; // remember that the brakelight comes back into low.
@@ -149,11 +154,11 @@ const int brakeLedHighIntensity = 255;
 const int brakeLedMaxIntensity = 255;
 
 #elif defined(ICB_DF)
-const int headLedOffIntensity = 0;
-const int headLedLowIntensity = 32;
-const int headLedMediumIntensity = VP_DIMMED_INTENSITY;
-const int headLedHighIntensity = 255;
-const int headLedMaxIntensity = 255;
+//const int headLedOffIntensity = 0;
+//const int headLedLowIntensity = 32;
+//const int headLedMediumIntensity = VP_DIMMED_INTENSITY;
+//const int headLedHighIntensity = 255;
+//const int headLedMaxIntensity = 255;
 
 const int brakeLedOffIntensity = 0; // aux is not connected in the ICB_DF
 const int brakeLedLowIntensity = 0;
