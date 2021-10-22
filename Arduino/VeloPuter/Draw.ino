@@ -32,7 +32,7 @@ void drawScreen ()
   */
   drawInit();
   drawBatteryText();
-  drawLightIcons();
+  //drawLightIcons();
   drawSpeed();
   drawCadence();
   drawGear();
@@ -215,10 +215,17 @@ void drawBatteryText()
   u8g.setPrintPos (col, row);
   u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
 
-  // TEMP
-  u8g.print (leftLed.getICurrentIntensity());
-  u8g.setPrintPos (col + 20, row);
-  u8g.print (leftLed.getICurrentIntensity());
+//  // TEMP
+//  u8g.print (headLed.IMax());
+//  u8g.print (headLed.getICurrentIntensity());
+//  u8g.print (brakeLed.getICurrentIntensity());
+//  u8g.print (rearLed.getICurrentIntensity());
+//  u8g.print (leftLed.getICurrentIntensity());
+//  u8g.print (rightLed.getICurrentIntensity());
+//  u8g.print (brakeLed.IMax());
+//  u8g.print (rearLed.IMax());
+//  u8g.print (leftLed.IMax());
+//  u8g.print (rightLed.IMax());
 
 }
 
@@ -324,7 +331,7 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the rearlight.
   */
-  if (rearLed.getLedIntensity() == 0)                            u8g.drawBitmapP (c2, r, 3, 14, icoNone);
+  if (rearLed.getICurrentIntensity() == 0)                            u8g.drawBitmapP (c2, r, 3, 14, icoNone);
   else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
   else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
   else if (rearLed.getICurrentIntensity() == 3)    u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);
