@@ -49,66 +49,43 @@
   myBattery.setPinID(voltagePin);
 
   // Setup all the outputs (5 LED in total and a speaker)
+
+  // Indicator: left
   pinMode(ledLeftPin, OUTPUT);
   leftLed.setPinID(ledLeftPin);
-//  leftLed.offIntensity = leftLedOffIntensity;
-//  leftLed.lowIntensity = leftLedLowIntensity;
-//  leftLed.mediumIntensity = leftLedMediumIntensity;
-//  leftLed.highIntensity = leftLedHighIntensity;
-//  leftLed.maxIntensity = leftLedMaxIntensity;
   memcpy (leftLed.setIntensities, leftLedIntensities, sizeof(leftLedIntensities));
   leftLed.setLedOff();
 
+  // Indicator: right
   pinMode(ledRightPin, OUTPUT);
   rightLed.setPinID(ledRightPin);
-//  rightLed.offIntensity = rightLedOffIntensity;
-//  rightLed.lowIntensity = rightLedLowIntensity;
-//  rightLed.mediumIntensity = rightLedMediumIntensity;
-//  rightLed.highIntensity = rightLedHighIntensity;
-//  rightLed.maxIntensity = rightLedMaxIntensity;
   memcpy (rightLed.setIntensities, rightLedIntensities,sizeof(rightLedIntensities));
   rightLed.setLedOff();
 
+  // Rear light
   pinMode(ledRearPin, OUTPUT);
   rearLed.setPinID(ledRearPin);
-//  rearLed.offIntensity = rearLedOffIntensity;
-//  rearLed.lowIntensity = rearLedLowIntensity;
-//  rearLed.mediumIntensity = rearLedMediumIntensity;
-//  rearLed.highIntensity = rearLedHighIntensity;
-//  rearLed.maxIntensity = rearLedMaxIntensity;
   memcpy (rearLed.setIntensities, rearLedIntensities,sizeof(rearLedIntensities));
   rearLed.setLedLow();
 
+  // Head light
   pinMode(ledHeadPin, OUTPUT);
   headLed.setPinID(ledHeadPin);
-//  headLed.offIntensity = headLedOffIntensity;
-//  headLed.lowIntensity = headLedLowIntensity;
-//  headLed.mediumIntensity = headLedMediumIntensity;
-//  headLed.highIntensity = headLedHighIntensity;
-//  headLed.maxIntensity = headLedMaxIntensity ;
   memcpy (headLed.setIntensities, headLedIntensities,sizeof(headLedIntensities));
   headLed.setLedLow();
 
+  // Brake light (optional)
   pinMode(ledBrakePin, OUTPUT);
   brakeLed.setPinID(ledBrakePin);
-//  brakeLed.offIntensity = brakeLedOffIntensity;
-//  brakeLed.lowIntensity = brakeLedLowIntensity;
-//  brakeLed.mediumIntensity = brakeLedMediumIntensity;
-//  brakeLed.highIntensity = brakeLedHighIntensity;
-//  brakeLed.maxIntensity = brakeLedMaxIntensity;
   memcpy (brakeLed.setIntensities, brakeLedIntensities,sizeof(brakeLedIntensities));
   brakeLed.setLedOff();
 
+  // Extra free potition. 
   pinMode(ledAux2Pin, OUTPUT);
-  aux2Led.setPinID(ledAux2Pin);
-//  aux2Led.offIntensity = aux2LedOffIntensity;
-//  aux2Led.lowIntensity = aux2LedLowIntensity;
-//  aux2Led.mediumIntensity = aux2LedMediumIntensity;
-//  aux2Led.highIntensity = aux2LedHighIntensity;
-//  aux2Led.maxIntensity = aux2LedMaxIntensity;
-  aux2Led.setLedOff();
+  auxLed.setPinID(ledAux2Pin);
+  auxLed.setLedOff();
 
-
+  // Speaker
   pinMode(speakerPin, OUTPUT);
 
   // Set the battery type

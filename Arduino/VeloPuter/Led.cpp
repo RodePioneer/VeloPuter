@@ -18,17 +18,21 @@ class Led
 
 
   public:
-//    byte offIntensity = 0; // "group" intensity
-//    byte lowIntensity = 0; // "group" intensity
-//    byte mediumIntensity = 0; // "normal day ride"
-//    byte highIntensity = 0; // "normal night ride"
-//    byte maxIntensity = 0; // "max"
+    //    byte offIntensity = 0; // "group" intensity
+    //    byte lowIntensity = 0; // "group" intensity
+    //    byte mediumIntensity = 0; // "normal day ride"
+    //    byte highIntensity = 0; // "normal night ride"
+    //    byte maxIntensity = 0; // "max"
     int setIntensities[8] = { -1, -1, -1, -1, -1, -1, -1, -1} ; // -1 indicates the end of the array /  setting
 
+    enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};
+    byte setBatteryStatus = BATTERY_GREEN;
+
+
     byte IMax (void)
-    // Run only once to find the max. 
+    // Run only once to find the max.
     {
-      
+
       if (iIntensityMax == 0)
       {
         for (byte i = 0; i <= 7; i++)
@@ -36,6 +40,19 @@ class Led
           if (setIntensities[i] == -1) iIntensityMax = i - 1;
         }
       }
+
+      //
+      // Adjust the max acording to the color code of the battery state
+      //
+      if (setBatteryStatus == BATTERY_ORANGE)
+        // We are at orange, lower the max intensity one level
+        iIntensityMax = iIntensityMax - 1 ;
+      else if (setBatteryStatus == BATTERY_RED)
+        // We are at red, lower the max intensity two levels
+        iIntensityMax = iIntensityMax - 2 ;
+
+
+      //
       return iIntensityMax;
     }
 
@@ -113,7 +130,7 @@ class Led
     // This is mainly relevant for the brakes and the indicators.
     void setLedMax (void) // switch to high / max
     {
-        setLedIntensity(setIntensities[IMax()]);
+      setLedIntensity(setIntensities[IMax()]);
     }
 
     // Increase intensity until at the max setting (array index 1)
@@ -135,16 +152,6 @@ class Led
         iIntensityCurrent--;
         setLedIntensity(setIntensities[iIntensityCurrent]);
       }
-    }
-
-    void upLed4X (void) // Brake light on
-    {
-
-    }
-
-    void downLed4X (void) // Brake light off
-    {
-
     }
 
 };

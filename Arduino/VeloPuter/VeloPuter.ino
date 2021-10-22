@@ -24,7 +24,7 @@
 
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);   // The proper contructor for the display currently used.
 
-Led leftLed, rightLed, rearLed, headLed, brakeLed, aux2Led;
+Led leftLed, rightLed, rearLed, headLed, brakeLed, auxLed;
 Switch leftSwitch, rightSwitch, upSwitch, downSwitch, brakeSwitch, speedSwitch, cadenceSwitch, alarmSwitch, configSwitch;
 Battery myBattery;
 //

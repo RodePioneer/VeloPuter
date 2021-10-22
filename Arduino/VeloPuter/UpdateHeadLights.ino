@@ -34,7 +34,7 @@ void updateHead()
   {
     headLed.upLed();
     // Uncomment the next line if there is a headlight attached to aux2
-    //aux2Led.upLed();
+    //auxLed.upLed();
   }
 
   // less light
@@ -42,6 +42,6 @@ void updateHead()
   {
     headLed.downLed();
     // Uncomment the next line if there is a headlight attached to aux2
-    //aux2Led.downLed();
+    //auxLed.downLed();
   }
 }

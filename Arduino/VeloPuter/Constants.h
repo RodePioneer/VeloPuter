@@ -115,7 +115,7 @@ const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
 const int brakeLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Brake light in the hood
 const int headLedIntensities[6]  = {0, 0, 32, 96,  255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
 const int rearLedIntensities[6]  = {0, 8, 32, 64,  255, -1}; // Rear light
-const int aux2LedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
+const int auxLedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
 
 #elif defined(ICB_DF)
 const int leftLedIntensities[6]  = {0, 0, 64, 128, 255, -1}; // Indicators left
@@ -123,7 +123,7 @@ const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
 const int brakeLedIntensities[6] = {0, 0, -1}; // Brake light 
 const int headLedIntensities[6]  = {0, 0, 32, 96,  255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
 const int rearLedIntensities[6]  = {0, 8, 32, 64,  255, -1}; // Rear light
-const int aux2LedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
+const int auxLedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
 #endif
 
 // Needed for a while. Needs to be removed
@@ -141,11 +141,11 @@ const int rearLedMaxIntensity = 255;
 //const int headLedHighIntensity = 255 - 255;
 //const int headLedMaxIntensity = 255 -  255;
 //
-//const int aux2LedOffIntensity = 0; // aux is the 2nd headlight
-//const int aux2LedLowIntensity = 16; // remember that the brakelight comes back into low.Note: the lamp normally has 150 mA current. We up this to 175 (128 of 255 and over two lights)
-//const int aux2LedMediumIntensity = 48; // be carefull making this number higher
-//const int aux2LedHighIntensity = 128;
-//const int aux2LedMaxIntensity = 128;
+//const int auxLedOffIntensity = 0; // aux is the 2nd headlight
+//const int auxLedLowIntensity = 16; // remember that the brakelight comes back into low.Note: the lamp normally has 150 mA current. We up this to 175 (128 of 255 and over two lights)
+//const int auxLedMediumIntensity = 48; // be carefull making this number higher
+//const int auxLedHighIntensity = 128;
+//const int auxLedMaxIntensity = 128;
 
 const int brakeLedOffIntensity = 0; // aux2 is the brakelight
 const int brakeLedLowIntensity = 0; // remember that the brakelight comes back into low.

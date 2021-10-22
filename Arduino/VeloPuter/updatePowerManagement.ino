@@ -23,7 +23,14 @@ void updatePowerManagement()
 }
 
 void setBatteryToGreen ()
-{}
+{
+  headLed.setBatteryStatus = BATTERY_GREEN;
+  rearLed.setBatteryStatus = BATTERY_GREEN;
+  brakeLed.setBatteryStatus = BATTERY_GREEN;
+  rightLed.setBatteryStatus = BATTERY_GREEN;
+  leftLed.setBatteryStatus = BATTERY_GREEN;
+  auxLed.setBatteryStatus = BATTERY_GREEN;
+  }
 
 void setBatteryToOrange ()
 {
@@ -34,34 +41,12 @@ void setBatteryToOrange ()
     Dim indicators
     Dim brakelight
   */
-  //  headLed.highIntensity = headLedMediumIntensity;
-  //  headLed.maxIntensity = headLedMediumIntensity ;
-  //  headLed.setLedIntensity (min(headLed.getLedIntensity(), headLedMediumIntensity));
-  //
-  //  rearLed.maxIntensity = rearLedHighIntensity;
-  //  rearLed.setLedIntensity (min(rearLed.getLedIntensity(), rearLedMediumIntensity));
-  //
-  //  /*
-  //     Less bright brakelight
-  //  */
-  //  brakeLed.highIntensity = brakeLedMediumIntensity;
-  //  brakeLed.maxIntensity = brakeLedMediumIntensity;
-  //  brakeLed.setLedIntensity (min(brakeLed.getLedIntensity(), brakeLedMediumIntensity));
-  //
-  //  rightLed.offIntensity =    rightLedOffIntensity;
-  //  rightLed.lowIntensity =    rightLedOffIntensity;
-  //  rightLed.mediumIntensity = rightLedOffIntensity;
-  //  rightLed.highIntensity =   rightLedHighIntensity; // 1/2th the power
-  //  rightLed.maxIntensity =    rightLedHighIntensity;
-  //  rightLed.setLedIntensity (min(rightLed.getLedIntensity(), rightLedMediumIntensity));
-  //
-  //
-  //  leftLed.offIntensity =    leftLedOffIntensity;
-  //  leftLed.lowIntensity =    leftLedOffIntensity;
-  //  leftLed.mediumIntensity = leftLedOffIntensity;
-  //  leftLed.highIntensity =   leftLedHighIntensity;
-  //  leftLed.maxIntensity =    leftLedHighIntensity;
-  //  leftLed.setLedIntensity (min(leftLed.getLedIntensity(), leftLedMediumIntensity));
+  headLed.setBatteryStatus = BATTERY_ORANGE;
+  rearLed.setBatteryStatus = BATTERY_ORANGE;
+  brakeLed.setBatteryStatus = BATTERY_ORANGE;
+  rightLed.setBatteryStatus = BATTERY_ORANGE;
+  leftLed.setBatteryStatus = BATTERY_ORANGE;
+  auxLed.setBatteryStatus = BATTERY_ORANGE;
 }
 
 void setBatteryToRed ()
@@ -73,33 +58,12 @@ void setBatteryToRed ()
      No brakelight
      No fog light
   */
-  //  headLed.highIntensity = headLedLowIntensity;
-  //  headLed.maxIntensity = headLedLowIntensity ;
-  //  headLed.setLedIntensity (min(headLed.getLedIntensity(), headLedMediumIntensity));
-  //
-  //  rightLed.offIntensity =    rightLedOffIntensity;
-  //  rightLed.lowIntensity =    rightLedOffIntensity;
-  //  rightLed.mediumIntensity = rightLedOffIntensity;
-  //  rightLed.highIntensity =   rightLedOffIntensity; // 1/2th the power
-  //  rightLed.maxIntensity =    rightLedOffIntensity;
-  //  rightLed.setLedIntensity (min(rightLed.getLedIntensity(), rightLedMediumIntensity));
-  //
-  //
-  //  leftLed.offIntensity =    leftLedOffIntensity;
-  //  leftLed.lowIntensity =    leftLedOffIntensity;
-  //  leftLed.mediumIntensity = leftLedOffIntensity;
-  //  leftLed.highIntensity =   leftLedOffIntensity;
-  //  leftLed.maxIntensity =    leftLedOffIntensity;
-  //  leftLed.setLedIntensity (min(leftLed.getLedIntensity(), leftLedMediumIntensity));
-  //
-  //
-  //  rearLed.setPinID(ledRearPin);
-  //  rearLed.offIntensity =    rearLedOffIntensity;
-  //  rearLed.lowIntensity =    rearLedLowIntensity;
-  //  rearLed.mediumIntensity = rearLedLowIntensity;
-  //  rearLed.highIntensity =   rearLedLowIntensity;
-  //  rearLed.maxIntensity =    rearLedLowIntensity;
-  //  rearLed.setLedIntensity (min(rearLed.getLedIntensity(), rearLedMediumIntensity));
+  headLed.setBatteryStatus = BATTERY_RED;
+  rearLed.setBatteryStatus = BATTERY_RED;
+  brakeLed.setBatteryStatus = BATTERY_RED;
+  rightLed.setBatteryStatus = BATTERY_RED;
+  leftLed.setBatteryStatus = BATTERY_RED;
+  auxLed.setBatteryStatus = BATTERY_RED;
 }
 
 void setBatteryToBlack ()
