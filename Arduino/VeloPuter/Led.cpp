@@ -26,7 +26,7 @@ class Led
     int setIntensities[8] = { -1, -1, -1, -1, -1, -1, -1, -1} ; // -1 indicates the end of the array /  setting
 
     enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};
-    byte setBatteryStatus = BATTERY_GREEN;
+    byte setBatteryLimit = 0;
 
 
     byte IMax (void)
@@ -44,13 +44,8 @@ class Led
       //
       // Adjust the max acording to the color code of the battery state
       //
-      if (setBatteryStatus == BATTERY_ORANGE)
-        // We are at orange, lower the max intensity one level
-        iIntensityMax = iIntensityMax - 1 ;
-      else if (setBatteryStatus == BATTERY_RED)
-        // We are at red, lower the max intensity two levels
-        iIntensityMax = iIntensityMax - 2 ;
-
+      // setBatteryLimit should be 0 for green, 1 for orange, 2 for red.
+       iIntensityMax = iIntensityMax - setBatteryLimit ;
 
       //
       return iIntensityMax;

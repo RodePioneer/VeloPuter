@@ -78,9 +78,9 @@ const int tDelayBatteryCheck_s = 15;      // How long until the battery manageme
 const int tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action.
 
 //const int  tDelayBatteryStatusChange_s = 15;
-const int  tPeriodBlink_ms = 333;           // 1.5 Hz Note that it actually is have a period.
-const int  tFogFlashHigh_ms = 100;           // 1.5 Hz Note that it actually is have a period.
-const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // 1.5 Hz Note that it actually is have a period.
+const int  tPeriodBlink_ms = 333;            // 1.5 Hz Note that the time listed actually is half a period.
+const int  tFogFlashHigh_ms = 100;           // Just a short flash.
+const int  tFogFlashLow_ms = 4000 - tFogFlashHigh_ms;           // Once every 4 seconds.
 const byte numTimesToBlink = VP_BLINK_COUNT;             // 7 times high, 6 times low, = 13 = 4.3 s
 
 const int  wheelCircumference_mm = VP_FRONTWHEEL;

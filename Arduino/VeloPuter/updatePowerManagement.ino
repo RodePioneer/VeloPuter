@@ -24,12 +24,12 @@ void updatePowerManagement()
 
 void setBatteryToGreen ()
 {
-  headLed.setBatteryStatus = BATTERY_GREEN;
-  rearLed.setBatteryStatus = BATTERY_GREEN;
-  brakeLed.setBatteryStatus = BATTERY_GREEN;
-  rightLed.setBatteryStatus = BATTERY_GREEN;
-  leftLed.setBatteryStatus = BATTERY_GREEN;
-  auxLed.setBatteryStatus = BATTERY_GREEN;
+  headLed.setBatteryLimit = 0;
+  rearLed.setBatteryLimit = 0;
+  brakeLed.setBatteryLimit = 0;
+  rightLed.setBatteryLimit = 0;
+  leftLed.setBatteryLimit = 0;
+  auxLed.setBatteryLimit = 0;
   }
 
 void setBatteryToOrange ()
@@ -41,12 +41,12 @@ void setBatteryToOrange ()
     Dim indicators
     Dim brakelight
   */
-  headLed.setBatteryStatus = BATTERY_ORANGE;
-  rearLed.setBatteryStatus = BATTERY_ORANGE;
-  brakeLed.setBatteryStatus = BATTERY_ORANGE;
-  rightLed.setBatteryStatus = BATTERY_ORANGE;
-  leftLed.setBatteryStatus = BATTERY_ORANGE;
-  auxLed.setBatteryStatus = BATTERY_ORANGE;
+  headLed.setBatteryLimit = 1;
+  rearLed.setBatteryLimit = 1;
+  brakeLed.setBatteryLimit = 1;
+  rightLed.setBatteryLimit = 1;
+  leftLed.setBatteryLimit = 1;
+  auxLed.setBatteryLimit = 1;
 }
 
 void setBatteryToRed ()
@@ -58,12 +58,12 @@ void setBatteryToRed ()
      No brakelight
      No fog light
   */
-  headLed.setBatteryStatus = BATTERY_RED;
-  rearLed.setBatteryStatus = BATTERY_RED;
-  brakeLed.setBatteryStatus = BATTERY_RED;
-  rightLed.setBatteryStatus = BATTERY_RED;
-  leftLed.setBatteryStatus = BATTERY_RED;
-  auxLed.setBatteryStatus = BATTERY_RED;
+  headLed.setBatteryLimit = 2;
+  rearLed.setBatteryLimit = 2;
+  brakeLed.setBatteryLimit = 2;
+  rightLed.setBatteryLimit = 2;
+  leftLed.setBatteryLimit = 2;
+  auxLed.setBatteryLimit = 2;
 }
 
 void setBatteryToBlack ()
