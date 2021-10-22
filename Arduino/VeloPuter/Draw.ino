@@ -214,18 +214,23 @@ void drawBatteryText()
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (col, row);
   u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
+  //  u8g.print (myBattery.getPercentage_pct());
+  //  u8g.print ('.');
+  //  u8g.print (myBattery.getColorCode());
+  //  u8g.print ('.');
+  //  u8g.print (myBattery.tLastStateChange_ms);
 
-//  // TEMP
-//  u8g.print (headLed.IMax());
-//  u8g.print (headLed.getICurrentIntensity());
-//  u8g.print (brakeLed.getICurrentIntensity());
-//  u8g.print (rearLed.getICurrentIntensity());
-//  u8g.print (leftLed.getICurrentIntensity());
-//  u8g.print (rightLed.getICurrentIntensity());
-//  u8g.print (brakeLed.IMax());
-//  u8g.print (rearLed.IMax());
-//  u8g.print (leftLed.IMax());
-//  u8g.print (rightLed.IMax());
+  //  // TEMP
+  //  u8g.print (headLed.IMax());
+  //  u8g.print (headLed.getICurrentIntensity());
+  //  u8g.print (brakeLed.getICurrentIntensity());
+  //  u8g.print (rearLed.getICurrentIntensity());
+  //  u8g.print (leftLed.getICurrentIntensity());
+  //  u8g.print (rightLed.getICurrentIntensity());
+  //  u8g.print (brakeLed.IMax());
+  //  u8g.print (rearLed.IMax());
+  //  u8g.print (leftLed.IMax());
+  //  u8g.print (rightLed.IMax());
 
 }
 

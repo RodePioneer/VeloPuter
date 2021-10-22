@@ -105,8 +105,8 @@ const byte setTeethOnCainring = VP_CHAINRING;
 
 // 1ste position is reserved for the black level and sleep (ie: turn it all the way off)
 // 2nd number is the lowest setting. 0 for more. A bit for the rear lights
-// last number is -1 to indicate the end of the array.  
-// An array cannot be longer than 8 because of the definition in Led.cpp 
+// last number is -1 to indicate the end of the array.
+// An array cannot be longer than 8 because of the definition in Led.cpp
 //
 
 #if defined(QUATRO)
@@ -121,7 +121,7 @@ const int auxLedIntensities[8]  =  {0, 0, -1, -1,   -1, -1, -1, -1}; // Extra un
 // *TODO: fix lengths
 const int leftLedIntensities[6]  = {0, 0, 64, 128, 255, -1}; // Indicators left
 const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
-const int brakeLedIntensities[6] = {0, 0, -1}; // Brake light 
+const int brakeLedIntensities[6] = {0, 0, -1}; // Brake light
 const int headLedIntensities[6]  = {0, 0, 32, 96,  255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
 const int rearLedIntensities[6]  = {0, 8, 32, 64,  255, -1}; // Rear light
 const int auxLedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero

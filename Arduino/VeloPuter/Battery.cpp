@@ -12,10 +12,10 @@ class Battery
     byte Pin = 255; // 255 is a default
     long tNow_ms             = 0;
     float PinMean = analogRead(Pin);
-    const int  tDelayBatteryStatusChange_s = 5;
+    const int tDelayBatteryStatusChange_s = 10;
     byte statusBattery = BATTERY_GREEN;
     byte setBatteryStatusHasChanged;
-    
+
   public:
 
     long tLastStateChange_ms = 0;
@@ -111,7 +111,7 @@ class Battery
     byte getColorCode()
     {
       //
-      
+
       // Code orange is below 25%
       // Code Red is below 15%
       // Code Black is below 5%
@@ -188,10 +188,10 @@ class Battery
       SetBatteryType = setBatteryType;
     }
 
-        long getBatteryStatusHasChanged ()
-        {
-          return  setBatteryStatusHasChanged;
-        }
+    long getBatteryStatusHasChanged ()
+    {
+      return  setBatteryStatusHasChanged;
+    }
 
 
 };

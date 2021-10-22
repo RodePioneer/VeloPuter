@@ -1,6 +1,6 @@
 
 
-  void wakeUp() {
+void wakeUp() {
 
   // Turn on the power to the display, the 5Vout and all the powersources
   pinMode(powerOnOffPin, OUTPUT);
@@ -54,41 +54,35 @@
   pinMode(ledLeftPin, OUTPUT);
   leftLed.setPinID(ledLeftPin);
   memcpy (leftLed.setIntensities, leftLedIntensities, sizeof(leftLedIntensities));
-//  leftLed.IMax();
   leftLed.setLedOff();
 
   // Indicator: right
   pinMode(ledRightPin, OUTPUT);
   rightLed.setPinID(ledRightPin);
-  memcpy (rightLed.setIntensities, rightLedIntensities,sizeof(rightLedIntensities));
-//  rightLed.IMax();
+  memcpy (rightLed.setIntensities, rightLedIntensities, sizeof(rightLedIntensities));
   rightLed.setLedOff();
 
   // Rear light
   pinMode(ledRearPin, OUTPUT);
   rearLed.setPinID(ledRearPin);
-  memcpy (rearLed.setIntensities, rearLedIntensities,sizeof(rearLedIntensities));
-//  rearLed.IMax();
+  memcpy (rearLed.setIntensities, rearLedIntensities, sizeof(rearLedIntensities));
   rearLed.setLedLow();
 
   // Head light
   pinMode(ledHeadPin, OUTPUT);
   headLed.setPinID(ledHeadPin);
-  memcpy (headLed.setIntensities, headLedIntensities,sizeof(headLedIntensities));
-//  headLed.IMax();
+  memcpy (headLed.setIntensities, headLedIntensities, sizeof(headLedIntensities));
   headLed.setLedLow();
 
   // Brake light (optional)
   pinMode(ledBrakePin, OUTPUT);
   brakeLed.setPinID(ledBrakePin);
-  memcpy (brakeLed.setIntensities, brakeLedIntensities,sizeof(brakeLedIntensities));
-//  brakeLed.IMax();
+  memcpy (brakeLed.setIntensities, brakeLedIntensities, sizeof(brakeLedIntensities));
   brakeLed.setLedOff();
 
-  // Extra free potition. 
+  // Extra free potition.
   pinMode(ledAux2Pin, OUTPUT);
   auxLed.setPinID(ledAux2Pin);
-//  auxLed.IMax();
   auxLed.setLedOff();
 
   // Speaker
@@ -99,6 +93,6 @@
 
 
   // Start display
-  delay (100); 
+  delay (100);
   drawSplash ();
 }
