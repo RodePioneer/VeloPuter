@@ -54,35 +54,41 @@
   pinMode(ledLeftPin, OUTPUT);
   leftLed.setPinID(ledLeftPin);
   memcpy (leftLed.setIntensities, leftLedIntensities, sizeof(leftLedIntensities));
+//  leftLed.IMax();
   leftLed.setLedOff();
 
   // Indicator: right
   pinMode(ledRightPin, OUTPUT);
   rightLed.setPinID(ledRightPin);
   memcpy (rightLed.setIntensities, rightLedIntensities,sizeof(rightLedIntensities));
+//  rightLed.IMax();
   rightLed.setLedOff();
 
   // Rear light
   pinMode(ledRearPin, OUTPUT);
   rearLed.setPinID(ledRearPin);
   memcpy (rearLed.setIntensities, rearLedIntensities,sizeof(rearLedIntensities));
+//  rearLed.IMax();
   rearLed.setLedLow();
 
   // Head light
   pinMode(ledHeadPin, OUTPUT);
   headLed.setPinID(ledHeadPin);
   memcpy (headLed.setIntensities, headLedIntensities,sizeof(headLedIntensities));
+//  headLed.IMax();
   headLed.setLedLow();
 
   // Brake light (optional)
   pinMode(ledBrakePin, OUTPUT);
   brakeLed.setPinID(ledBrakePin);
   memcpy (brakeLed.setIntensities, brakeLedIntensities,sizeof(brakeLedIntensities));
+//  brakeLed.IMax();
   brakeLed.setLedOff();
 
   // Extra free potition. 
   pinMode(ledAux2Pin, OUTPUT);
   auxLed.setPinID(ledAux2Pin);
+//  auxLed.IMax();
   auxLed.setLedOff();
 
   // Speaker

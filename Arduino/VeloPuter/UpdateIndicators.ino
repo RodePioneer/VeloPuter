@@ -82,7 +82,7 @@ void updateIndicators()
   {
 
     // Zoomer ands screen blinking in sync with the actual leds. Don't keep track.
-    BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
+    BlinkOn = (rightLed.getICurrentIntensity() > 1 || leftLed.getICurrentIntensity() > 1);
 
     tStartBlink_ms = tNow_ms;
 
@@ -133,7 +133,7 @@ void updateIndicators()
     //
     // blink the screen
     //
-    BlinkOn = (rightLed.getLedIntensity() > 0 || leftLed.getLedIntensity() > 0);
+    BlinkOn = (rightLed.getICurrentIntensity() > 1  || leftLed.getICurrentIntensity() > 1);
 
     if (BlinkOn)
     {

@@ -23,13 +23,19 @@ void updatePowerManagement()
 }
 
 void setBatteryToGreen ()
-{
-  headLed.setBatteryLimit = 0;
-  rearLed.setBatteryLimit = 0;
-  brakeLed.setBatteryLimit = 0;
-  rightLed.setBatteryLimit = 0;
-  leftLed.setBatteryLimit = 0;
-  auxLed.setBatteryLimit = 0;
+{/*
+  GREEN
+
+  No limitations
+
+  */
+  
+  headLed.SetBatteryLimit(0);
+  rearLed.SetBatteryLimit(0);
+  brakeLed.SetBatteryLimit(0);
+  rightLed.SetBatteryLimit(0);
+  leftLed.SetBatteryLimit(0);
+  auxLed.SetBatteryLimit(0);
   }
 
 void setBatteryToOrange ()
@@ -41,12 +47,12 @@ void setBatteryToOrange ()
     Dim indicators
     Dim brakelight
   */
-  headLed.setBatteryLimit = 1;
-  rearLed.setBatteryLimit = 1;
-  brakeLed.setBatteryLimit = 1;
-  rightLed.setBatteryLimit = 1;
-  leftLed.setBatteryLimit = 1;
-  auxLed.setBatteryLimit = 1;
+  headLed.SetBatteryLimit(1);
+  rearLed.SetBatteryLimit(1);
+  brakeLed.SetBatteryLimit(1);
+  rightLed.SetBatteryLimit(1);
+  leftLed.SetBatteryLimit(1);
+  auxLed.SetBatteryLimit(1);
 }
 
 void setBatteryToRed ()
@@ -58,12 +64,12 @@ void setBatteryToRed ()
      No brakelight
      No fog light
   */
-  headLed.setBatteryLimit = 2;
-  rearLed.setBatteryLimit = 2;
-  brakeLed.setBatteryLimit = 2;
-  rightLed.setBatteryLimit = 2;
-  leftLed.setBatteryLimit = 2;
-  auxLed.setBatteryLimit = 2;
+  headLed.SetBatteryLimit(2);
+  rearLed.SetBatteryLimit(2);
+  brakeLed.SetBatteryLimit(2);
+  rightLed.SetBatteryLimit(2);
+  leftLed.SetBatteryLimit(2);
+  auxLed.SetBatteryLimit(2);
 }
 
 void setBatteryToBlack ()

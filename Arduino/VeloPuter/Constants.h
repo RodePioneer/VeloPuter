@@ -110,14 +110,15 @@ const byte setTeethOnCainring = VP_CHAINRING;
 //
 
 #if defined(QUATRO)
-const int leftLedIntensities[6]  = {0, 0, 64, 128, 255, -1}; // Indicators left
-const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
-const int brakeLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Brake light in the hood
-const int headLedIntensities[6]  = {0, 0, 32, 96,  255, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
-const int rearLedIntensities[6]  = {0, 8, 32, 64,  255, -1}; // Rear light
-const int auxLedIntensities[3]  = {0, 0, -1}; // Extra unused pin Set to zero
+const int leftLedIntensities[8]  = {0, 0, 64, 128, 255, -1, -1, -1}; // Indicators left
+const int rightLedIntensities[8] = {0, 0, 64, 128, 255, -1, -1, -1}; // Indicators right
+const int brakeLedIntensities[8] = {0, 0, 64, 128, 255, -1, -1, -1}; // Brake light in the hood
+const int headLedIntensities[8]  = {0, 0, 32, 96,  255, -1, -1, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
+const int rearLedIntensities[8]  = {0, 8, 32, 64,  255, -1, -1, -1}; // Rear light
+const int auxLedIntensities[8]  =  {0, 0, -1, -1,   -1, -1, -1, -1}; // Extra unused pin Set to zero
 
 #elif defined(ICB_DF)
+// *TODO: fix lengths
 const int leftLedIntensities[6]  = {0, 0, 64, 128, 255, -1}; // Indicators left
 const int rightLedIntensities[6] = {0, 0, 64, 128, 255, -1}; // Indicators right
 const int brakeLedIntensities[6] = {0, 0, -1}; // Brake light 

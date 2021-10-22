@@ -21,7 +21,7 @@ void updateRear()
 
     Note that we keep track of the return state when the brake is released here here.
   */
-  static byte ledPreviousIntensity = rearLedOffIntensity;
+  //static byte ledPreviousIntensity = rearLedOffIntensity;
   long tNow_ms = millis();
   int setNotMoving = (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
 
@@ -35,9 +35,9 @@ void updateRear()
   {
     if (not setNotMoving)
     {
-      ledPreviousIntensity = rearLed.getLedIntensity();
-      rearLed.setLedMax();
-      brakeLed.setLedMax();
+      //ledPreviousIntensity = rearLed.getICurrentIntensity();
+      rearLed.setLedToggleMax();
+      brakeLed.setLedToggleMax();
     }
   }
   //
@@ -48,7 +48,7 @@ void updateRear()
            && tNow_ms - brakeSwitch.getTimeLastChange_ms() > 1000*tDurationBrakeLight_s 
            && rearLed.getICurrentIntensity() == rearLed.IMax())
   {
-      rearLed.setLedIntensity(ledPreviousIntensity);
+      rearLed.setLedToggleMax();
       brakeLed.setLedOff();
   }
   //
@@ -56,9 +56,9 @@ void updateRear()
   //
   else if (brakeSwitch.getState() == HIGH 
            && brakeSwitch.hasStateChanged() 
-           && rearLed.getLedIntensity() == rearLed.IMax())
+           && rearLed.getICurrentIntensity() == rearLed.IMax())
   {
-    rearLed.setLedIntensity(ledPreviousIntensity);
+    rearLed.setLedToggleMax();
     brakeLed.setLedOff();
   }
 
@@ -69,9 +69,9 @@ void updateRear()
            && upSwitch.getState() == LOW 
            && upSwitch.hasStateChanged())
   {
-    rearLed.setLedIntensity(ledPreviousIntensity);
+    rearLed.setLedToggleMax();
     rearLed.upLed();
-    ledPreviousIntensity = rearLed.getLedIntensity();
+    //ledPreviousIntensity = rearLed.getICurrentIntensity();
     brakeLed.setLedOff();
   }
 
@@ -82,9 +82,9 @@ void updateRear()
            && downSwitch.getState() == LOW 
            && downSwitch.hasStateChanged())
   {
-    rearLed.setLedIntensity(ledPreviousIntensity);
+    rearLed.setLedToggleMax();
     rearLed.downLed();
-    ledPreviousIntensity = rearLed.getLedIntensity();
+    //ledPreviousIntensity = rearLed.getICurrentIntensity();
     brakeLed.setLedOff();
   }
 
@@ -95,7 +95,7 @@ void updateRear()
   if (setNotMoving
       && brakeSwitch.getState() == LOW)
     {
-      rearLed.setLedIntensity(ledPreviousIntensity);
+      rearLed.setLedToggleMax();
       brakeLed.setLedOff();
     }
 
@@ -103,37 +103,37 @@ void updateRear()
   // When riding with fog lights (ie rear set to rearLedMediumIntensity we flash the rear light once every N seconds. 
   // Do not do this when the brake is applied. Only for the QuatroVelo, DF & other three-wheelers don't have aux light.
   //
-#if defined(QUATRO)
-  if (rearLed.getLedIntensity() == rearLedMediumIntensity 
+//#if defined(QUATRO)
+  if (rearLed.getICurrentIntensity() >= 2
       && brakeSwitch.getState() == HIGH)
   {
       // When high, set to off
-      if (brakeLed.getLedIntensity() == brakeLedMaxIntensity 
+      if (brakeLed.getICurrentIntensity() == brakeLed.IMax()
           // Go high for 1/4th of the blink frequency duration
           && (tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms)
           {
-              brakeLed.setLedOff();
+              brakeLed.setLedToggleMax();
           }
       // when off set to high
-      else if (brakeLed.getLedIntensity() == brakeLedOffIntensity 
+      else if (brakeLed.getICurrentIntensity() <= 1
           // Go low for 10 times the blink duration
           && (tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms)
           {
-              brakeLed.setLedMax();
+              brakeLed.setLedToggleMax();
           }
 
   }
-#endif
-#if defined(ICB_DF)
-if (rearLed.getLedIntensity() == rearLedMediumIntensity 
-      && brakeSwitch.getState() == HIGH)
-  {
-    if (   (rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms) 
-        || (!rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashLow_ms))
-    {
-        rearLed.toggleFlashLed();
-    }
-  }
-#endif
+//#endif
+//#if defined(ICB_DF)
+//if (rearLed.getLedIntensity() == rearLedMediumIntensity 
+//      && brakeSwitch.getState() == HIGH)
+//  {
+//    if (   (rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms) 
+//        || (!rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashLow_ms))
+//    {
+//        rearLed.toggleFlashLed();
+//    }
+//  }
+//#endif
   
 }
