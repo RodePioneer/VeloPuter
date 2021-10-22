@@ -21,18 +21,19 @@ void updateIndicators()
   long tNow_ms = millis();
   byte BlinkOn = 0;
 
+
   if (alarmSwitch.hasStateChanged() && alarmSwitch.getState() == LOW )
   {
+    //
+    // toggle the alarm state because the alarm button was hit.
+    //
     stateAlarmBlinkersOn = !stateAlarmBlinkersOn;
-
-    if (stateAlarmBlinkersOn == false)
-    {
-      numTimesToBlinkLeft = 0;
-      numTimesToBlinkRight = 0;
-      // Just in case.... otherwise they might stay on.
-      rightLed.setLedOff();
-      leftLed.setLedOff();
-    }
+    // Reset the blinker counters
+    numTimesToBlinkLeft = 0;
+    numTimesToBlinkRight = 0;
+    // Just in case.... otherwise they might stay on or the hazzars can blink out of sync
+    rightLed.setLedOff();
+    leftLed.setLedOff();
   }
 
   if (stateAlarmBlinkersOn)
@@ -83,48 +84,40 @@ void updateIndicators()
 
     // Zoomer ands screen blinking in sync with the actual leds. Don't keep track.
     BlinkOn = (rightLed.getICurrentIntensity() > 1 || leftLed.getICurrentIntensity() > 1);
-
     tStartBlink_ms = tNow_ms;
 
+    //
     // blink left
+    //
     if (numTimesToBlinkLeft > 0 && numTimesToBlinkRight == 0)
     {
       numTimesToBlinkLeft--;
-
-      if (leftLed.getICurrentIntensity() == 1) leftLed.setLedMax();
-      else leftLed.setLedOff();
-
+      leftLed.setLedToggleMax();
       rightLed.setLedOff();
-
-
     }
+    //
     // blink right
+    //
     else if (numTimesToBlinkRight > 0 && numTimesToBlinkLeft == 0)
     {
       numTimesToBlinkRight--;
-
-      if (rightLed.getICurrentIntensity() == 1) rightLed.setLedMax();
-      else rightLed.setLedOff();
-
+      rightLed.setLedToggleMax();
       leftLed.setLedOff();
     }
-    // blink alarm
+    //
+    // Hazzard lights: blink with all indicators.
+    //
     else if (numTimesToBlinkRight > 0 && numTimesToBlinkLeft > 0)
-    { // alarm, make sure they are in sync
-      if (rightLed.getICurrentIntensity() == 1)
-      {
-        rightLed.setLedMax();
-        leftLed.setLedMax();
-      }
-      else
-      {
-        rightLed.setLedOff();
-        leftLed.setLedOff();
-      }
+    {
+      // Make sure they are in sync
+      rightLed.setLedToggleMax();
+      leftLed.setLedToggleMax();
     }
     else if (numTimesToBlinkRight == 0 && numTimesToBlinkLeft == 0 && BlinkOn)
     {
+      //
       // Apearently the leds are still on while the blinker switch is in the off setting and we no longer need to do anything
+      //
       rightLed.setLedOff();
       leftLed.setLedOff();
     }

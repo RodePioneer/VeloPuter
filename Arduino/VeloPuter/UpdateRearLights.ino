@@ -21,7 +21,6 @@ void updateRear()
 
     Note that we keep track of the return state when the brake is released here here.
   */
-  //static byte ledPreviousIntensity = rearLedOffIntensity;
   long tNow_ms = millis();
   int setNotMoving = (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
 
