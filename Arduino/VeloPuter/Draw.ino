@@ -32,7 +32,7 @@ void drawScreen ()
   */
   drawInit();
   drawBatteryText();
-  //drawLightIcons();
+  drawLightIcons();
   drawSpeed();
   drawCadence();
   drawGear();
@@ -214,15 +214,27 @@ void drawBatteryText()
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (col, row);
   u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
-  //  u8g.print (myBattery.getPercentage_pct());
+  //    u8g.print (myBattery.getPercentage_pct());
   //  u8g.print ('.');
-  //  u8g.print (myBattery.getColorCode());
-  //  u8g.print ('.');
-  //  u8g.print (myBattery.tLastStateChange_ms);
+  //    u8g.print (myBattery.getColorCode());
+  //    u8g.print ('.');
+  //    u8g.print (myBattery.tLastStateChange_ms);
 
-  //  // TEMP
+  //  //  // TEMP
   //  u8g.print (headLed.IMax());
+  //  u8g.print ('.');
   //  u8g.print (headLed.getICurrentIntensity());
+  //  u8g.print ('.');
+  //  u8g.print (headLed.setBatteryLimit);
+  //
+  //  u8g.print ('.');
+  //  u8g.print (rearLed.IMax());
+  //  u8g.print ('.');
+  //  u8g.print (rearLed.getICurrentIntensity());
+  //  u8g.print ('.');
+  //  u8g.print (rearLed.setBatteryLimit);
+  //u8g.print (myBattery.getBatteryStatusHasChanged());
+
   //  u8g.print (brakeLed.getICurrentIntensity());
   //  u8g.print (rearLed.getICurrentIntensity());
   //  u8g.print (leftLed.getICurrentIntensity());
@@ -285,6 +297,11 @@ void drawBatteryIcon()
     if (myBattery.getColorCode() == BATTERY_ORANGE)
     {
       //Serial.println ("Draw Orange");
+      //
+      // Exclamation mark
+      //
+      u8g.setColorIndex(0);
+      u8g.drawBox (wBattery_px / 2 + cBattery_px - 3, rBody_px + 4, 7, hBody_px / 2 + 6);
       u8g.setColorIndex(1);
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + 4, 3, hBody_px / 2 - 2);
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + hBody_px / 2 + 5, 3, 3);
@@ -292,21 +309,27 @@ void drawBatteryIcon()
     else if (myBattery.getColorCode() == BATTERY_RED)
     {
       //Serial.println ("Draw Red");
-      u8g.setColorIndex(1);
+      //
+      // Wide circle.
+      //
       byte rCircle_px = hBattery_px / 2;
       byte cCircle_px = wBattery_px / 2 + cBattery_px;
       byte dCircle_px = wBattery_px / 2 ;
-      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 5);
       u8g.setColorIndex(0);
-      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 2);
+      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 7);
+      u8g.setColorIndex(1);
+      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px + 4);
+      u8g.setColorIndex(0);
+      u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px );
 
-
+      //
+      // Diagonal line (5 lines next to each other)
+      //
       byte Delta_px = 0.707 * dCircle_px + 2.5;
       u8g.setColorIndex(1);
-
       for (int i = -2; i <= 2; i++)
       {
-        u8g.drawLine (cCircle_px - Delta_px + i, rCircle_px - Delta_px , cCircle_px + Delta_px + i, rCircle_px + Delta_px);
+        u8g.drawLine (cCircle_px - Delta_px , rCircle_px - Delta_px + i , cCircle_px + Delta_px , rCircle_px + Delta_px + i);
       }
     }
   }
@@ -336,7 +359,7 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the rearlight.
   */
-  if (rearLed.getICurrentIntensity() == 0)                            u8g.drawBitmapP (c2, r, 3, 14, icoNone);
+  if (rearLed.getICurrentIntensity() == 0)         u8g.drawBitmapP (c2, r, 3, 14, icoNone);
   else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
   else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
   else if (rearLed.getICurrentIntensity() == 3)    u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);

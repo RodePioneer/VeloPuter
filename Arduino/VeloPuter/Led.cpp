@@ -17,7 +17,6 @@ class Led
     byte iIntensityCurrent = 0;
     byte iIntensityMax = 0;
     byte iIntensityPrevious = 0;
-    byte setBatteryLimit = 0;
 
     void setLedIntensity (byte newIntensity_255) // directly set the new LED value, either digital or analog.
     {
@@ -28,6 +27,9 @@ class Led
     }
 
   public:
+    byte setBatteryLimit = 0;
+
+
     // used to limit the max intensities according to the battery state.
 
     //    byte getFlashOnStatus()
@@ -74,12 +76,6 @@ class Led
       }
 
       //
-      // Adjust the max acording to the color code of the battery state
-      //
-      // setBatteryLimit should be 0 for green, 1 for orange, 2 for red.
-      iIntensityMax = iIntensityMax - setBatteryLimit ;
-
-      //
       return iIntensityMax;
     }
 
@@ -95,7 +91,23 @@ class Led
 
     void SetBatteryLimit (byte SetBatteryLimit)
     {
+      // Update the batery limit
       setBatteryLimit = SetBatteryLimit;
+      // Update the current of hte current led when applicable.
+      iIntensityCurrent = constrain (iIntensityCurrent, 1, IMax());
+      setICurrentIntensity(iIntensityCurrent);
+
+    // Calculate the NEW iIMax
+        for (byte i = 7; i > 0; i--)
+        {
+          if (setIntensities[i] == -1) iIntensityMax = i - 1;
+        }
+             //
+        // Adjust the max acording to the color code of the battery state
+        //
+        // setBatteryLimit should be 0 for green, 1 for orange, 2 for red.
+        // TODO: this fucks up stuff. Brake is blinking...
+        iIntensityMax = iIntensityMax - setBatteryLimit;
     }
 
 
@@ -148,16 +160,16 @@ class Led
 
     // Add the battery state check here. Limit the up based on the battery level.
     // This is mainly relevant for the brakes and the indicators.
-//    void setLedMax (void) // switch to high / max
-//    {
-//      iIntensityCurrent = IMax();
-//      setICurrentIntensity(iIntensityCurrent);
-//    }
+    //    void setLedMax (void) // switch to high / max
+    //    {
+    //      iIntensityCurrent = IMax();
+    //      setICurrentIntensity(iIntensityCurrent);
+    //    }
 
 
     void setLedToggleMax (void)
     {
-      if (iIntensityCurrent == IMax())
+      if (iIntensityCurrent >= IMax())
         // if the intensity is max: go back to the last known value
       {
         iIntensityCurrent = iIntensityPrevious;

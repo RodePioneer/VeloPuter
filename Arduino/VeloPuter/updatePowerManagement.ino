@@ -15,11 +15,15 @@ void updatePowerManagement()
      Black: down. We are now dead.
 
   */
+  byte setPreviousBatteryColorCode = BATTERY_GREEN;
+  byte setBatteryStatusHasChanged = false;
 
   if (doBatteryCheck) {
 
     int setCurrentBatteryColorCode = myBattery.getColorCode();
-    byte setBatteryStatusHasChanged = myBattery.getBatteryStatusHasChanged();
+    //byte setBatteryStatusHasChanged = myBattery.getBatteryStatusHasChanged();
+
+    setBatteryStatusHasChanged = setPreviousBatteryColorCode != setCurrentBatteryColorCode;
 
     if (setBatteryStatusHasChanged)
     {
