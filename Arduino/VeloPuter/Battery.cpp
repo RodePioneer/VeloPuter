@@ -12,7 +12,7 @@ class Battery
     byte Pin = 255; // 255 is a default
     long tNow_ms             = 0;
     float PinMean = analogRead(Pin);
-    const int tDelayBatteryStatusChange_s = 5;
+    const int tDelayBatteryStatusChange_s = 10;
     byte statusBattery = BATTERY_GREEN;
 //    byte setBatteryStatusHasChanged;
 
@@ -115,8 +115,8 @@ class Battery
       // Code orange is below 25%
       // Code Red is below 15%
       // Code Black is below 5%
-      //const byte Batt_pct_limits[3] = {25, 15, 5};
-      const byte Batt_pct_limits[3] = {50, 49, 5}; // For testing purposes, drop 1 level 
+      const byte Batt_pct_limits[3] = {25, 15, 5};
+      //const byte Batt_pct_limits[3] = {50, 49, 5}; // For testing purposes, drop 1 level 
       long tNow_ms = 0;
 
       // Add a 15 sec delay on battery state changes
@@ -185,11 +185,4 @@ class Battery
     {
       SetBatteryType = setBatteryType;
     }
-
-//    long getBatteryStatusHasChanged ()
-//    {
-//      return  setBatteryStatusHasChanged;
-//    }
-
-
 };

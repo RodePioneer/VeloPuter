@@ -190,6 +190,8 @@ void drawGear()
     {
       u8g.setPrintPos (col - dcol * 2, row); // teeth >= 100
     }
+
+    // Draw it
     if (gearOnCassette_teeth < 37.4)
     {
       u8g.print (round(gearOnCassette_teeth));
@@ -199,6 +201,12 @@ void drawGear()
       // Slumpf is in effect
       u8g.print (round(gearOnCassette_teeth / 2.5));
     }
+  }
+  else
+  {
+    // Not active: print a dash
+    u8g.setPrintPos (col, row); // teeth <10
+    u8g.print ('-');
   }
 }
 
@@ -228,11 +236,20 @@ void drawBatteryText()
   //  u8g.print (headLed.setBatteryLimit);
   //
   //  u8g.print ('.');
-  //  u8g.print (rearLed.IMax());
-  //  u8g.print ('.');
-  //  u8g.print (rearLed.getICurrentIntensity());
-  //  u8g.print ('.');
-  //  u8g.print (rearLed.setBatteryLimit);
+  //    u8g.print (brakeSwitch.getState());
+  //    u8g.print (upSwitch.getState());
+  //    u8g.print (downSwitch.getState());
+  //    u8g.print ('-');
+  //    u8g.print (rearLed.IMax());
+  //    u8g.print (rearLed.getICurrentIntensity());
+  //    u8g.print (rearLed.getLedPrevious());
+  //    u8g.print ('-');
+  //    u8g.print (brakeLed.IMax());
+  //    u8g.print (brakeLed.getICurrentIntensity());
+  //    u8g.print ('.');
+
+
+
   //u8g.print (myBattery.getBatteryStatusHasChanged());
 
   //  u8g.print (brakeLed.getICurrentIntensity());
@@ -359,9 +376,11 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the rearlight.
   */
-  if (rearLed.getICurrentIntensity() == 0)         u8g.drawBitmapP (c2, r, 3, 14, icoNone);
+  else if (brakeLed.getICurrentIntensity() == brakeLed.IMax() ) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  else if (rearLed.getICurrentIntensity() == 0)    u8g.drawBitmapP (c2, r, 3, 14, icoNone);
   else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
   else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
   else if (rearLed.getICurrentIntensity() == 3)    u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);
-  else if (rearLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  else if (rearLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear); // should never happen as the brake check catches it
+  else if (rearLed.getICurrentIntensity() == 5)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear); // should never happen as the brake check catches it
 }
