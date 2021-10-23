@@ -222,6 +222,7 @@ void drawBatteryText()
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (col, row);
   u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
+  
   //    u8g.print (myBattery.getPercentage_pct());
   //  u8g.print ('.');
   //    u8g.print (myBattery.getColorCode());
@@ -236,17 +237,17 @@ void drawBatteryText()
   //  u8g.print (headLed.setBatteryLimit);
   //
   //  u8g.print ('.');
-  //    u8g.print (brakeSwitch.getState());
-  //    u8g.print (upSwitch.getState());
-  //    u8g.print (downSwitch.getState());
-  //    u8g.print ('-');
-  //    u8g.print (rearLed.IMax());
-  //    u8g.print (rearLed.getICurrentIntensity());
-  //    u8g.print (rearLed.getLedPrevious());
-  //    u8g.print ('-');
-  //    u8g.print (brakeLed.IMax());
-  //    u8g.print (brakeLed.getICurrentIntensity());
-  //    u8g.print ('.');
+  
+//      u8g.print (brakeSwitch.getState());
+//      u8g.print (upSwitch.getState());
+//      u8g.print (downSwitch.getState());
+//      u8g.print ('-');
+//      u8g.print (rearLed.IMax());
+//      u8g.print (rearLed.getICurrentIntensity());
+//      u8g.print (rearLed.getLedPrevious());
+//      u8g.print ('-');
+//      u8g.print (brakeLed.IMax());
+//      u8g.print (brakeLed.getICurrentIntensity());
 
 
 
@@ -376,7 +377,7 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the rearlight.
   */
-  else if (brakeLed.getICurrentIntensity() == brakeLed.IMax() ) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  if (brakeLed.getICurrentIntensity() == brakeLed.IMax() ) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
   else if (rearLed.getICurrentIntensity() == 0)    u8g.drawBitmapP (c2, r, 3, 14, icoNone);
   else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
   else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);

@@ -200,7 +200,7 @@ class Led
       iIntensityPrevious = iIntensityCurrent;
     }
 
-
+    // TODO: depricate this. 
     void setLedToggleMax (void)
     {
       if (iIntensityCurrent >= IMax()) // use >= because the max may have been lowered.

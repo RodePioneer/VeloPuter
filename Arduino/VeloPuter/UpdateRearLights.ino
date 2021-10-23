@@ -40,6 +40,9 @@ void updateRear()
   bool setDoRearUp = false;
   bool setDoRearDown = false;
 
+  // Todo: why no brake after sleep?
+  // Todo: clode clean
+
   if ((not setIsBrakeSwitchOn) and setIsBrakeLedOn)
   {
     setDoRearOff = true;

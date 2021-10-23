@@ -68,7 +68,7 @@ const byte powerOnOffPin =      A5;
 /*
    Other constants which are used throughout the programm:
 */
-const byte tSleepCadSpd_min = 1;                // Timeout until sleep when cadence and speed sensor are active. In minutes.
+const byte tSleepCadSpd_min = 5;                // Timeout until sleep when cadence and speed sensor are active. In minutes.
 const byte tSleepNoCadSpd_min = 30;       // Timeout until sleep when cadence and speed sensor are NOT active. In minutes.
 const int tDelayBatteryCheck_s = 15;      // How long until the battery management starts. This is the time window after power on in which the battery management van be disabled even when the battery voltage is complety off.
 const int tDurationBrakeLight_s = 15;    // The maximun duration the brake light is on for one continuous brake action.
