@@ -42,6 +42,7 @@ void updateRear()
 
   // Todo: why no brake after sleep?
   // Todo: clode clean
+  // TODO: make sure it is faster. Skip unnececary loops.
 
   if ((not setIsBrakeSwitchOn) and setIsBrakeLedOn)
   {
@@ -70,7 +71,7 @@ void updateRear()
   */
   if (setDoRearMax)
   {
-    // Set both LEDs to max but make sure we can set the rear light back to its current value after the brake is released. 
+    // Set both LEDs to max but make sure we can set the rear light back to its current value after the brake is released.
     brakeLed.setLedMax();
     rearLed.setLedStoreCurrentIntensityAsPrevious ();
     rearLed.setLedMax();
@@ -90,16 +91,16 @@ void updateRear()
     if (rearLed.getICurrentIntensity() < (rearLed.IMax() - 2))
     {
       rearLed.upLed();
-            rearLed.setLedStoreCurrentIntensityAsPrevious ();
+      rearLed.setLedStoreCurrentIntensityAsPrevious (); // TODO: why is this needed??
     }
   }
-  else if (setDoRearDown)  
+  else if (setDoRearDown)
   {
     // Decrease the intensity at the back
     brakeLed.setLedOff();
     rearLed.setLedToPreviousIntensity ();
     rearLed.downLed();
-        rearLed.setLedStoreCurrentIntensityAsPrevious ();
+    rearLed.setLedStoreCurrentIntensityAsPrevious ();// TODO: why is this needed??
 
   }
 

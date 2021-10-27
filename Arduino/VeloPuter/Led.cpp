@@ -124,6 +124,7 @@ class Led
     ************************************************************/
     void setICurrentIntensity (byte iIntensityNew)
     {
+      // TODO: Add coutner and run experiments to track how often thuis is called. Sole the upa dn down issues we have.
       iIntensityCurrent = iIntensityNew;
       setLedIntensity(setIntensities[iIntensityCurrent]);
     }
