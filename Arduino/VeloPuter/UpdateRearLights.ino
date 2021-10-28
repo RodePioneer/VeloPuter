@@ -16,27 +16,21 @@ void updateRear()
   */
 
   /*
-    First we determine how the state changed
-    Second we adapt the led settings.
-
-  */
-
-  /*
-    Get the state of affairs
+    Get the state of affairs: aa determine the state of all relevant sensors and LEDs.
   */
   long tNow_ms = millis();
+  bool setIsMoving = not (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
   bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
   bool setIsBrakeSwitchChanged = brakeSwitch.hasStateChanged();
   bool setIsBrakeSwitchTimerExpired = (millis() - brakeSwitch.getTimeLastChange_ms()) > (1000 * tDurationBrakeLight_s);
   bool setIsUpSwitchOnChanged   = upSwitch.getState() == LOW && upSwitch.hasStateChanged();
   bool setIsDownSwitchOnChanged = downSwitch.getState() == LOW && downSwitch.hasStateChanged();
-  bool setIsMoving = not (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());   //(speed_kmh != 0 || cadence_rpm != 0) && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive();
   bool setIsBrakeLedOn = brakeLed.getICurrentIntensity() == brakeLed.IMax();
-  bool setIsFlashHighExpired = (rearLed.getICurrentIntensity() >= 2) and      setIsBrakeLedOn  and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms);
-  bool setIsFlashLowExpired  = (rearLed.getICurrentIntensity() >= 2) and (not setIsBrakeLedOn) and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms);
+  bool setIsFlashHighExpired = (rearLed.getICurrentIntensity() >= 2) and     setIsBrakeLedOn and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms);
+  bool setIsFlashLowExpired  = (rearLed.getICurrentIntensity() >= 2) and not setIsBrakeLedOn and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms );
 
   /*
-    Determine what to do
+    Set the default actions.
   */
   bool setDoRearOff = false;
   bool setDoRearMax = false;
@@ -45,46 +39,50 @@ void updateRear()
   bool setDoBrakeFlashOn = false;
   bool setDoBrakeFlashOff = false;
 
+  /*
+     Determine what to do by analysing the state of affairs
+  */
 
-  // Todo: clode clean
-  // TODO: make sure it is faster. Skip unnececary loops.
-  // todo: Flash the brake
-
-  if ((not setIsBrakeSwitchOn) and setIsBrakeLedOn and setIsBrakeSwitchChanged)
+  // The brake switch is not applied but was just released and the LED is on: set all rear lights back to normal.
+  if (not setIsBrakeSwitchOn and setIsBrakeLedOn and setIsBrakeSwitchChanged)
   {
     setDoRearOff = true;
   }
-  else if ((not setIsBrakeSwitchOn) and (not setIsBrakeSwitchChanged) and setIsFlashHighExpired)
+  // The brake switch is not applied and has not changed and brake light has been ON long enough: turn OFF the brake light.
+  else if (not setIsBrakeSwitchOn and not setIsBrakeSwitchChanged and setIsFlashHighExpired)
   {
     setDoBrakeFlashOff = true;
   }
-  else if ((not setIsBrakeSwitchOn) and (not setIsBrakeSwitchChanged) and setIsFlashLowExpired)
+  // The brake switch is not applied and has not changed and brake light has been OFF long enough: turn ON the brake light.
+  else if (not setIsBrakeSwitchOn and not setIsBrakeSwitchChanged and setIsFlashLowExpired)
   {
     setDoBrakeFlashOn = true;
   }
+  // The brake switch is applied, but has been for a long time and the brake light is on: assume that we are standing still for a long time and set all rear lights back to normal.
   else if (setIsBrakeSwitchOn and setIsBrakeSwitchTimerExpired and setIsBrakeLedOn)
   {
     setDoRearOff = true;
   }
+  // The brake switch is applied, it changed since the last time we checked and we are actually moving (or don't have speed/cadence sensors active): turn on brake and rear lights to show we are braking
   else if (setIsBrakeSwitchOn and setIsBrakeSwitchChanged and setIsMoving)
   {
     setDoRearMax = true;
   }
+  // The brake switch is applied but we stopped moving: set all rear lights back to normal.
   else if (setIsBrakeSwitchOn and not setIsMoving)
   {
     setDoRearOff = true;
   }
+  // The up-switch was turned on while the brake switch is applied: increase the rear lights intensity
   else if (setIsBrakeSwitchOn and setIsUpSwitchOnChanged)
   {
     setDoRearUp = true;
   }
+  // The down-switch was turned on while the brake switch is applied: reduce the rear lights intensity
   else if (setIsBrakeSwitchOn and setIsDownSwitchOnChanged)
   {
     setDoRearDown = true;
   }
-
-
-  // else: do nothing.....
 
   /*
     Update the leds depending on the brake handle
@@ -98,156 +96,38 @@ void updateRear()
   }
   else if (setDoRearOff)
   {
-    // Brake is off. Back to normal.
+    // Turn off the brake light and set the rear lights back to a previous intensity.
     brakeLed.setLedOff();
     rearLed.setLedToPreviousIntensity  ();
   }
   else if (setDoRearUp)
   {
-    // Increase the intensity at the back.
+    // Increase the intensity at the back. Since this is a configuration: turn off the brake light.
     brakeLed.setLedOff();
     // Note we do never go up to the max intensity because we need a difference with the brake light (max is reserved for braking)
     rearLed.setLedToPreviousIntensity  ();
     if (rearLed.getICurrentIntensity() < (rearLed.IMax() - 2))
     {
       rearLed.upLed();
-      rearLed.setLedStoreCurrentIntensityAsPrevious (); // TODO: why is this needed??
+      rearLed.setLedStoreCurrentIntensityAsPrevious ();
     }
   }
   else if (setDoRearDown)
   {
-    // Decrease the intensity at the back
+    // Decrease the intensity at the back. Since this is a configuration: turn off the brake light.
     brakeLed.setLedOff();
     rearLed.setLedToPreviousIntensity ();
     rearLed.downLed();
-    rearLed.setLedStoreCurrentIntensityAsPrevious ();// TODO: why is this needed??
+    rearLed.setLedStoreCurrentIntensityAsPrevious ();
   }
   else if (setDoBrakeFlashOn)
   {
+    // For extra visibility shortly flash the brake light, turn on.
     brakeLed.setLedMax();
   }
   else if (setDoBrakeFlashOff)
   {
+    // For extra visibility shortly flash the brake light, turn off.
     brakeLed.setLedOff();
-  }
-
-  //
-  // Disable code below
-  //
-  //
-  if (false) {
-    long tNow_ms = millis();
-    int setNotMoving = (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
-
-    //
-    // only brakeswitch is on, and changed and we are moving -> turn on brake light to Max.
-    //
-    if (brakeSwitch.getState() == LOW
-        && brakeSwitch.hasStateChanged()
-        && upSwitch.getState() == HIGH
-        && downSwitch.getState() == HIGH)
-    {
-      if (not setNotMoving)
-      {
-        //ledPreviousIntensity = rearLed.getICurrentIntensity();
-        rearLed.setLedToggleMax();
-        brakeLed.setLedToggleMax();
-      }
-    }
-    //
-    // When the brakeswitch is applied too long switch off the breaklights.
-    //
-    else if (brakeSwitch.getState() == LOW
-             && !brakeSwitch.hasStateChanged()
-             && tNow_ms - brakeSwitch.getTimeLastChange_ms() > 1000 * tDurationBrakeLight_s
-             && rearLed.getICurrentIntensity() == rearLed.IMax())
-    {
-      rearLed.setLedToggleMax();
-      brakeLed.setLedOff();
-    }
-    //
-    // brakeswitch is off -> return to previous state. Only when the brakeled is max.
-    //
-    else if (brakeSwitch.getState() == HIGH
-             && brakeSwitch.hasStateChanged()
-             && rearLed.getICurrentIntensity() == rearLed.IMax())
-    {
-      rearLed.setLedToggleMax();
-      brakeLed.setLedOff();
-    }
-
-    //
-    // Brakeswitch is on, upswitch has changed- > default goes up as fog light
-    //
-    else if (brakeSwitch.getState() == LOW
-             && upSwitch.getState() == LOW
-             && upSwitch.hasStateChanged())
-    {
-      rearLed.setLedToggleMax();
-      rearLed.upLed();
-      //ledPreviousIntensity = rearLed.getICurrentIntensity();
-      brakeLed.setLedOff();
-    }
-
-    //
-    // Brakeswicht is on, downswitch has changed -> turn off fog light or go to dim
-    //
-    else if (brakeSwitch.getState() == LOW
-             && downSwitch.getState() == LOW
-             && downSwitch.hasStateChanged())
-    {
-      rearLed.setLedToggleMax();
-      rearLed.downLed();
-      //ledPreviousIntensity = rearLed.getICurrentIntensity();
-      brakeLed.setLedOff();
-    }
-
-
-    //
-    // When standing still AND not pedaling, turn it off. Note this only works when both speed and cadende are working
-    //
-    if (setNotMoving
-        && brakeSwitch.getState() == LOW)
-    {
-      rearLed.setLedToggleMax();
-      brakeLed.setLedOff();
-    }
-
-    //
-    // When riding with fog lights (ie rear set to rearLedMediumIntensity we flash the rear light once every N seconds.
-    // Do not do this when the brake is applied. Only for the QuatroVelo, DF & other three-wheelers don't have aux light.
-    //
-    //#if defined(QUATRO)
-    if (rearLed.getICurrentIntensity() >= 2
-        && brakeSwitch.getState() == HIGH)
-    {
-      // When high, set to off
-      if (brakeLed.getICurrentIntensity() == brakeLed.IMax()
-          // Go high for 1/4th of the blink frequency duration
-          && (tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms)
-      {
-        brakeLed.setLedToggleMax();
-      }
-      // when off set to high
-      else if (brakeLed.getICurrentIntensity() <= 1
-               // Go low for 10 times the blink duration
-               && (tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms)
-      {
-        brakeLed.setLedToggleMax();
-      }
-
-    }
-    //#endif
-    //#if defined(ICB_DF)
-    //if (rearLed.getLedIntensity() == rearLedMediumIntensity
-    //      && brakeSwitch.getState() == HIGH)
-    //  {
-    //    if (   (rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms)
-    //        || (!rearLed.getFlashOnStatus() && (tNow_ms - rearLed.getTimeLastChange_ms()) >= tFogFlashLow_ms))
-    //    {
-    //        rearLed.toggleFlashLed();
-    //    }
-    //  }
-    //#endif
   }
 }
