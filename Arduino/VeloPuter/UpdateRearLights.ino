@@ -15,9 +15,11 @@ void updateRear()
 
   */
 
-  /*
+  /****************************************************************************************
+
     Get the state of affairs: aa determine the state of all relevant sensors and LEDs.
-  */
+
+  ****************************************************************************************/
   long tNow_ms = millis();
   bool setIsMoving = not (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
   bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
@@ -39,9 +41,11 @@ void updateRear()
   bool setDoBrakeFlashOn = false;
   bool setDoBrakeFlashOff = false;
 
-  /*
+  /****************************************************************************************
+
      Determine what to do by analysing the state of affairs
-  */
+
+  ****************************************************************************************/
 
   // The brake switch is not applied but was just released and the LED is on: set all rear lights back to normal.
   if (not setIsBrakeSwitchOn and setIsBrakeLedOn and setIsBrakeSwitchChanged)
@@ -84,9 +88,12 @@ void updateRear()
     setDoRearDown = true;
   }
 
-  /*
+  /****************************************************************************************
+
     Update the leds depending on the brake handle
-  */
+
+  ****************************************************************************************/
+  
   if (setDoRearMax)
   {
     // Set both LEDs to max but make sure we can set the rear light back to its current value after the brake is released.
