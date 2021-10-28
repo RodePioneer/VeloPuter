@@ -124,9 +124,16 @@ class Led
     ************************************************************/
     void setICurrentIntensity (byte iIntensityNew)
     {
-      // TODO: Add coutner and run experiments to track how often thuis is called. Sole the upa dn down issues we have.
+      // TODO: Add coutner and run experiments to track how often this is called. Sole the upa dn down issues we have.
       iIntensityCurrent = iIntensityNew;
       setLedIntensity(setIntensities[iIntensityCurrent]);
+    }
+
+    // set the intensity to the sleep/black state. 
+    void setLedBlack (void)
+    {
+      iIntensityCurrent = 0;
+      setICurrentIntensity(iIntensityCurrent);
     }
 
     // set the intensity to the off state. Note that this is NOT the black state. It can denote a minimum intensity.

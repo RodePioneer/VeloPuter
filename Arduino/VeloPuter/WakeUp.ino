@@ -74,16 +74,18 @@ void wakeUp() {
   memcpy (headLed.setIntensities, headLedIntensities, sizeof(headLedIntensities));
   headLed.setLedLow();
 
-  // Brake light (optional)
+  // Brake light (optional) (On/Off)
   pinMode(ledBrakePin, OUTPUT);
   brakeLed.setPinID(ledBrakePin);
   memcpy (brakeLed.setIntensities, brakeLedIntensities, sizeof(brakeLedIntensities));
   brakeLed.setLedOff();
 
-  // Extra free potition.
-  pinMode(ledAux2Pin, OUTPUT);
-  auxLed.setPinID(ledAux2Pin);
+  // Aux: Extra free position. (PWM)
+  pinMode(ledAuxPin, OUTPUT);
+  auxLed.setPinID(ledAuxPin);
+  memcpy (auxLed.setIntensities, auxLedIntensities, sizeof(auxLedIntensities));
   auxLed.setLedOff();
+  
 
   // Speaker
   pinMode(speakerPin, OUTPUT);

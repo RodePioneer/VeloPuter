@@ -17,16 +17,16 @@ const byte setBatteryType = LIPO;
   PWM: on 7 lines
   Analog in: 12 lines
 
-  0          INT     (Serial RX)
-  1          INT     (Serial TX)
-  2          INT     (TWI SDA)
-  3      PWM INT     (TWI SCL)
-  4/A6           ANA
-  5      PWM
-  6/A7   PWM     ANA
+  0           INT     (Serial RX)
+  1           INT     (Serial TX)
+  2           INT     (TWI SDA)
+  3       PWM INT     (TWI SCL)
+  4/A6            ANA
+  5       PWM
+  6/A7    PWM     ANA
   7          INT
-  8/A8           ANA
-  9/A9   PWM     ANA     // Note that Timer 1 does break the pwm in this pin
+  8/A8            ANA
+  9/A9    PWM     ANA     // Note that Timer 1 does break the pwm in this pin
   10/A10  PWM     ANA     // Note that Timer 1 does break the pwm in this pin
   11      PWM
   12/A11          ANA
@@ -45,17 +45,17 @@ const byte switchSpdPin =       1;      // NOTE: 0 and 1 are the RX and TX pins.
 const byte OLED_SDA =           2;      // used for the oled display through u8glib
 const byte OLED_SCL =           3;      // used for the oled display through u8glib
 const byte switchConfigPin =    4;
-const byte ledHeadPin =         5;
-//const byte ledAuxPin =          6;   // brake light in the hood
-const byte ledBrakePin =          12;   // brake light in the hood
+const byte ledHeadPin =         5;      // PWM
+const byte ledAuxPin =          6;      // PWM
+//const byte ledBrakePin =      6;
 const byte switchBrakePin =     7;
 const byte switchAlarmPin =     8;
-const byte ledRightPin =        9;
-const byte ledLeftPin =         10;
-const byte ledRearPin =         11;
-//const byte ledAux2Pin =         12; // wide beam inside headlight
-const byte ledAux2Pin =         6; // wide beam inside headlight
-const byte speakerPin =         13;
+const byte ledRightPin =        9;      // PWM
+const byte ledLeftPin =         10;     // PWM
+const byte ledRearPin =         11;     // PWM
+const byte ledBrakePin =        12;     // On/Off (No intensity variation)
+//const byte ledAuxPin =        12;
+const byte speakerPin =         13;     // PWM
 const byte voltagePin =         A0;
 
 const byte switchRightPin =     A1;
@@ -95,7 +95,7 @@ const byte setTeethOnCainring = VP_CHAINRING;
 /* This makes the setting accessible through the python configuration script */
 #define VP_DIMMED_INTENSITY 96
 #endif
-// NOTE: -1 indicated end of setting or non-used values. 
+// NOTE: -1 indicated end of setting or non-used values.
 // Note these are the normal intensities.
 
 // 1ste position is reserved for the black level and sleep (ie: turn it all the way off)
@@ -105,12 +105,12 @@ const byte setTeethOnCainring = VP_CHAINRING;
 //
 
 #if defined(QUATRO)
-const int leftLedIntensities[8]  = {0, 0, 64, 128, 255,  -1, -1, -1}; // Indicators left
-const int rightLedIntensities[8] = {0, 0, 64, 128, 255,  -1, -1, -1}; // Indicators right
-const int brakeLedIntensities[8] = {0, 0, 64, 128, 255,  -1, -1, -1}; // Brake light in the hood
-const int headLedIntensities[8]  = {0, 0, 32, 96,  255,  -1, -1, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
-const int rearLedIntensities[8]  = {0, 8, 32, 64,  128, 255, -1, -1}; // Rear light
-const int auxLedIntensities[8]  =  {0, 0, -1, -1,   -1,  -1, -1, -1}; // Extra unused pin Set to zero
+const int leftLedIntensities[8]  = {0, 0, 64,  128, 255,  -1, -1, -1}; // Indicators left
+const int rightLedIntensities[8] = {0, 0, 64,  128, 255,  -1, -1, -1}; // Indicators right
+const int brakeLedIntensities[8] = {0, 0, 64,  128, 255,  -1, -1, -1}; // Brake light in the hood
+const int headLedIntensities[8]  = {0, 0, 32,  96,  255,  -1, -1, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
+const int rearLedIntensities[8]  = {0, 8, 32,  64,  128, 255, -1, -1}; // Rear light
+const int auxLedIntensities[8]  =  {0, 0, 255, -1,   -1,  -1, -1, -1}; // Extra unused pin Set to zero
 
 #elif defined(ICB_DF)
 // *TODO: fix lengths

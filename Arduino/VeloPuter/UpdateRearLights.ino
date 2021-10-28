@@ -24,6 +24,7 @@ void updateRear()
   /*
     Get the state of affairs
   */
+  long tNow_ms = millis();
   bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
   bool setIsBrakeSwitchChanged = brakeSwitch.hasStateChanged();
   bool setIsBrakeSwitchTimerExpired = (millis() - brakeSwitch.getTimeLastChange_ms()) > (1000 * tDurationBrakeLight_s);
@@ -31,6 +32,8 @@ void updateRear()
   bool setIsDownSwitchOnChanged = downSwitch.getState() == LOW && downSwitch.hasStateChanged();
   bool setIsMoving = not (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());   //(speed_kmh != 0 || cadence_rpm != 0) && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive();
   bool setIsBrakeLedOn = brakeLed.getICurrentIntensity() == brakeLed.IMax();
+  bool setIsFlashHighExpired = (rearLed.getICurrentIntensity() >= 2) and      setIsBrakeLedOn  and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms);
+  bool setIsFlashLowExpired  = (rearLed.getICurrentIntensity() >= 2) and (not setIsBrakeLedOn) and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms);
 
   /*
     Determine what to do
@@ -39,14 +42,25 @@ void updateRear()
   bool setDoRearMax = false;
   bool setDoRearUp = false;
   bool setDoRearDown = false;
+  bool setDoBrakeFlashOn = false;
+  bool setDoBrakeFlashOff = false;
 
-  // Todo: why no brake after sleep?
+
   // Todo: clode clean
   // TODO: make sure it is faster. Skip unnececary loops.
+  // todo: Flash the brake
 
-  if ((not setIsBrakeSwitchOn) and setIsBrakeLedOn)
+  if ((not setIsBrakeSwitchOn) and setIsBrakeLedOn and setIsBrakeSwitchChanged)
   {
     setDoRearOff = true;
+  }
+  else if ((not setIsBrakeSwitchOn) and (not setIsBrakeSwitchChanged) and setIsFlashHighExpired)
+  {
+    setDoBrakeFlashOff = true;
+  }
+  else if ((not setIsBrakeSwitchOn) and (not setIsBrakeSwitchChanged) and setIsFlashLowExpired)
+  {
+    setDoBrakeFlashOn = true;
   }
   else if (setIsBrakeSwitchOn and setIsBrakeSwitchTimerExpired and setIsBrakeLedOn)
   {
@@ -56,6 +70,10 @@ void updateRear()
   {
     setDoRearMax = true;
   }
+  else if (setIsBrakeSwitchOn and not setIsMoving)
+  {
+    setDoRearOff = true;
+  }
   else if (setIsBrakeSwitchOn and setIsUpSwitchOnChanged)
   {
     setDoRearUp = true;
@@ -64,10 +82,12 @@ void updateRear()
   {
     setDoRearDown = true;
   }
+
+
   // else: do nothing.....
 
   /*
-    Update the leds
+    Update the leds depending on the brake handle
   */
   if (setDoRearMax)
   {
@@ -101,7 +121,14 @@ void updateRear()
     rearLed.setLedToPreviousIntensity ();
     rearLed.downLed();
     rearLed.setLedStoreCurrentIntensityAsPrevious ();// TODO: why is this needed??
-
+  }
+  else if (setDoBrakeFlashOn)
+  {
+    brakeLed.setLedMax();
+  }
+  else if (setDoBrakeFlashOff)
+  {
+    brakeLed.setLedOff();
   }
 
   //
