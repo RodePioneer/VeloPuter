@@ -17,18 +17,53 @@
 */
 void updateConfig()
 {
-  //configSwitch.ReadOut();
+  /****************************************************************************************
 
+    Get the state of affairs: aa determine the state of all relevant sensors and LEDs.
+
+  ****************************************************************************************/
+  bool setIsConfigSwitchOn = configSwitch.getState() == LOW;
+  bool setIsConfigSwitchChanged = configSwitch.hasStateChanged() == 1;
+  bool setIsUpSwitchOn = upSwitch.getState() == LOW;
+  bool setIsDownSwitchOn = downSwitch.getState() == LOW;
+
+  bool setDoPowerManagementOff = false;
+  bool setDoPowerManagementOn = false;
+  bool setToggleOledIntensity = false;
+
+  /****************************************************************************************
+
+    Determine what to do by analysing the state of affairs
+
+  ****************************************************************************************/
   // See of there is also a up or down switch active: disable or enable the battery check.
-  if ( configSwitch.getState() == LOW && downSwitch.getState() == LOW)
+  if (setIsConfigSwitchOn and setIsDownSwitchOn)
+  {
+    setDoPowerManagementOff = true;
+  }
+  else if (setIsConfigSwitchOn and setIsUpSwitchOn)
+  {
+    setDoPowerManagementOn = true;
+  }
+  else if (setIsConfigSwitchOn and setIsConfigSwitchChanged)
+  {
+    setToggleOledIntensity = true;
+  }
+  /****************************************************************************************
+
+    Update the Oled or the powermanagement depending on the brake handle
+
+  ****************************************************************************************/
+  // See of there is also a up or down switch active: disable or enable the battery check.
+  if (setDoPowerManagementOff)
   {
     doBatteryCheck = false;
   }
-  else if (configSwitch.getState() == LOW && upSwitch.getState() == LOW )
+  else if (setDoPowerManagementOn)
   {
     doBatteryCheck = true;
   }
-  else if (configSwitch.hasStateChanged() && configSwitch.getState() == LOW )
+  else if (setToggleOledIntensity)
   {
     if (setOledIntensity >= 128)
     {
@@ -88,7 +123,6 @@ void updateGear()
     axle speed = front axle speed * (front wheel circumference / read wheel circumference)
   */
   float gearOnCassette = float(setTeethOnCainring) * gearOnCassette_scaling * cadenceSwitch.getInteruptFrequency(1500) / speedSwitch.getInteruptFrequency(1500);
-
   gearOnCassette_teeth = round(gearOnCassette);
 
 }

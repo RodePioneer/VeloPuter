@@ -15,10 +15,9 @@ class Switch
     long tNow_ms             = 0;
     volatile long tInterupts_ms[10] = {0};
 
-    byte LastState = HIGH;
     byte iEnd = sizeof (tInterupts_ms) / sizeof (tInterupts_ms[0]) - 1;
     byte State = HIGH; // Note that due to the internal pull-up resistor HIGH means an open connection and LOW is a closed switch.
-    byte StateChanged = LOW;
+    bool StateChanged = LOW;
     byte Pin = 255; // 255 is a default
 
   public:
@@ -50,7 +49,6 @@ class Switch
     void ReadOut (void)
     {
       tNow_ms = millis();
-      LastState = State;
       StateChanged = false;
 
       // Ignore everything if not enough time has passed.
@@ -59,8 +57,13 @@ class Switch
       {
         if (Pin != 255) // difference between checked pins and interupt pins. Interupt pins only act on change.
         {
-          State = digitalRead(Pin);
-          StateChanged = (State != LastState);
+          //LastState = State;
+          byte setNewState = digitalRead(Pin);
+          StateChanged = (State != setNewState);
+          if (StateChanged)
+          {
+            State = setNewState;
+          }
         }
         else // interupt based
         {
@@ -82,7 +85,7 @@ class Switch
     }
 
     // Has this switch changed state since the last read out.
-    byte hasStateChanged (void)
+    bool hasStateChanged (void)
     {
       return StateChanged;
     }
@@ -98,7 +101,7 @@ class Switch
          Handeling interupts
 
     */
-    byte getInteruptActive (void)
+    bool getInteruptActive (void)
     {
       /*
          An interupt is NOT active when there are zeros left in the
@@ -177,7 +180,6 @@ class Switch
       // define upper als lower limits to the debounce time.
       //
       //  On a 1590 mm wheel the speed for 1 Hz ~ 6 km/h. -> debounce upper limit for this is 0.25 s = 250 ms.
-      //
       //
       tDebounceVariable_ms = constrain(tDebounceVariable_ms, tDebounce_ms, 250);
 

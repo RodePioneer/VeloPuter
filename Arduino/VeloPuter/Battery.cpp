@@ -14,7 +14,6 @@ class Battery
     float PinMean = analogRead(Pin);
     const int tDelayBatteryStatusChange_s = 10;
     byte statusBattery = BATTERY_GREEN;
-//    byte setBatteryStatusHasChanged;
 
   public:
 
@@ -32,14 +31,16 @@ class Battery
         else if (getVoltage_mv() >= 6000) numOfCells  = 2;  // 5 cells
       }
       else if (SetBatteryType == LIFEPO4)
-      { // Do not count cells for LIFEPO4
+      {
+        // Do not count cells for LIFEPO4
         numOfCells = 1;
       }
       return numOfCells;
     }
 
     int getVoltage_mv ()
-    { // returns the battery voltage
+    {
+      // returns the battery voltage
       const byte numSamples = 10 ;
       PinMean = (PinMean * (numSamples - 1) + analogRead(Pin)) / numSamples; // the mean voltage on the pin.
       int batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2020-05-03 @ Boekelo by Rode Pioneer
@@ -47,7 +48,8 @@ class Battery
     }
 
     int getVoltageCell_mv ()
-    { // returns the battery voltage per cell. This is battery specific.
+    { 
+      // returns the battery voltage per cell. This is battery specific.
       return getVoltage_mv() / getNumberOfCells() ;
     }
 
@@ -116,12 +118,12 @@ class Battery
       // Code Red is below 15%
       // Code Black is below 5%
       const byte Batt_pct_limits[3] = {25, 15, 5};
-      //const byte Batt_pct_limits[3] = {50, 49, 5}; // For testing purposes, drop 1 level 
+      //const byte Batt_pct_limits[3] = {50, 49, 5}; // For testing purposes, drop 1 level
       long tNow_ms = 0;
 
       // Add a 15 sec delay on battery state changes
       tNow_ms = millis();
-//      setBatteryStatusHasChanged = 0;
+      //      setBatteryStatusHasChanged = 0;
       if (tLastStateChange_ms + tDelayBatteryStatusChange_s * 1000 < tNow_ms)
       {
         //
@@ -143,27 +145,23 @@ class Battery
         {
           statusBattery = BATTERY_GREEN;
           tLastStateChange_ms = tNow_ms;
-//          setBatteryStatusHasChanged = 1;
         }
         else if ((getPercentage_pct() < Batt_pct_limits[0]) && (statusBattery == BATTERY_GREEN))
         {
           statusBattery = BATTERY_ORANGE;
           tLastStateChange_ms = tNow_ms;
-//          setBatteryStatusHasChanged = 1;
         }
         else if ((getPercentage_pct() < Batt_pct_limits[1]) && (statusBattery == BATTERY_ORANGE))
         {
           statusBattery = BATTERY_RED;
           tLastStateChange_ms = tNow_ms;
-//          setBatteryStatusHasChanged = 1;
         }
         else if ((getPercentage_pct() < Batt_pct_limits[2]) && (statusBattery == BATTERY_RED))
         {
           statusBattery = BATTERY_BLACK;
           tLastStateChange_ms = tNow_ms;
-//          setBatteryStatusHasChanged = 1;
         }
-       
+
       }
       return statusBattery;
     }

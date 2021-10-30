@@ -37,7 +37,7 @@ void wakeUp() {
   pinMode(switchConfigPin, INPUT_PULLUP);
   configSwitch.setPinID(switchConfigPin);
 
-
+  // Note that we DO NOT set a Pin ID for the interupts. This is used to separate 
   pinMode(switchSpdPin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(switchSpdPin), interruptServiceRoutineSpeed, FALLING); // 0 = interupt on pin 2
 
@@ -50,25 +50,25 @@ void wakeUp() {
 
   // Setup all the outputs (5 LED in total and a speaker)
 
-  // Indicator: left
+  // Indicator: left (PWM)
   pinMode(ledLeftPin, OUTPUT);
   leftLed.setPinID(ledLeftPin);
   memcpy (leftLed.setIntensities, leftLedIntensities, sizeof(leftLedIntensities));
   leftLed.setLedOff();
 
-  // Indicator: right
+  // Indicator: right (PWM)
   pinMode(ledRightPin, OUTPUT);
   rightLed.setPinID(ledRightPin);
   memcpy (rightLed.setIntensities, rightLedIntensities, sizeof(rightLedIntensities));
   rightLed.setLedOff();
 
-  // Rear light
+  // Rear light. (PWM)
   pinMode(ledRearPin, OUTPUT);
   rearLed.setPinID(ledRearPin);
   memcpy (rearLed.setIntensities, rearLedIntensities, sizeof(rearLedIntensities));
   rearLed.setLedLow();
 
-  // Head light
+  // Head light. (PWM)
   pinMode(ledHeadPin, OUTPUT);
   headLed.setPinID(ledHeadPin);
   memcpy (headLed.setIntensities, headLedIntensities, sizeof(headLedIntensities));
@@ -93,8 +93,7 @@ void wakeUp() {
   // Set the battery type
   myBattery.setType(setBatteryType);
 
-
-  // Start display
+  // Start display after 100 ms
   delay (100);
   drawSplash ();
 }

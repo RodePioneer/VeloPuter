@@ -15,33 +15,53 @@
 void updateHead()
 {
 
-  //
-  // Determine what to do
-  //
-  // Check if the brake and the config are off
+  /****************************************************************************************
+
+    Get the state of affairs: aa determine the state of all relevant sensors and LEDs.
+
+  ****************************************************************************************/
   bool setIsBrakeOff = brakeSwitch.getState() == HIGH;
   bool setIsConfigOff = configSwitch.getState() == HIGH;
+  bool setIsUpSwitchOnChanged   = upSwitch.getState() == LOW && upSwitch.hasStateChanged();
+  bool setIsDownSwitchOnChanged = downSwitch.getState() == LOW && downSwitch.hasStateChanged();
 
-  // Do we up or lower the lights?
-  bool setDoHeadUp = upSwitch.getState() == LOW && upSwitch.hasStateChanged() && setIsBrakeOff && setIsConfigOff;
-  bool setDoHeadDown = downSwitch.getState() == LOW && downSwitch.hasStateChanged() && setIsBrakeOff && setIsConfigOff;
+  /*
+    Set the default actions.
+  */
+  bool setDoHeadUp = false;
+  bool setDoHeadDown = false;
 
-  //
-  // Update the leds
-  //
-  // more light
-  if (setDoHeadUp)
+  /****************************************************************************************
+
+     Determine what to do by analysing the state of affairs
+
+  ****************************************************************************************/
+  if (setIsUpSwitchOnChanged and setIsBrakeOff and setIsConfigOff)
   {
-    headLed.upLed();
-    // Uncomment the next line if there is a headlight attached to aux2
-    //auxLed.upLed();
+    setDoHeadUp = true;
+  }
+  else if (setIsDownSwitchOnChanged and setIsBrakeOff and setIsConfigOff)
+  {
+    setDoHeadDown = true;
   }
 
-  // less light
-  if (setDoHeadDown)
+  /****************************************************************************************
+
+    Update the leds depending on the brake handle
+
+  ****************************************************************************************/
+  if (setDoHeadUp)
   {
+    // more light
+    headLed.upLed();
+    // Uncomment the next line if there is a headlight attached to aux
+    //auxLed.upLed();
+  }
+  else if (setDoHeadDown)
+  {
+    // less light
     headLed.downLed();
-    // Uncomment the next line if there is a headlight attached to aux2
+    // Uncomment the next line if there is a headlight attached to aux
     //auxLed.downLed();
   }
 }

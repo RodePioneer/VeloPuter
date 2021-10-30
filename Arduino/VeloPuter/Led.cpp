@@ -29,33 +29,6 @@ class Led
   public:
     byte setBatteryLimit = 0;
 
-
-    // used to limit the max intensities according to the battery state.
-
-    //    byte getFlashOnStatus()
-    //    {
-    //      return flashOn;
-    //    }
-    //
-    //    void toggleFlashLed() // set led intensity to max intensity, without changing internal led intensity (for easy reset)
-    //    {
-    //      if (flashOn)
-    //      {
-    //        analogWrite(pin, ledIntensity_255);
-    //        flashOn = false;
-    //        tLastStateChange_ms = millis();
-    //      }
-    //      else
-    //      {
-    //        setLedMax();
-    //        //analogWrite(pin, maxIntensity);
-    //        flashOn = true;
-    //        tLastStateChange_ms = millis();
-    //      }
-    //    }
-
-
-
     /************************************************************
 
        Configuration of the LED

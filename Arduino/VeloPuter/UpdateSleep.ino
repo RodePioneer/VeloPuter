@@ -18,10 +18,12 @@ void updateSleep ()
   tLastStateChange_ms = max(tLastStateChange_ms, cadenceSwitch.getTimeLastChange_ms());
   tLastStateChange_ms = max(tLastStateChange_ms, speedSwitch.getTimeLastChange_ms());
 
+  //long tLastStateChange_min = tLastStateChange_ms / 60000;
+
   // We detected a cadence or a speed sensor. Reduce the time until sleep.
-  if (cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive())
+  if ((cadenceSwitch.getInteruptActive() || speedSwitch.getInteruptActive()))
   {
-    tSleep_ms = long(tSleepCadSpd_min) * 1000 * 60;
+    tSleep_ms = tSleepCadSpd_min * 60000;
   }
 
   // When the time has passed and the alarm blinkers are NOT on go to sleep.

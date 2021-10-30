@@ -21,7 +21,7 @@ void updateRear()
 
   ****************************************************************************************/
   long tNow_ms = millis();
-  bool setIsMoving = not (speed_kmh == 0 && cadence_rpm == 0 && cadenceSwitch.getInteruptActive() && speedSwitch.getInteruptActive());
+  bool setIsMoving = speed_kmh > 0 or speedSwitch.getInteruptActive() == 0;
   bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
   bool setIsBrakeSwitchChanged = brakeSwitch.hasStateChanged();
   bool setIsBrakeSwitchTimerExpired = (millis() - brakeSwitch.getTimeLastChange_ms()) > (1000 * tDurationBrakeLight_s);
@@ -46,21 +46,25 @@ void updateRear()
      Determine what to do by analysing the state of affairs
 
   ****************************************************************************************/
+  // TODO fix weird issue with moving and non-noving flash / all lights out.
+  //x :- fuck
+
+  // Note that the order is relevant. 
 
   // The brake switch is not applied but was just released and the LED is on: set all rear lights back to normal.
   if (not setIsBrakeSwitchOn and setIsBrakeLedOn and setIsBrakeSwitchChanged)
   {
     setDoRearOff = true;
   }
-  // The brake switch is not applied and has not changed and brake light has been ON long enough: turn OFF the brake light.
-  else if (not setIsBrakeSwitchOn and not setIsBrakeSwitchChanged and setIsFlashHighExpired)
+  // The up-switch was turned on while the brake switch is applied: increase the rear lights intensity
+  else if (setIsBrakeSwitchOn and setIsUpSwitchOnChanged)
   {
-    setDoBrakeFlashOff = true;
+    setDoRearUp = true;
   }
-  // The brake switch is not applied and has not changed and brake light has been OFF long enough: turn ON the brake light.
-  else if (not setIsBrakeSwitchOn and not setIsBrakeSwitchChanged and setIsFlashLowExpired)
+  // The down-switch was turned on while the brake switch is applied: reduce the rear lights intensity
+  else if (setIsBrakeSwitchOn and setIsDownSwitchOnChanged)
   {
-    setDoBrakeFlashOn = true;
+    setDoRearDown = true;
   }
   // The brake switch is applied, but has been for a long time and the brake light is on: assume that we are standing still for a long time and set all rear lights back to normal.
   else if (setIsBrakeSwitchOn and setIsBrakeSwitchTimerExpired and setIsBrakeLedOn)
@@ -77,23 +81,24 @@ void updateRear()
   {
     setDoRearOff = true;
   }
-  // The up-switch was turned on while the brake switch is applied: increase the rear lights intensity
-  else if (setIsBrakeSwitchOn and setIsUpSwitchOnChanged)
+  // The brake switch is not applied and has not changed and brake light has been ON long enough: turn OFF the brake light.
+  else if (not setIsBrakeSwitchOn and not setIsBrakeSwitchChanged and setIsFlashHighExpired and setIsMoving)
   {
-    setDoRearUp = true;
+    setDoBrakeFlashOff = true;
   }
-  // The down-switch was turned on while the brake switch is applied: reduce the rear lights intensity
-  else if (setIsBrakeSwitchOn and setIsDownSwitchOnChanged)
+  // The brake switch is not applied and has not changed and brake light has been OFF long enough: turn ON the brake light.
+  else if (not setIsBrakeSwitchOn and not setIsBrakeSwitchChanged and setIsFlashLowExpired and setIsMoving)
   {
-    setDoRearDown = true;
+    setDoBrakeFlashOn = true;
   }
+
 
   /****************************************************************************************
 
     Update the leds depending on the brake handle
 
   ****************************************************************************************/
-  
+
   if (setDoRearMax)
   {
     // Set both LEDs to max but make sure we can set the rear light back to its current value after the brake is released.
