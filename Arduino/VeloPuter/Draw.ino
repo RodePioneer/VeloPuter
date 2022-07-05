@@ -365,6 +365,9 @@ void drawLightIcons ()
   const byte r = 50;
   const byte c1 = 28 + 32;
   const byte c2 = 128 - 24;
+  bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
+
+  
 
   /*
     // The icon which indicated the status of the headlight.
@@ -377,7 +380,8 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the rearlight.
   */
-  if (brakeLed.getICurrentIntensity() == brakeLed.IMax() ) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  // 
+  if (brakeLed.getICurrentIntensity() == brakeLed.IMax() and setIsBrakeSwitchOn) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
   else if (rearLed.getICurrentIntensity() == 0)    u8g.drawBitmapP (c2, r, 3, 14, icoNone);
   else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
   else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);

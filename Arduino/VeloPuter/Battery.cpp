@@ -45,7 +45,9 @@ class Battery
       // returns the battery voltage
       const byte numSamples = 10 ;
       PinMean = (PinMean * (numSamples - 1) + analogRead(Pin)) / numSamples; // the mean voltage on the pin.
-      int batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2020-05-03 @ Boekelo by Rode Pioneer
+      //int batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2020-05-03 @ Boekelo by Rode Pioneer 
+      int batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
+      
       return batteryVoltage_mv ;
     }
 
