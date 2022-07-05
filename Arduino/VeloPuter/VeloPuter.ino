@@ -87,11 +87,11 @@ void loop ()
 
   // Update the stuff which is also fine to do at a slow pace.
   // The lines are execured only once every time the screen has made a full cycle. 
-  updatePowerManagement(); // Read out and calculate the acutual battery status
   updateSpeed();   // Check the speed based on the interupts which have been.
   updateCadence(); // Check the cadence based on the interupts which have been.
   updateGear();    // Figure out which gear we are using at the moment.
 
+  updatePowerManagement(); // Read out and calculate the acutual battery status
   updateSleep();   // See is we need to powerdown the Arduino
 
 }

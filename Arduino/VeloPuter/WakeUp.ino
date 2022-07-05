@@ -84,7 +84,7 @@ void wakeUp() {
   pinMode(ledAuxPin, OUTPUT);
   auxLed.setPinID(ledAuxPin);
   memcpy (auxLed.setIntensities, auxLedIntensities, sizeof(auxLedIntensities));
-  auxLed.setLedOff();
+  auxLed.setLedLow(); // Functions as a head light. 
   
 
   // Speaker

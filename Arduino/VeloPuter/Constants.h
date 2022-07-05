@@ -46,18 +46,15 @@ const byte OLED_SDA =           2;      // used for the oled display through u8g
 const byte OLED_SCL =           3;      // used for the oled display through u8glib
 const byte switchConfigPin =    4;
 const byte ledHeadPin =         5;      // PWM
-const byte ledAuxPin =          6;      // PWM
-//const byte ledBrakePin =      6;
 const byte switchBrakePin =     7;
+const byte ledAuxPin =          6;      // PWM Aux is configured as a second head light.
 const byte switchAlarmPin =     8;
 const byte ledRightPin =        9;      // PWM
 const byte ledLeftPin =         10;     // PWM
 const byte ledRearPin =         11;     // PWM
 const byte ledBrakePin =        12;     // On/Off (No intensity variation)
-//const byte ledAuxPin =        12;
 const byte speakerPin =         13;     // PWM
 const byte voltagePin =         A0;
-
 const byte switchRightPin =     A1;
 const byte switchLeftPin =      A2;
 const byte switchHeadDownPin =  A3;
@@ -107,10 +104,10 @@ const byte setTeethOnCainring = VP_CHAINRING;
 #if defined(QUATRO)
 const int leftLedIntensities[8]  = {0, 0, 64,  128, 255,  -1, -1, -1}; // Indicators left
 const int rightLedIntensities[8] = {0, 0, 64,  128, 255,  -1, -1, -1}; // Indicators right
-const int brakeLedIntensities[8] = {0, 0, 64,  128, 255,  -1, -1, -1}; // Brake light in the hood
 const int headLedIntensities[8]  = {0, 0, 32,  96,  255,  -1, -1, -1};  // Recom: {255, 255, 255-32, 255-VP_DIMMED_INTENSITY, 0}; // Head lights
+const int auxLedIntensities[8]  =  {0, 0, 32,  96,  255,  -1, -1, -1}; // Doubles as the head light
+const int brakeLedIntensities[8] = {0, 0, 64,  128, 255,  -1, -1, -1}; // Brake light in the hood
 const int rearLedIntensities[8]  = {0, 8, 32,  64,  128, 255, -1, -1}; // Rear light
-const int auxLedIntensities[8]  =  {0, 0, 255, -1,   -1,  -1, -1, -1}; // Extra unused pin Set to zero
 
 #elif defined(ICB_DF)
 // *TODO: fix lengths

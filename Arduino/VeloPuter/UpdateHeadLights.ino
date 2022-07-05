@@ -55,13 +55,13 @@ void updateHead()
     // more light
     headLed.upLed();
     // Uncomment the next line if there is a headlight attached to aux
-    //auxLed.upLed();
+    auxLed.upLed();
   }
   else if (setDoHeadDown)
   {
     // less light
     headLed.downLed();
     // Uncomment the next line if there is a headlight attached to aux
-    //auxLed.downLed();
+    auxLed.downLed();
   }
 }

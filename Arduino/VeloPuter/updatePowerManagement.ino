@@ -16,20 +16,19 @@ void updatePowerManagement()
 
   */
   byte setPreviousBatteryColorCode = BATTERY_GREEN;
-  byte setBatteryStatusHasChanged = false;
+  bool setBatteryStatusHasChanged = false;
 
   if (doBatteryCheck) {
 
-    int setCurrentBatteryColorCode = myBattery.getColorCode();
-    //byte setBatteryStatusHasChanged = myBattery.getBatteryStatusHasChanged();
-
+    byte setCurrentBatteryColorCode = myBattery.getColorCode();
+  
     setBatteryStatusHasChanged = setPreviousBatteryColorCode != setCurrentBatteryColorCode;
 
     if (setBatteryStatusHasChanged)
     {
       if (setCurrentBatteryColorCode == BATTERY_GREEN)       setBatteryToGreen ();
-      else if (setCurrentBatteryColorCode == BATTERY_RED)    setBatteryToRed ();
       else if (setCurrentBatteryColorCode == BATTERY_ORANGE) setBatteryToOrange ();
+      else if (setCurrentBatteryColorCode == BATTERY_RED)    setBatteryToRed ();
       else if (setCurrentBatteryColorCode == BATTERY_BLACK)  setBatteryToBlack ();
     }
   }
