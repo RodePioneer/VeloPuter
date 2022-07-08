@@ -10,67 +10,133 @@ class Battery
     enum {LIPO, LIFEPO4};
     enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};
 
-    byte SetBatteryType = LIPO;
-    byte Pin = 255; // 255 is a default
-    long tNow_ms             = 0;
-    float PinMean = analogRead(Pin);
-    const int tDelayBatteryStatusChange_s = 2;
-    byte statusBattery = BATTERY_GREEN;
-    long tLastStateChange_ms = 0;
-    //int batteryVoltage_mv = 0;
-  
-    //  
-    // Get the number of cells in serries in a LIPO battery
-    //
-    byte getNumberOfCells ()
+    // Init at defaults
+    byte batteryType = LIPO;
+    byte batteryPin = 255; 
+    int batteryCellVoltage_mv = 0;
+    int batteryVoltage_mv = 0;
+    int batteryStatus_pct = 100;
+    byte batteryStatus_color = BATTERY_GREEN;
+    byte batteryNumOfCells = 1;
+
+
+    /*********************************************
+
+      All calculations are done in the private updateXXX functions.
+      The data can be retrieved by the getXXX functions.
+
+    *********************************************/
+
+
+    /******************************************************************************************
+
+       Update: calculate the Battery Voltage [V]
+
+    */
+    void updateBatteryVoltage_mv ()
     {
-      byte numOfCells = 1;
-      if (SetBatteryType == LIPO)
-      { // Calculate the number of cells for LIPO
-             if (getVoltage_mv() >= 17000) numOfCells = 1;       // 5 or more: dislay voltage 4.2*4 = 16.8
-        else if (getVoltage_mv() >= 12800) numOfCells = 4;  // 4 cells
-        else if (getVoltage_mv() >= 9000) numOfCells  = 3;  // 3 cells
-        else if (getVoltage_mv() >= 6000) numOfCells  = 2;  // 5 cells
+      long PinMean = 0;
+
+      // returns the battery voltage
+      if (PinMean == 0)
+      {
+        // No value set yet. Get one.
+        PinMean = analogRead(batteryPin);
       }
-      else if (SetBatteryType == LIFEPO4)
+      else
+      {
+        // Use an decaying moving average
+        const byte numSamples = 10 ;
+        PinMean = (PinMean * (numSamples - 1) + analogRead(batteryPin)) / numSamples;
+      }
+      batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
+    }
+
+    /******************************************************************************************
+
+       Update: From the Battery voltage estimate the number of cells in serries in a LIPO battery
+
+    */
+    void updateBatteryNumberOfCells ()
+    {
+      const int Batt_voltage_limits[4] = {17000, 12800, 9000, 6000};
+      if (batteryType == LIPO)
+      { // Calculate the number of cells for LIPO
+        if (batteryVoltage_mv >= Batt_voltage_limits[0]) batteryNumOfCells = 1;        // 5 or more: dislay voltage 4.2*4 = 16.8
+        else if (batteryVoltage_mv >= Batt_voltage_limits[1]) batteryNumOfCells = 4;   // 4 cells
+        else if (batteryVoltage_mv >= Batt_voltage_limits[2]) batteryNumOfCells  = 3;  // 3 cells
+        else if (batteryVoltage_mv >= Batt_voltage_limits[3]) batteryNumOfCells  = 2;  // 2 cells
+      }
+      else if (batteryType == LIFEPO4)
       {
         // Do not count cells for LIFEPO4
-        numOfCells = 1;
+        batteryNumOfCells = 1;
       }
-      return numOfCells;
     }
 
-    //
-    // Get the Battery Voltage
-    //
-    // TODO: add a 1,2,5,whatever seconds delay skip
-    int getVoltage_mv ()
+    /******************************************************************************************
+
+       Update: From the Battery voltage and number of cell calculate the average cell voltage.
+
+    */
+    void updateVoltageCell_mv ()
     {
-      // returns the battery voltage
-      const byte numSamples = 20 ;
-      PinMean = (PinMean * (numSamples - 1) + analogRead(Pin)) / numSamples; // the mean voltage on the pin.
-      
-      //int batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2020-05-03 @ Boekelo by Rode Pioneer 
-      //int batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
-      int batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
-      return batteryVoltage_mv ;
+      batteryCellVoltage_mv = batteryVoltage_mv / batteryNumOfCells;
     }
 
+    /******************************************************************************************
 
-  public:
-    //
-    // Get the Voltage per cell
-    //
-    int getVoltageCell_mv ()
-    { 
-      // returns the battery voltage per cell. This is battery specific.
-      return getVoltage_mv() / getNumberOfCells();
+       Update: battery color code
+
+    */
+    void updateBatteryColorCode()
+    { // Code Green   == Full functionality (capacity % above 1st number)
+      // Code orange  == no high beams      (capacity % below 2nd number)
+      // Code Red     == only weak lights   (capacity % below 3rd number)
+      // Code Black   == turn off           (capacity % below last number)
+
+
+      //    const byte Batt_pct_limits[4] = {80, 25, 15, 5};
+      const byte Batt_pct_limits[4] = {80, 66, 33, 5};
+
+      //
+      // Only do something and update the timer when we enter a different state
+      //
+
+      /*
+         The colors go down, only on a switch to a full battery (green)
+         the colorcode can go up. This is to accomodate a battery change.
+
+         GREEN -> ORANGE -> RED -> BLACK
+           ^        |        |       |
+           |        |        |       |
+           +--------+--------+-------+
+      */
+
+      // We can only enter green when the battery status is high enough
+      if ((getPercentage_pct() >= Batt_pct_limits[0]) && (batteryStatus_color != BATTERY_GREEN))
+      {
+        batteryStatus_color = BATTERY_GREEN;
+      }
+      else if ((getPercentage_pct() < Batt_pct_limits[1]) && (batteryStatus_color == BATTERY_GREEN))
+      {
+        batteryStatus_color = BATTERY_ORANGE;
+      }
+      else if ((getPercentage_pct() < Batt_pct_limits[2]) && (batteryStatus_color == BATTERY_ORANGE))
+      {
+        batteryStatus_color = BATTERY_RED;
+      }
+      else if ((getPercentage_pct() < Batt_pct_limits[3]) && (batteryStatus_color == BATTERY_RED))
+      {
+        batteryStatus_color = BATTERY_BLACK;
+      }
     }
+
 
     //
     // Get the percentage of charge left the the battery by comparing the cell voltage to a look up table.
     //
-    byte getPercentage_pct ()
+    void updatePercentage_pct ()
     { /*
         Define the voltage-percentage curves used for the interpolating lookup table
       */
@@ -91,7 +157,7 @@ class Battery
 
         LiPo
       */
-      const int V_mV[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3450, 3350};  //mV
+      const int V_mV[NUM_REFDATA] = {4200, 4000, 3850, 3750, 3550, 3350};  //mV
       const int C_pct[NUM_REFDATA] = {100,    90,   75,   50,    7,    0};      // % capacity
 #elif defined(BATTERY_LIFEPO4)
 #define NUM_REFDATA 7
@@ -107,7 +173,7 @@ class Battery
       //
       // Calc interpolated value
       //
-      // TODO: Change this to a two step aproach where we first find the index and then only calculate the pct only once. 
+      // TODO: Change this to a two step aproach where we first find the index and then only calculate the pct only once.
       int batteryPercentage_pct = 0;
       for (int i = NUM_REFDATA - 1; i > 0; i--)
       {
@@ -125,89 +191,50 @@ class Battery
           batteryPercentage_pct = int( (C_pct[i - 1] - C_pct[i]) * (getVoltageCell_mv() - V_mV[i]) / (V_mV[i - 1] - V_mV[i]) + C_pct[i] );
       }
 
-      batteryPercentage_pct = constrain(batteryPercentage_pct, 0, 99);
-      return batteryPercentage_pct;
-    }
-
-    // get Battery status
-    byte getColorCode()
-    {
-      return statusBattery;
+      batteryStatus_pct = constrain(batteryPercentage_pct, 0, 99);
     }
 
 
-    //
-    // Update battery color code
-    //
-    void updateBatteryColorCode()
+
+
+
+  public:
+    /**************************************************************************************
+        Update the battery
+    */
+    void updateBattery()
     {
-      //
-
-      // Code orange is below 25% == no high beams
-      // Code Red is below 15%    ==  only weak lights
-      // Code Black is below 5%   ==  turn off
-  //    const byte Batt_pct_limits[4] = {80, 25, 15, 5};
-      const byte Batt_pct_limits[4] = {80, 66, 33, 5};
-
-      long tNow_ms = 0;
-
-      // Add a tDelayBatteryStatusChange_s sec delay on battery state changes
-      tNow_ms = millis();
-      if (tLastStateChange_ms + tDelayBatteryStatusChange_s * 1000 < tNow_ms)
-      {
-        //
-        // Only do something and update the timer when we enter a different state
-        //
-
-        /*
-           The colors go down, only on a switch to a full battery (green) the colorcode can go up.
-
-           GREEN -> ORANGE -> RED -> BLACK
-             ^        |        |       |
-             |        |        |       |
-             +--------+--------+-------+
-        */
-
-
-        // We can only enter green when the battery status is high enough 
-        if ((getPercentage_pct() >= Batt_pct_limits[0]) && (statusBattery != BATTERY_GREEN))
-        {
-          statusBattery = BATTERY_GREEN;
-          tLastStateChange_ms = tNow_ms;
-        }
-        else if ((getPercentage_pct() < Batt_pct_limits[1]) && (statusBattery == BATTERY_GREEN))
-        {
-          statusBattery = BATTERY_ORANGE;
-          tLastStateChange_ms = tNow_ms;
-        }
-        else if ((getPercentage_pct() < Batt_pct_limits[2]) && (statusBattery == BATTERY_ORANGE))
-        {
-          statusBattery = BATTERY_RED;
-          tLastStateChange_ms = tNow_ms;
-        }
-        else if ((getPercentage_pct() < Batt_pct_limits[3]) && (statusBattery == BATTERY_RED))
-        {
-          statusBattery = BATTERY_BLACK;
-          tLastStateChange_ms = tNow_ms;
-        }
-
-      }
-      //return statusBattery;
+      /*
+        TODO: Add delay so we don't calculate every second.
+      */
+      updateBatteryVoltage_mv();
+      updateBatteryNumberOfCells();
+      updateVoltageCell_mv();
+      updatePercentage_pct();
+      updateBatteryColorCode ();
     }
 
-    //
-    // Functions to configure the battery
-    //
-
-    // Set the pin for this switch
-    void setPinID (byte pin)
-    {
-      Pin = pin;
+    /*
+       Return values
+    */
+    int getVoltageCell_mv ()   {
+      return batteryCellVoltage_mv;
+    }
+    byte getBatteryColorCode() {
+      return batteryStatus_color;
+    }
+    byte getPercentage_pct ()  {
+      return batteryStatus_pct;
     }
 
-    // set Battery type
-    void setType (byte setBatteryType)
-    {
-      SetBatteryType = setBatteryType;
+
+    /*
+       Configure the battery
+    */
+    void setPinID (byte Pin) {
+      batteryPin = Pin;
+    }
+    void setType (byte Type) {
+      batteryType = Type;
     }
 };
