@@ -46,8 +46,6 @@ void drawScreen ()
 
   //  u8g.setFont(u8g_font_helvR14r);
   //
-  //  u8g.setPrintPos (70, 17);
-  //  u8g.print(myBattery.getVoltage_mv());
   //  u8g.setPrintPos (70, 33);
   //  u8g.print(myBattery.getVoltageCell_mv());
   //  u8g.setPrintPos (40, 33);
