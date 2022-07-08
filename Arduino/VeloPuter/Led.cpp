@@ -15,10 +15,10 @@ class Led
     volatile long tLastStateChange_ms = 0;
     byte pin;
     byte iIntensityCurrent = 0;
-    byte iIntensityMaxAllowed =  255;
+    //byte iIntensityMaxAllowed =  255;
     byte iIntensityPrevious = 0;
     enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};
-    byte batteryColor = BATTERY_GREEN;
+    byte myBatteryGetColorCode = BATTERY_GREEN;
 
     void setLedIntensity (byte newIntensity_255) // directly set the new LED value, either digital or analog.
     {
@@ -56,6 +56,33 @@ class Led
       return iIntensityMaxPossible;
     }
 
+
+    byte iIntensityMaxAllowed()
+    {
+           //
+      // Determine the max allowed intensity for this battery color 
+      //
+      byte IIntensityMaxAllowed = IMax();
+      
+      if (myBatteryGetColorCode == BATTERY_GREEN)
+      {
+        IIntensityMaxAllowed = IMax();
+      }
+      else if (myBatteryGetColorCode == BATTERY_ORANGE)
+      {
+        IIntensityMaxAllowed = IMax() - 1;
+      }
+      else if (myBatteryGetColorCode == BATTERY_RED)
+      {
+        IIntensityMaxAllowed = IMax() - 2;
+      }
+      else if (myBatteryGetColorCode == BATTERY_BLACK)
+      {
+        IIntensityMaxAllowed = 0;
+      }
+      return IIntensityMaxAllowed;
+    }
+
     //
     // Functions for cunfiguring the LED
     //
@@ -63,8 +90,6 @@ class Led
     {
       pin = Pin;
     }
-
-
 
 
     // Return the INDEX of the current intensity setting.
@@ -110,31 +135,14 @@ class Led
     // Increase intensity until at the max setting (array index 1)
     // Add the battery state check here. Limit the up based on the battery level.
     void upLed (void)
-    {
-      //
-      // Determine the max allowed intensity for this battery color 
-      //
-      iIntensityMaxAllowed = IMax();
-      if (batteryColor == BATTERY_ORANGE)
-      {
-        iIntensityMaxAllowed = IMax() - 1;
-      }
-      else if (batteryColor == BATTERY_RED)
-      {
-        iIntensityMaxAllowed = IMax() - 2;
-      }
-      else if (batteryColor == BATTERY_BLACK)
-      {
-        iIntensityMaxAllowed = 0;
-      }
-      
+    {      
       //
       // Up the intensity if needed
       //
-      if (iIntensityCurrent < iIntensityMaxAllowed)
+      if (iIntensityCurrent < iIntensityMaxAllowed())
       {
-        iIntensityCurrent++;
-        setICurrentIntensity(iIntensityCurrent);
+        //iIntensityCurrent++;
+        setICurrentIntensity(iIntensityCurrent + 1);
       }
     }
 
@@ -143,8 +151,8 @@ class Led
     {
       if (iIntensityCurrent > 1)
       {
-        iIntensityCurrent--;
-        setICurrentIntensity(iIntensityCurrent);
+        //iIntensityCurrent--;
+        setICurrentIntensity(iIntensityCurrent - 1);
       }
     }
 
@@ -158,9 +166,9 @@ class Led
 
     void setLedMax (void)
     {
-      if (iIntensityCurrent != iIntensityMaxAllowed)
+      if (iIntensityCurrent != iIntensityMaxAllowed())
       {
-        iIntensityCurrent = iIntensityMaxAllowed;
+        iIntensityCurrent = iIntensityMaxAllowed();
         setICurrentIntensity(iIntensityCurrent);
       }
     }
@@ -193,16 +201,16 @@ class Led
     //
     void setLedToggleMax (void)
     {
-      if (iIntensityCurrent >= iIntensityMaxAllowed) // use >= because the max may have been lowered.
+      if (iIntensityCurrent >= iIntensityMaxAllowed()) // use >= because the max may have been lowered.
         // if the intensity is max: go back to the last known value
       {
-        iIntensityCurrent = min(iIntensityMaxAllowed, iIntensityPrevious); // use min in case the IMax and previous are the same....
+        iIntensityCurrent = min(iIntensityMaxAllowed(), iIntensityPrevious); // use min in case the IMax and previous are the same....
       }
       else
         // if the intensity is not max: store the intensity and then set hte intensity to max
       {
         iIntensityPrevious = iIntensityCurrent;
-        iIntensityCurrent = iIntensityMaxAllowed;
+        iIntensityCurrent = iIntensityMaxAllowed();
       }
       setICurrentIntensity(iIntensityCurrent);
     }
@@ -215,15 +223,17 @@ class Led
 
 
     //
+    //  Update the color and adjust the intenstiy when needed.
     //  
-    //  
-    void setBatteryColor (byte newBatteryColor)
+    void setMyBatteryGetColorCode (byte newBatteryColor)
     {
-      batteryColor = newBatteryColor;      
-      if (iIntensityCurrent > iIntensityMaxAllowed)
+      // Update battery status
+      myBatteryGetColorCode = newBatteryColor;  
+
+      // If needed recude light intensity
+      if (iIntensityCurrent > iIntensityMaxAllowed())
       {
-        iIntensityCurrent = iIntensityMaxAllowed;
-        setICurrentIntensity(iIntensityCurrent);
+        setICurrentIntensity(iIntensityMaxAllowed());
       }
     }
 

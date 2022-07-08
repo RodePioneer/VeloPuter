@@ -14,7 +14,7 @@ class Battery
     byte Pin = 255; // 255 is a default
     long tNow_ms             = 0;
     float PinMean = analogRead(Pin);
-    const int tDelayBatteryStatusChange_s = 10;
+    const int tDelayBatteryStatusChange_s = 2;
     byte statusBattery = BATTERY_GREEN;
     long tLastStateChange_ms = 0;
     //int batteryVoltage_mv = 0;

@@ -35,19 +35,19 @@ void updatePowerManagement()
     //
     // This mainly copies the battery status to the LED's
     //
-    if (setBatteryStatusHasChanged)
-    {
+   // if (setBatteryStatusHasChanged)
+  ////  {
       /*
        * We update the color coding for all the LED's
        * Inside the LED update routing this information is used to determine what is the actual max which we may set. 
        */
-      headLed.setBatteryColor(setCurrentBatteryColorCode);
-      auxLed.setBatteryColor(setCurrentBatteryColorCode);
-      rearLed.setBatteryColor(setCurrentBatteryColorCode);
-      brakeLed.setBatteryColor(setCurrentBatteryColorCode);
-      rightLed.setBatteryColor(setCurrentBatteryColorCode);
-      leftLed.setBatteryColor(setCurrentBatteryColorCode);
-    }
+      headLed.setMyBatteryGetColorCode(setCurrentBatteryColorCode);
+      auxLed.setMyBatteryGetColorCode(setCurrentBatteryColorCode);
+      rearLed.setMyBatteryGetColorCode(setCurrentBatteryColorCode);
+      brakeLed.setMyBatteryGetColorCode(setCurrentBatteryColorCode);
+      rightLed.setMyBatteryGetColorCode(setCurrentBatteryColorCode);
+      leftLed.setMyBatteryGetColorCode(setCurrentBatteryColorCode);
+  //  }
 
     //
     // Aditionally: if we went to black: kill the interupts so we won't wake up when we go to sleep.
