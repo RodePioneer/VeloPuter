@@ -16,18 +16,18 @@ class Battery
     float PinMean = analogRead(Pin);
     const int tDelayBatteryStatusChange_s = 10;
     byte statusBattery = BATTERY_GREEN;
-
-  public:
-
     long tLastStateChange_ms = 0;
-
-
+    //int batteryVoltage_mv = 0;
+  
+    //  
+    // Get the number of cells in serries in a LIPO battery
+    //
     byte getNumberOfCells ()
     {
       byte numOfCells = 1;
       if (SetBatteryType == LIPO)
       { // Calculate the number of cells for LIPO
-        if (getVoltage_mv() >= 17000) numOfCells = 1;       // 5 or more: dislay voltage 4.2*4 = 16.8
+             if (getVoltage_mv() >= 17000) numOfCells = 1;       // 5 or more: dislay voltage 4.2*4 = 16.8
         else if (getVoltage_mv() >= 12800) numOfCells = 4;  // 4 cells
         else if (getVoltage_mv() >= 9000) numOfCells  = 3;  // 3 cells
         else if (getVoltage_mv() >= 6000) numOfCells  = 2;  // 5 cells
@@ -40,23 +40,36 @@ class Battery
       return numOfCells;
     }
 
+    //
+    // Get the Battery Voltage
+    //
+    // TODO: add a 1,2,5,whatever seconds delay skip
     int getVoltage_mv ()
     {
       // returns the battery voltage
-      const byte numSamples = 10 ;
+      const byte numSamples = 20 ;
       PinMean = (PinMean * (numSamples - 1) + analogRead(Pin)) / numSamples; // the mean voltage on the pin.
-      //int batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2020-05-03 @ Boekelo by Rode Pioneer 
-      int batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
       
+      //int batteryVoltage_mv = 24.008 + 19.368 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2020-05-03 @ Boekelo by Rode Pioneer 
+      //int batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
+      int batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
       return batteryVoltage_mv ;
     }
 
+
+  public:
+    //
+    // Get the Voltage per cell
+    //
     int getVoltageCell_mv ()
     { 
       // returns the battery voltage per cell. This is battery specific.
-      return getVoltage_mv() / getNumberOfCells() ;
+      return getVoltage_mv() / getNumberOfCells();
     }
 
+    //
+    // Get the percentage of charge left the the battery by comparing the cell voltage to a look up table.
+    //
     byte getPercentage_pct ()
     { /*
         Define the voltage-percentage curves used for the interpolating lookup table
@@ -91,7 +104,10 @@ class Battery
       numOfCells = 1;
 #endif
 
+      //
       // Calc interpolated value
+      //
+      // TODO: Change this to a two step aproach where we first find the index and then only calculate the pct only once. 
       int batteryPercentage_pct = 0;
       for (int i = NUM_REFDATA - 1; i > 0; i--)
       {
@@ -113,21 +129,30 @@ class Battery
       return batteryPercentage_pct;
     }
 
-    // Get battery color code
+    // get Battery status
     byte getColorCode()
+    {
+      return statusBattery;
+    }
+
+
+    //
+    // Update battery color code
+    //
+    void updateBatteryColorCode()
     {
       //
 
-      // Code orange is below 25%
-      // Code Red is below 15%
-      // Code Black is below 5%
-      const byte Batt_pct_limits[3] = {25, 15, 5};
-      //const byte Batt_pct_limits[3] = {50, 49, 5}; // For testing purposes, drop 1 level
+      // Code orange is below 25% == no high beams
+      // Code Red is below 15%    ==  only weak lights
+      // Code Black is below 5%   ==  turn off
+  //    const byte Batt_pct_limits[4] = {80, 25, 15, 5};
+      const byte Batt_pct_limits[4] = {80, 66, 33, 5};
+
       long tNow_ms = 0;
 
-      // Add a 15 sec delay on battery state changes
+      // Add a tDelayBatteryStatusChange_s sec delay on battery state changes
       tNow_ms = millis();
-      //      setBatteryStatusHasChanged = 0;
       if (tLastStateChange_ms + tDelayBatteryStatusChange_s * 1000 < tNow_ms)
       {
         //
@@ -144,42 +169,40 @@ class Battery
         */
 
 
-        // We can only enter green when the battery status is high enough
+        // We can only enter green when the battery status is high enough 
         if ((getPercentage_pct() >= Batt_pct_limits[0]) && (statusBattery != BATTERY_GREEN))
         {
           statusBattery = BATTERY_GREEN;
           tLastStateChange_ms = tNow_ms;
         }
-        else if ((getPercentage_pct() < Batt_pct_limits[0]) && (statusBattery == BATTERY_GREEN))
+        else if ((getPercentage_pct() < Batt_pct_limits[1]) && (statusBattery == BATTERY_GREEN))
         {
           statusBattery = BATTERY_ORANGE;
           tLastStateChange_ms = tNow_ms;
         }
-        else if ((getPercentage_pct() < Batt_pct_limits[1]) && (statusBattery == BATTERY_ORANGE))
+        else if ((getPercentage_pct() < Batt_pct_limits[2]) && (statusBattery == BATTERY_ORANGE))
         {
           statusBattery = BATTERY_RED;
           tLastStateChange_ms = tNow_ms;
         }
-        else if ((getPercentage_pct() < Batt_pct_limits[2]) && (statusBattery == BATTERY_RED))
+        else if ((getPercentage_pct() < Batt_pct_limits[3]) && (statusBattery == BATTERY_RED))
         {
           statusBattery = BATTERY_BLACK;
           tLastStateChange_ms = tNow_ms;
         }
 
       }
-      return statusBattery;
+      //return statusBattery;
     }
+
+    //
+    // Functions to configure the battery
+    //
 
     // Set the pin for this switch
     void setPinID (byte pin)
     {
       Pin = pin;
-    }
-
-    // retrieve the rin for this switch
-    byte getPin ()
-    {
-      return Pin;
     }
 
     // set Battery type
