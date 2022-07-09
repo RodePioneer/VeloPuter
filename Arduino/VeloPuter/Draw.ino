@@ -44,17 +44,16 @@ void drawScreen ()
   // TEMP : uncomment this code when debugging the battery management.
   //
 
-  //  u8g.setFont(u8g_font_helvR14r);
+    u8g.setFont(u8g_font_helvR14r);
   //
   //  u8g.setPrintPos (70, 33);
   //  u8g.print(myBattery.getVoltageCell_mv());
-  //  u8g.setPrintPos (40, 33);
-  //  u8g.print (myBattery.getNumberOfCells());
-  //  u8g.setPrintPos (40, 49);
-  //  u8g.print (myBattery.getPercentage_pct());
-  //  u8g.setPrintPos (70, 49);
-  //  u8g.print (myBattery.getColorCode());
-
+//  u8g.setPrintPos (40, 33);
+//  u8g.print (myBattery.getBatteryColorCode());
+//  u8g.setPrintPos (40, 49);
+//  u8g.print (headLed.iIntensityMaxAllowed());
+//  u8g.setPrintPos (70, 49);
+//  u8g.print (headLed.iIntensityMaxAllowed());
   //
   // TEMP
   //
@@ -219,8 +218,8 @@ void drawBatteryText()
 
   // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (col, row);
-   u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
-  
+  u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
+
   //    u8g.print (myBattery.getPercentage_pct());
   //  u8g.print ('.');
   //    u8g.print (myBattery.getColorCode());
@@ -235,17 +234,17 @@ void drawBatteryText()
   //  u8g.print (headLed.setBatteryLimit);
   //
   //  u8g.print ('.');
-  
-//      u8g.print (brakeSwitch.getState());
-//      u8g.print (upSwitch.getState());
-//      u8g.print (downSwitch.getState());
-//      u8g.print ('-');
-//      u8g.print (rearLed.IMax());
-//      u8g.print (rearLed.getICurrentIntensity());
-//      u8g.print (rearLed.getLedPrevious());
-//      u8g.print ('-');
-//      u8g.print (brakeLed.IMax());
-//      u8g.print (brakeLed.getICurrentIntensity());
+
+  //      u8g.print (brakeSwitch.getState());
+  //      u8g.print (upSwitch.getState());
+  //      u8g.print (downSwitch.getState());
+  //      u8g.print ('-');
+  //      u8g.print (rearLed.IMax());
+  //      u8g.print (rearLed.getICurrentIntensity());
+  //      u8g.print (rearLed.getLedPrevious());
+  //      u8g.print ('-');
+  //      u8g.print (brakeLed.IMax());
+  //      u8g.print (brakeLed.getICurrentIntensity());
 
 
 
@@ -308,9 +307,10 @@ void drawBatteryIcon()
     else if (hBar_px > 1)
       u8g.drawBox  (cBar_px, rBar_px, wBar_px, hBar_px);
 
+    //
     // Battery level indication
-
-    if (myBattery.getColorCode() == BATTERY_ORANGE)
+    //
+    if (myBattery.getBatteryColorCode() == BATTERY_ORANGE)
     {
       //Serial.println ("Draw Orange");
       //
@@ -322,7 +322,7 @@ void drawBatteryIcon()
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + 4, 3, hBody_px / 2 - 2);
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + hBody_px / 2 + 5, 3, 3);
     }
-    else if (myBattery.getColorCode() == BATTERY_RED)
+    else if (myBattery.getBatteryColorCode() == BATTERY_RED)
     {
       //Serial.println ("Draw Red");
       //
@@ -365,7 +365,7 @@ void drawLightIcons ()
   const byte c2 = 128 - 24;
   bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
 
-  
+
 
   /*
     // The icon which indicated the status of the headlight.
@@ -378,12 +378,12 @@ void drawLightIcons ()
   /*
     // The icon which indicated the status of the rearlight.
   */
-  // 
-  if (brakeLed.getICurrentIntensity() == brakeLed.IMax() and setIsBrakeSwitchOn) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  //
+  if (brakeLed.getICurrentIntensity() == brakeLed.iIntensityMaxAllowed() and setIsBrakeSwitchOn) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
   else if (rearLed.getICurrentIntensity() == 0)    u8g.drawBitmapP (c2, r, 3, 14, icoNone);
   else if (rearLed.getICurrentIntensity() == 1)    u8g.drawBitmapP (c2, r, 3, 14, icoLowRear);
   else if (rearLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c2, r, 3, 14, icoHighRear);
   else if (rearLed.getICurrentIntensity() == 3)    u8g.drawBitmapP (c2, r, 3, 14, icoFogRear);
-  else if (rearLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear); // should never happen as the brake check catches it
-  else if (rearLed.getICurrentIntensity() == 5)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear); // should never happen as the brake check catches it
+  else if (rearLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
+  else if (rearLed.getICurrentIntensity() == 5)    u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
 }

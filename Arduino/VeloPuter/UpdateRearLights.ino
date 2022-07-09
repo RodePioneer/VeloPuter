@@ -27,7 +27,7 @@ void updateRear()
   bool setIsBrakeSwitchTimerExpired = (millis() - brakeSwitch.getTimeLastChange_ms()) > (1000 * tDurationBrakeLight_s);
   bool setIsUpSwitchOnChanged   = upSwitch.getState() == LOW && upSwitch.hasStateChanged();
   bool setIsDownSwitchOnChanged = downSwitch.getState() == LOW && downSwitch.hasStateChanged();
-  bool setIsBrakeLedOn = brakeLed.getICurrentIntensity() == brakeLed.IMax();
+  bool setIsBrakeLedOn = brakeLed.getICurrentIntensity() == brakeLed.iIntensityMaxAllowed();
   bool setIsFlashHighExpired = (rearLed.getICurrentIntensity() >= 2) and     setIsBrakeLedOn and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashHigh_ms);
   bool setIsFlashLowExpired  = (rearLed.getICurrentIntensity() >= 2) and not setIsBrakeLedOn and ((tNow_ms - brakeLed.getTimeLastChange_ms()) >= tFogFlashLow_ms );
 
@@ -118,7 +118,7 @@ void updateRear()
     brakeLed.setLedOff();
     // Note we do never go up to the max intensity because we need a difference with the brake light (max is reserved for braking)
     rearLed.setLedToPreviousIntensity  ();
-    if (rearLed.getICurrentIntensity() < (rearLed.IMax() - 2))
+    if (rearLed.getICurrentIntensity() < (rearLed.iIntensityMaxAllowed() - 2))
     {
       rearLed.upLed();
       rearLed.setLedStoreCurrentIntensityAsPrevious ();

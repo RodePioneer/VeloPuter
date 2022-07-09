@@ -10,15 +10,17 @@ class Battery
     enum {LIPO, LIFEPO4};
     enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};
 
-    // Init at defaults
+    // Init at defaults which are set from the outside
     byte batteryType = LIPO;
     byte batteryPin = 255; 
-    int batteryCellVoltage_mv = 0;
-    int batteryVoltage_mv = 0;
-    int batteryStatus_pct = 100;
-    byte batteryStatus_color = BATTERY_GREEN;
-    byte batteryNumOfCells = 1;
 
+    // Init defaults for values which are used and/or can be requested from outside 
+    byte batteryNumOfCells = 1;
+    long batteryVoltage_mv = 0;
+    long batteryCellVoltage_mv = 0;
+    byte batteryStatus_pct = 100;
+    byte batteryStatus_color = BATTERY_GREEN;
+    
 
     /*********************************************
 
@@ -59,7 +61,7 @@ class Battery
     */
     void updateBatteryNumberOfCells ()
     {
-      const int Batt_voltage_limits[4] = {17000, 12800, 9000, 6000};
+      const long Batt_voltage_limits[4] = {17000, 12800, 9000, 6000};
       if (batteryType == LIPO)
       { // Calculate the number of cells for LIPO
         if (batteryVoltage_mv >= Batt_voltage_limits[0]) batteryNumOfCells = 1;        // 5 or more: dislay voltage 4.2*4 = 16.8
@@ -217,12 +219,15 @@ class Battery
     /*
        Return values
     */
+    // Voltage is shown below the icon.
     int getVoltageCell_mv ()   {
       return batteryCellVoltage_mv;
     }
+    // The color determines if there is an ! or a X displayed to indicate Orange or Red
     byte getBatteryColorCode() {
       return batteryStatus_color;
     }
+    // The percentage determines how high the bar in the battery icon is. 
     byte getPercentage_pct ()  {
       return batteryStatus_pct;
     }

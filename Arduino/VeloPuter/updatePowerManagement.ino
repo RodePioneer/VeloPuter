@@ -10,14 +10,20 @@ void updatePowerManagement()
     Determnine battery regime
 
      Green: normal operation
-     Orange: we need to preserve power. No more high beams, lower intensity on all LEDs. 
+     Orange: we need to preserve power. No more high beams, lower intensity on all LEDs.
      Red: okay now we are almost fucked.
      Black: down. We are now dead.
 
   */
-  /*
-    Update the battery color code. This includes reading out the voltage.
-  */
+  //  long tNow_ms = millis();
+  //  long tLastCheck_ms = tNow_ms;
+  //  const long tTimeBetweenBatteryUpdates_ms = 3000;
+  //
+  //  tNow_ms = millis();
+  //
+  //  if ((tNow_ms - tLastCheck_ms) > tTimeBetweenBatteryUpdates_ms)
+  //  {
+  //    tLastCheck_ms = tNow_ms;
   myBattery.updateBattery(); // Update the battery status
 
   if (doBatteryCheck) {
@@ -57,4 +63,19 @@ void updatePowerManagement()
       sleepNow ();
     }
   }
+  else
+  {
+    //
+    // Monitoring is disables. Set everything to green.
+    // This is dangerous but may be nececary in emergencies !!!!
+    //
+    headLed.setMyBatteryGetColorCode(BATTERY_GREEN);
+    auxLed.setMyBatteryGetColorCode(BATTERY_GREEN);
+    rearLed.setMyBatteryGetColorCode(BATTERY_GREEN);
+    brakeLed.setMyBatteryGetColorCode(BATTERY_GREEN);
+    rightLed.setMyBatteryGetColorCode(BATTERY_GREEN);
+    leftLed.setMyBatteryGetColorCode(BATTERY_GREEN);
+  }
+  //}
+
 }

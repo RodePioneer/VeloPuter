@@ -28,16 +28,6 @@ class Led
       tLastStateChange_ms = millis();
     }
 
-  public:
-    //byte setBatteryLimit = 0;
-
-    /************************************************************
-
-       Configuration of the LED
-
-     ************************************************************/
-    int setIntensities[8] = { -1, -1, -1, -1, -1, -1, -1, -1} ; // -1 indicates the end of the array /  setting
-
     byte IMax (void)
     {
       // Run only once to find the max.
@@ -55,6 +45,18 @@ class Led
       //
       return iIntensityMaxPossible;
     }
+
+  public:
+    //byte setBatteryLimit = 0;
+
+    /************************************************************
+
+       Configuration of the LED
+
+     ************************************************************/
+    int setIntensities[8] = { -1, -1, -1, -1, -1, -1, -1, -1} ; // -1 indicates the end of the array /  setting
+
+
 
 
     byte iIntensityMaxAllowed()
