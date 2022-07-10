@@ -100,9 +100,8 @@ class Battery
       // Code Black   == turn off           (capacity % below last number)
 
 
-      //    const byte Batt_pct_limits[4] = {80, 25, 15, 5};
-      const byte Batt_pct_limits[4] = {80, 66, 33, 5};
-
+      const byte Batt_pct_limits[4] = {80, 25, 15, 5};
+      
       //
       // Only do something and update the timer when we enter a different state
       //
