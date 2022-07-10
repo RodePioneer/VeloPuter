@@ -248,4 +248,8 @@ class Battery
     void setType (byte Type) {
       batteryType = Type;
     }
+    void setBatteryColorCode(byte colorCode)
+    {
+      batteryStatus_color = colorCode;
+    }
 };

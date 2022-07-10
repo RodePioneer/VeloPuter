@@ -58,6 +58,7 @@ void updateConfig()
   if (setDoPowerManagementOff)
   {
     doBatteryCheck = false;
+    myBattery.setBatteryColorCode(BATTERY_GREEN);
   }
   else if (setDoPowerManagementOn)
   {
