@@ -12,15 +12,16 @@ class Battery
 
     // Init at defaults which are set from the outside
     byte batteryType = LIPO;
-    byte batteryPin = 255; 
+    byte batteryPin = 255;
 
-    // Init defaults for values which are used and/or can be requested from outside 
+    // Init defaults for values which are used and/or can be requested from outside
     byte batteryNumOfCells = 1;
     long batteryVoltage_mv = 0;
-    long batteryCellVoltage_mv = 0;
+    long batteryCellVoltage_mv = 0; // internal use
+    float batteryCellVoltage_v = 0.0; // display use
     byte batteryStatus_pct = 100;
     byte batteryStatus_color = BATTERY_GREEN;
-    
+
 
     /*********************************************
 
@@ -35,7 +36,7 @@ class Battery
        Update: calculate the Battery Voltage [V]
 
     */
-    void updateBatteryVoltage_mv ()
+    void updateBatteryVoltage ()
     {
       long PinMean = 0;
 
@@ -81,9 +82,10 @@ class Battery
        Update: From the Battery voltage and number of cell calculate the average cell voltage.
 
     */
-    void updateVoltageCell_mv ()
+    void updateVoltageCell ()
     {
       batteryCellVoltage_mv = batteryVoltage_mv / batteryNumOfCells;
+      batteryCellVoltage_v = float(batteryCellVoltage_mv) / 1000.0;
     }
 
     /******************************************************************************************
@@ -196,8 +198,12 @@ class Battery
       batteryStatus_pct = constrain(batteryPercentage_pct, 0, 99);
     }
 
-
-
+    /*
+       Cell voltage in mv for internal use
+    */
+    int getVoltageCell_mv ()   {
+      return batteryCellVoltage_mv;
+    }
 
 
   public:
@@ -209,9 +215,9 @@ class Battery
       /*
         TODO: Add delay so we don't calculate every second.
       */
-      updateBatteryVoltage_mv();
+      updateBatteryVoltage();
       updateBatteryNumberOfCells();
-      updateVoltageCell_mv();
+      updateVoltageCell();
       updatePercentage_pct();
       updateBatteryColorCode ();
     }
@@ -220,14 +226,14 @@ class Battery
        Return values
     */
     // Voltage is shown below the icon.
-    int getVoltageCell_mv ()   {
-      return batteryCellVoltage_mv;
+    float getVoltageCell_v ()   {
+      return batteryCellVoltage_v;
     }
     // The color determines if there is an ! or a X displayed to indicate Orange or Red
     byte getBatteryColorCode() {
       return batteryStatus_color;
     }
-    // The percentage determines how high the bar in the battery icon is. 
+    // The percentage determines how high the bar in the battery icon is.
     byte getPercentage_pct ()  {
       return batteryStatus_pct;
     }

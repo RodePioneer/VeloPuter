@@ -28,53 +28,62 @@ void drawSplash ()
 void drawScreen ()
 {
   /*
-    // This is the main function which makes sure all information is plotted in the OLED display.
+     This is the main function which makes sure all information is plotted in the OLED display.
   */
   drawInit();
+  drawBatteryIcon();
   drawBatteryText();
   drawLightIcons();
   drawSpeed();
   drawCadence();
   drawGear();
-  drawBatteryIcon();
-  //drawSensors();
 
 
   //
   // TEMP : uncomment this code when debugging the battery management.
   //
 
-    u8g.setFont(u8g_font_helvR14r);
+  // u8g.setFont(u8g_font_helvR14r);
   //
   //  u8g.setPrintPos (70, 33);
   //  u8g.print(myBattery.getVoltageCell_mv());
-//  u8g.setPrintPos (40, 33);
-//  u8g.print (myBattery.getBatteryColorCode());
-//  u8g.setPrintPos (40, 49);
-//  u8g.print (headLed.iIntensityMaxAllowed());
-//  u8g.setPrintPos (70, 49);
-//  u8g.print (headLed.iIntensityMaxAllowed());
+  //  u8g.setPrintPos (40, 33);
+  //  u8g.print (myBattery.getBatteryColorCode());
+  //  u8g.setPrintPos (40, 49);
+  //  u8g.print (headLed.iIntensityMaxAllowed());
+  //  u8g.setPrintPos (70, 49);
+  //  u8g.print (headLed.iIntensityMaxAllowed());
   //
   // TEMP
   //
 }
 
+/****************************************************************************************************
+
+   Functions for controlling the display which do not display anything
+
+ *****************************************************************************************************/
+
+/*
+
+   Init: define font and set the intensity
+
+*/
 void drawInit()
 {
-  //u8g.setFont(u8g_font_helvR18r); //12,14,18
+  //  u8g.setFont(u8g_font_helvR18r); //12,14,18
   //  u8g.setFont(u8g_font_helvB18n); //12,14,18 BROKEN
+  //  u8g.setFont(u8g_font_fub17n);
   u8g.setFont(u8g_font_fur17n);
-  //u8g.setFont(u8g_font_fub17n);
-
-
   u8g.setColorIndex(1);
 }
 
+/*
+  Blinking the screen when the blinkers are on.
+*/
+
 void blinkScreen (byte doBlink)
 {
-  /*
-    // Blinking the screen when the blinkers are on.
-  */
   if (doBlink)
   {
     u8g.firstPage();
@@ -84,17 +93,24 @@ void blinkScreen (byte doBlink)
     } while ( u8g.nextPage() );
   }
 }
+/****************************************************************************************************
 
+   Functions which display text on the display
+
+ *****************************************************************************************************/
+
+/*
+   Display the speed.
+*/
 void drawSpeed()
 {
-  /*
-    // Display the speed. Note that we double the display scale in order to
-    // get larger characters without the need for an other font to be loaded.
-  */
-  const byte row =  2; // was: 0
-  const byte col =  30; // was: 39
-  const byte dcol = 13; // was 9 or 10
+
+  const byte row =  2; 
+  const byte col =  30;
+  const byte dcol = 13;
   u8g.setFontPosTop();
+
+  // Note that we double the display scale in order to get larger characters without the need for an other font to be loaded.
   u8g.setScale2x2();
 
   // The starting potion depends on the number of characters to display.
@@ -119,30 +135,35 @@ void drawSpeed()
   u8g.undoScale();
 }
 
+/*
+   Display the cadence
+*/
 void drawCadence()
 {
-  /*
-    // This draws the cadence
-  */
-  const byte row =  22; // was: 49
-  const byte col =  115; // was: 118
-  const byte dcol = 13; // was 9 or 10
+  // Define hte position
+  const byte row =  22;
+  const byte col =  115;
+  const byte dcol = 13;
   u8g.setFontPosTop();
 
   // The starting potion depends on the number of characters to display.
   if (cadence_rpm < 10)
   {
-    u8g.setPrintPos (col, row); // cad <10
+    // For cad <10
+    u8g.setPrintPos (col, row); 
   }
   else if (cadence_rpm < 100)
   {
-    u8g.setPrintPos (col - dcol, row); // cad >= 10, <100
+    // For cad >= 10, <100
+    u8g.setPrintPos (col - dcol, row); 
   }
   else
   {
-    u8g.setPrintPos (col - dcol * 2, row); // cad >= 100
+    // For cad >= 100
+    u8g.setPrintPos (col - dcol * 2, row);
   }
 
+  // Only display the cadence then we have a cadence at all
   if (cadenceSwitch.getInteruptActive())
   {
     // Active: print a number
@@ -155,18 +176,19 @@ void drawCadence()
   }
 }
 
+/*
+
+   Display the gear (number of teeth) of the cassette
+
+*/
 void drawGear()
 {
   //
   // Display which gear we are riding in
   //
-  //  const byte row =  17 + 8; // was: 17
-  //  const byte col =  115; // was: 118
-  //  const byte dcol = 13; // was 9 or 10
-  //  u8g.setFontPosBottom();
-  const byte row =  0; // was: 17
-  const byte col =  115; // was: 118
-  const byte dcol = 13; // was 9 or 10
+  const byte row =  0; 
+  const byte col =  115; 
+  const byte dcol = 13;
   u8g.setFontPosTop();
 
 
@@ -177,25 +199,29 @@ void drawGear()
     // number of teeth on current gear
     if (gearOnCassette_teeth < 10)
     {
-      u8g.setPrintPos (col, row); // teeth <10
+      // For number of teeth <10
+      u8g.setPrintPos (col, row); 
     }
     else if (gearOnCassette_teeth < 100)
     {
-      u8g.setPrintPos (col - dcol, row); // teeth >= 10, <100
+      // For number of teeth >= 10, <100
+      u8g.setPrintPos (col - dcol, row); 
     }
     else
     {
-      u8g.setPrintPos (col - dcol * 2, row); // teeth >= 100
+      // For number of teeth >= 100
+      u8g.setPrintPos (col - dcol * 2, row); 
     }
 
-    // Draw it
+    // Draw it. Note that we assume that the max cassete is 36. If we count more than that we assume that there is a slumpf. 
+    // Note that this is build for velomobiles which do not have a front derailieur.
     if (gearOnCassette_teeth < 37.4)
     {
       u8g.print (round(gearOnCassette_teeth));
     }
     else
     {
-      // Slumpf is in effect
+      // Slumpf is in effect: divide the number of teeth by 2.5
       u8g.print (round(gearOnCassette_teeth / 2.5));
     }
   }
@@ -210,62 +236,28 @@ void drawGear()
 void drawBatteryText()
 {
   /*
-    // The text underneath the battery
+     The text underneath the battery. Currently we show the cell voltage. This can also easily be changed to
   */
   const byte row =  64;
   const byte col =  0;
   u8g.setFontPosBottom();
-
-  // the if statement makes that the end of the number is at a fixed position.
   u8g.setPrintPos (col, row);
-  u8g.print (float (myBattery.getVoltageCell_mv()) / 1000);
 
-  //    u8g.print (myBattery.getPercentage_pct());
-  //  u8g.print ('.');
-  //    u8g.print (myBattery.getColorCode());
-  //    u8g.print ('.');
-  //    u8g.print (myBattery.tLastStateChange_ms);
-
-  //  //  // TEMP
-  //  u8g.print (headLed.IMax());
-  //  u8g.print ('.');
-  //  u8g.print (headLed.getICurrentIntensity());
-  //  u8g.print ('.');
-  //  u8g.print (headLed.setBatteryLimit);
-  //
-  //  u8g.print ('.');
-
-  //      u8g.print (brakeSwitch.getState());
-  //      u8g.print (upSwitch.getState());
-  //      u8g.print (downSwitch.getState());
-  //      u8g.print ('-');
-  //      u8g.print (rearLed.IMax());
-  //      u8g.print (rearLed.getICurrentIntensity());
-  //      u8g.print (rearLed.getLedPrevious());
-  //      u8g.print ('-');
-  //      u8g.print (brakeLed.IMax());
-  //      u8g.print (brakeLed.getICurrentIntensity());
-
-
-
-  //u8g.print (myBattery.getBatteryStatusHasChanged());
-
-  //  u8g.print (brakeLed.getICurrentIntensity());
-  //  u8g.print (rearLed.getICurrentIntensity());
-  //  u8g.print (leftLed.getICurrentIntensity());
-  //  u8g.print (rightLed.getICurrentIntensity());
-  //  u8g.print (brakeLed.IMax());
-  //  u8g.print (rearLed.IMax());
-  //  u8g.print (leftLed.IMax());
-  //  u8g.print (rightLed.IMax());
-
+  u8g.print (myBattery.getVoltageCell_v());
 }
 
+/****************************************************************************************************
+
+   Functions which display icons on the display
+
+ *****************************************************************************************************/
+
+/*
+   Defining how big the battery icon is displayed
+*/
 void drawBatteryIcon()
 {
-  /*
-    // Defining how big the battery icon is displayed
-  */
+
   const byte hBattery_px = 44; // was 46
   const byte wBattery_px = 17;
   const byte rBattery_px = 0;
@@ -307,15 +299,16 @@ void drawBatteryIcon()
     else if (hBar_px > 1)
       u8g.drawBox  (cBar_px, rBar_px, wBar_px, hBar_px);
 
-    //
-    // Battery level indication
-    //
+    /*
+      Battery level indication
+
+      On level Orange we draw an exclamation mark.
+      On level Red we draw an icon indicating a prohibition: a circl with a diagonal line on it.
+
+    */
     if (myBattery.getBatteryColorCode() == BATTERY_ORANGE)
     {
-      //Serial.println ("Draw Orange");
-      //
-      // Exclamation mark
-      //
+      // Exclamation mark indicating
       u8g.setColorIndex(0);
       u8g.drawBox (wBattery_px / 2 + cBattery_px - 3, rBody_px + 4, 7, hBody_px / 2 + 6);
       u8g.setColorIndex(1);
@@ -324,10 +317,7 @@ void drawBatteryIcon()
     }
     else if (myBattery.getBatteryColorCode() == BATTERY_RED)
     {
-      //Serial.println ("Draw Red");
-      //
       // Wide circle.
-      //
       byte rCircle_px = hBattery_px / 2;
       byte cCircle_px = wBattery_px / 2 + cBattery_px;
       byte dCircle_px = wBattery_px / 2 ;
@@ -338,9 +328,7 @@ void drawBatteryIcon()
       u8g.setColorIndex(0);
       u8g.drawDisc (cCircle_px, rCircle_px, dCircle_px );
 
-      //
       // Diagonal line (5 lines next to each other)
-      //
       byte Delta_px = 0.707 * dCircle_px + 2.5;
       u8g.setColorIndex(1);
       for (int i = -2; i <= 2; i++)
@@ -355,20 +343,21 @@ void drawBatteryIcon()
   }
 }
 
+/*
+   The light icons
+
+   We draw one for the head lights and one for the rear lights.
+*/
 void drawLightIcons ()
 {
-  /*
-    // define where the icons are to be displayed.
-  */
+
   const byte r = 50;
   const byte c1 = 28 + 32;
   const byte c2 = 128 - 24;
   bool setIsBrakeSwitchOn      = brakeSwitch.getState() == LOW;
 
-
-
   /*
-    // The icon which indicated the status of the headlight.
+     The icon which indicated the status of the headlight.
   */
   if (headLed.getICurrentIntensity() == 1)         u8g.drawBitmapP (c1, r, 3, 14, icoNone);
   else if (headLed.getICurrentIntensity() == 2)    u8g.drawBitmapP (c1, r, 3, 14, icoLowBeam);
@@ -376,7 +365,7 @@ void drawLightIcons ()
   else if (headLed.getICurrentIntensity() == 4)    u8g.drawBitmapP (c1, r, 3, 14, icoHighBeam);
 
   /*
-    // The icon which indicated the status of the rearlight.
+     The icon which indicated the status of the rearlight.
   */
   //
   if (brakeLed.getICurrentIntensity() == brakeLed.iIntensityMaxAllowed() and setIsBrakeSwitchOn) u8g.drawBitmapP (c2, r, 3, 14, icoBrakeRear);
