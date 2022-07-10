@@ -224,7 +224,4 @@ class Led
       return tLastStateChange_ms;
     }
 
-
-
-
 };

@@ -80,7 +80,7 @@ void wakeUp() {
   memcpy (brakeLed.setIntensities, brakeLedIntensities, sizeof(brakeLedIntensities));
   brakeLed.setLedOff();
 
-  // Aux: Extra free position. (PWM)
+  // Aux: Extra free position. (PWM) Functions the same as the head light. 
   pinMode(ledAuxPin, OUTPUT);
   auxLed.setPinID(ledAuxPin);
   memcpy (auxLed.setIntensities, auxLedIntensities, sizeof(auxLedIntensities));
