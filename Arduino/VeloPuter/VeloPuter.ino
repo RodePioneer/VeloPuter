@@ -69,7 +69,6 @@ void loop ()
     //
     // Read out the switches
     //
-    // Read out the switched TODO: move this to separate procedure.
     // Note: cad and spd are not read out as they are handeld by interupts.
     upSwitch.ReadOut();
     downSwitch.ReadOut();

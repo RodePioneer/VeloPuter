@@ -118,19 +118,19 @@ class Battery
       */
 
       // We can only enter green when the battery status is high enough
-      if ((getPercentage_pct() >= Batt_pct_limits[0]) && (batteryStatus_color != BATTERY_GREEN))
+      if ((batteryStatus_pct >= Batt_pct_limits[0]) && (batteryStatus_color != BATTERY_GREEN))
       {
         batteryStatus_color = BATTERY_GREEN;
       }
-      else if ((getPercentage_pct() < Batt_pct_limits[1]) && (batteryStatus_color == BATTERY_GREEN))
+      else if ((batteryStatus_pct < Batt_pct_limits[1]) && (batteryStatus_color == BATTERY_GREEN))
       {
         batteryStatus_color = BATTERY_ORANGE;
       }
-      else if ((getPercentage_pct() < Batt_pct_limits[2]) && (batteryStatus_color == BATTERY_ORANGE))
+      else if ((batteryStatus_pct < Batt_pct_limits[2]) && (batteryStatus_color == BATTERY_ORANGE))
       {
         batteryStatus_color = BATTERY_RED;
       }
-      else if ((getPercentage_pct() < Batt_pct_limits[3]) && (batteryStatus_color == BATTERY_RED))
+      else if ((batteryStatus_pct < Batt_pct_limits[3]) && (batteryStatus_color == BATTERY_RED))
       {
         batteryStatus_color = BATTERY_BLACK;
       }
@@ -177,11 +177,10 @@ class Battery
       //
       // Calc interpolated value
       //
-      // TODO: Change this to a two step aproach where we first find the index and then only calculate the pct only once.
       int batteryPercentage_pct = 0;
       for (int i = NUM_REFDATA - 1; i > 0; i--)
       {
-        if (getVoltageCell_mv() >= V_mV[i])
+        if (batteryCellVoltage_mv >= V_mV[i])
           // Vcell        = measured cell voltage = getVoltageCell_mv()
           // V_mV[i]      = lower voltage for this intervall
           // V_mV[i - 1]  = upper voltage for this interval
@@ -192,7 +191,7 @@ class Battery
           // pct =  ( C_pct[i-1] - C_pct[i] ) * -------------------- + C_pct[i]
           //                                     V_mV[i-1]- V_mV[i]
           //
-          batteryPercentage_pct = int( (C_pct[i - 1] - C_pct[i]) * (getVoltageCell_mv() - V_mV[i]) / (V_mV[i - 1] - V_mV[i]) + C_pct[i] );
+          batteryPercentage_pct = int( (C_pct[i - 1] - C_pct[i]) * (batteryCellVoltage_mv - V_mV[i]) / (V_mV[i - 1] - V_mV[i]) + C_pct[i] );
       }
 
       batteryStatus_pct = constrain(batteryPercentage_pct, 0, 99);
@@ -213,7 +212,7 @@ class Battery
     void updateBattery()
     {
       /*
-        TODO: Add delay so we don't calculate every second.
+        Update the battery status internally
       */
       updateBatteryVoltage();
       updateBatteryNumberOfCells();
