@@ -15,7 +15,8 @@ void updatePowerManagement()
      Black: down. We are now dead.
 
   */
-  //  long tNow_ms = millis();
+  unsigned long tNow_ms = millis();
+  unsigned long thStartUpDelay_ms = 5000;
   //  long tLastCheck_ms = tNow_ms;
   //  const long tTimeBetweenBatteryUpdates_ms = 3000;
   //
@@ -24,8 +25,19 @@ void updatePowerManagement()
   //  if ((tNow_ms - tLastCheck_ms) > tTimeBetweenBatteryUpdates_ms)
   //  {
   //    tLastCheck_ms = tNow_ms;
-  myBattery.updateBattery(); // Update the battery status
 
+
+  //
+  // This one updates the voltage and the battery state (color code) of the battery.
+  //
+  if (tNow_ms > thStartUpDelay_ms)
+  {
+    myBattery.updateBattery(); // Update the battery status
+  }
+
+  //
+  // This one updates the led's according to the battery color state.
+  //
   if (doBatteryCheck) {
 
     // The state of the battery

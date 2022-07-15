@@ -16,11 +16,13 @@ class Battery
 
     // Init defaults for values which are used and/or can be requested from outside
     byte batteryNumOfCells = 1;
-    long batteryVoltage_mv = 0;
-    long batteryCellVoltage_mv = 0; // internal use
+    int batteryVoltage_mv = 0;
+    int batteryCellVoltage_mv = 0; // internal use
+    
     float batteryCellVoltage_v = 0.0; // display use
     byte batteryStatus_pct = 100;
     byte batteryStatus_color = BATTERY_GREEN;
+    float PinMean = 0;
 
 
     /*********************************************
@@ -38,7 +40,26 @@ class Battery
     */
     void updateBatteryVoltage ()
     {
-      long PinMean = 0;
+
+//    int batteryPinValue_1024 = analogRead(batteryPin);
+//    
+//    if (batteryVoltage_mv == 0)
+//    {
+//// No value set yet. Get one.
+//      batteryVoltage_mv = 19.487 * float(batteryPinValue_1024);
+//    }
+//    else
+//    {
+//      // Use an decaying moving average
+//        // It turns out that 20 folows the voltage in about 5 to 6 seconds. This is good for stabalizing. 
+//        // It may not be sufficient to prevent droping in battery color code when the brake is applied 
+//        // as braking long may drop the voltage significantly.
+//        //
+//      const byte numSamples = 10 ;
+//      batteryVoltage_mv = (19.487 * batteryPinValue_1024 + (numSamples-1) * batteryVoltage_mv) / numSamples;
+//      }
+
+
 
       // returns the battery voltage
       if (PinMean == 0)
@@ -49,7 +70,14 @@ class Battery
       else
       {
         // Use an decaying moving average
-        const byte numSamples = 10 ;
+        // It turns out that 20 folows the voltage in about 5 to 6 seconds. This is good for stabalizing. 
+        // It may not be sufficient to prevent droping in battery color code when the brake is applied 
+        // as braking long may drop the voltage significantly.
+        //
+        // Note that PinMean needs to be a float because otherwise the difference between small voltages can never be bridged.
+        // 1024 pin values for 5 V means 5 mV per pin value. 
+        //
+        const byte numSamples = 20 ;
         PinMean = (PinMean * (numSamples - 1) + analogRead(batteryPin)) / numSamples;
       }
       batteryVoltage_mv = 19.487 * PinMean ; // Voltage measurements done and linear fit calibrated in octave 2022-07-05 @ Boekelo by Rode Pioneer Removed the offset
@@ -62,7 +90,7 @@ class Battery
     */
     void updateBatteryNumberOfCells ()
     {
-      const long Batt_voltage_limits[4] = {17000, 12800, 9000, 6000};
+      const int Batt_voltage_limits[4] = {17000, 12800, 9000, 6000};
       if (batteryType == LIPO)
       { // Calculate the number of cells for LIPO
         if (batteryVoltage_mv >= Batt_voltage_limits[0]) batteryNumOfCells = 1;        // 5 or more: dislay voltage 4.2*4 = 16.8

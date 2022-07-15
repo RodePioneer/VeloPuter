@@ -38,7 +38,6 @@ Battery myBattery;
 //int cellVoltage_mv = 4200;
 byte speed_kmh = 0;
 byte cadence_rpm = 0;
-
 float gearOnCassette_teeth = 0.00;
 
 enum {BATTERY_GREEN, BATTERY_ORANGE, BATTERY_RED, BATTERY_BLACK};

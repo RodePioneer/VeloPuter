@@ -46,7 +46,7 @@ void drawScreen ()
   // u8g.setFont(u8g_font_helvR14r);
   //
   //  u8g.setPrintPos (70, 33);
-  //  u8g.print(myBattery.getVoltageCell_mv());
+  //  u8g.print(myBattery.getPercentage_pct());
   //  u8g.setPrintPos (40, 33);
   //  u8g.print (myBattery.getBatteryColorCode());
   //  u8g.setPrintPos (40, 49);
@@ -309,11 +309,30 @@ void drawBatteryIcon()
     if (myBattery.getBatteryColorCode() == BATTERY_ORANGE)
     {
       // Exclamation mark indicating
+      byte x;
+      byte y;
+      byte w;
+      byte h;
+      
+      // clear background
       u8g.setColorIndex(0);
-      u8g.drawBox (wBattery_px / 2 + cBattery_px - 3, rBody_px + 4, 7, hBody_px / 2 + 6);
+      x = cBattery_px + wBattery_px / 2 - 3;
+      y = rBody_px + 4;
+      w = 7;
+      h = hBody_px / 3 + 6;
+      u8g.drawBox (x, y, w, h);
+
+      
+      // Draw the line
       u8g.setColorIndex(1);
-      u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + 4, 3, hBody_px / 2 - 2);
-      u8g.drawBox (wBattery_px / 2 + cBattery_px - 1, rBody_px + hBody_px / 2 + 5, 3, 3);
+      x = cBattery_px + wBattery_px / 2  - 1;
+      w = 3;
+      h = 4*hBody_px/10 - 2;
+      u8g.drawBox (x, y, w, h);
+      // draw the dot
+      y = rBody_px + 4*hBody_px/10 + 5;
+      h = w;
+      u8g.drawBox (x, y, w, h);
     }
     else if (myBattery.getBatteryColorCode() == BATTERY_RED)
     {
